@@ -22,7 +22,8 @@ namespace TestForm
             InitializeComponent();
 
             // Create connection to Intento API
-            intento = Intento.Create("Your API key");
+            // intento = Intento.Create("Your API key");
+            intento = Intento.Create("cfbe6b2ee3f44584adac2f7b481a78cf");
 
             // Get translate intent
             translate = intento.Ai.Text.Translate;

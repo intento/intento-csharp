@@ -46,12 +46,8 @@
     <Compile Include="IntentoAi.cs" />
     <Compile Include="IntentoAiText.cs" />
     <Compile Include="IntentoAiTextTranslate.cs" />
-    <Compile Include="IntentoAiTextTranslateFulfillRequestJson.cs" />
-    <Compile Include="IntentoAiTextTranslateFulfillResultJson.cs" />
-    <Compile Include="IntentoAiTextTranslateResult.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Intento.cs" />
-    <Compile Include="IntentoAiTextTranslateWaitAsyncResultJson.cs" />
     <Compile Include="IntentoException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
