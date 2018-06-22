@@ -1,0 +1,8 @@
+C:\Users\anton\source\repos\Intento\IntentoSDK\IntentoSDK\bin\Debug\IntentoSDK.dll
+C:\Users\anton\source\repos\Intento\IntentoSDK\IntentoSDK\bin\Debug\IntentoSDK.pdb
+C:\Users\anton\source\repos\Intento\IntentoSDK\IntentoSDK\obj\Debug\IntentoSDK.csproj.CoreCompileInputs.cache
+C:\Users\anton\source\repos\Intento\IntentoSDK\IntentoSDK\obj\Debug\IntentoSDK.dll
+C:\Users\anton\source\repos\Intento\IntentoSDK\IntentoSDK\obj\Debug\IntentoSDK.pdb
+C:\Users\anton\source\repos\Intento\IntentoSDK\IntentoSDK\obj\Debug\IntentoSDK.csprojAssemblyReference.cache
+C:\Users\anton\source\repos\Intento\IntentoSDK\IntentoSDK\bin\Debug\Newtonsoft.Json.dll
+C:\Users\anton\source\repos\Intento\IntentoSDK\IntentoSDK\obj\Debug\IntentoSDK.csproj.CopyComplete
