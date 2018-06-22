@@ -16,7 +16,16 @@ namespace TestForm
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+
+            string apiKey = "Your Api Key";
+            if (string.IsNullOrEmpty(apiKey) || apiKey == "Your Api Key")
+            {
+                Form2 form2 = new Form2();
+                Application.Run(form2);
+                apiKey = form2.apiKey;
+            }
+
+            Application.Run(new Form1(apiKey));
         }
     }
 }

@@ -27,3 +27,4 @@ C:\Users\anton\source\repos\Intento\intento-csharp\TestForm\obj\Debug\TestForm.c
 C:\Users\anton\source\repos\Intento\intento-csharp\TestForm\obj\Debug\TestForm.csproj.CopyComplete
 C:\Users\anton\source\repos\Intento\intento-csharp\TestForm\obj\Debug\TestForm.exe
 C:\Users\anton\source\repos\Intento\intento-csharp\TestForm\obj\Debug\TestForm.pdb
+C:\Users\anton\source\repos\Intento\intento-csharp\TestForm\obj\Debug\TestForm.Form2.resources

@@ -17,12 +17,12 @@ namespace TestForm
         IntentoAiTextTranslate translate;
         string asyncId;
 
-        public Form1()
+        public Form1(string apiKey)
         {
             InitializeComponent();
 
             // Create connection to Intento API
-            intento = Intento.Create("Your API key");
+            intento = Intento.Create(apiKey);
 
             // Get translate intent
             translate = intento.Ai.Text.Translate;
