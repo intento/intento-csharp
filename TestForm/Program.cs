@@ -19,7 +19,7 @@ namespace TestForm
 
             string apiKey = "Your Api Key";
             if (string.IsNullOrEmpty(apiKey) || apiKey == "Your Api Key")
-            {
+            {   // Show form to enter api key
                 Form2 form2 = new Form2();
                 Application.Run(form2);
                 apiKey = form2.apiKey;

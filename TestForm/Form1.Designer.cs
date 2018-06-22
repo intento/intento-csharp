@@ -38,7 +38,7 @@
             this.checkBoxHtml = new System.Windows.Forms.CheckBox();
             this.buttonSend = new System.Windows.Forms.Button();
             this.textBoxResult = new System.Windows.Forms.TextBox();
-            this.buttonWaitAsync = new System.Windows.Forms.Button();
+            this.buttonCheckAsync = new System.Windows.Forms.Button();
             this.textBoxProvider = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
@@ -48,9 +48,9 @@
             this.buttonSendAsync.Location = new System.Drawing.Point(65, 314);
             this.buttonSendAsync.Margin = new System.Windows.Forms.Padding(4);
             this.buttonSendAsync.Name = "buttonSendAsync";
-            this.buttonSendAsync.Size = new System.Drawing.Size(136, 28);
+            this.buttonSendAsync.Size = new System.Drawing.Size(170, 28);
             this.buttonSendAsync.TabIndex = 2;
-            this.buttonSendAsync.Text = "SendAsync";
+            this.buttonSendAsync.Text = "Send Async Request";
             this.buttonSendAsync.UseVisualStyleBackColor = true;
             this.buttonSendAsync.Click += new System.EventHandler(this.buttonSendAsync_Click);
             // 
@@ -131,7 +131,7 @@
             this.buttonSend.Location = new System.Drawing.Point(68, 266);
             this.buttonSend.Margin = new System.Windows.Forms.Padding(4);
             this.buttonSend.Name = "buttonSend";
-            this.buttonSend.Size = new System.Drawing.Size(133, 28);
+            this.buttonSend.Size = new System.Drawing.Size(167, 28);
             this.buttonSend.TabIndex = 11;
             this.buttonSend.Text = "Send";
             this.buttonSend.UseVisualStyleBackColor = true;
@@ -145,15 +145,15 @@
             this.textBoxResult.Size = new System.Drawing.Size(261, 108);
             this.textBoxResult.TabIndex = 12;
             // 
-            // buttonWaitAsync
+            // buttonCheckAsync
             // 
-            this.buttonWaitAsync.Location = new System.Drawing.Point(65, 362);
-            this.buttonWaitAsync.Name = "buttonWaitAsync";
-            this.buttonWaitAsync.Size = new System.Drawing.Size(135, 27);
-            this.buttonWaitAsync.TabIndex = 13;
-            this.buttonWaitAsync.Text = "WaitAsync";
-            this.buttonWaitAsync.UseVisualStyleBackColor = true;
-            this.buttonWaitAsync.Click += new System.EventHandler(this.buttonWaitAsync_Click);
+            this.buttonCheckAsync.Location = new System.Drawing.Point(65, 362);
+            this.buttonCheckAsync.Name = "buttonCheckAsync";
+            this.buttonCheckAsync.Size = new System.Drawing.Size(170, 27);
+            this.buttonCheckAsync.TabIndex = 13;
+            this.buttonCheckAsync.Text = "Check Async";
+            this.buttonCheckAsync.UseVisualStyleBackColor = true;
+            this.buttonCheckAsync.Click += new System.EventHandler(this.buttonCheckAsync_Click);
             // 
             // textBoxProvider
             // 
@@ -179,7 +179,7 @@
             this.ClientSize = new System.Drawing.Size(379, 602);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBoxProvider);
-            this.Controls.Add(this.buttonWaitAsync);
+            this.Controls.Add(this.buttonCheckAsync);
             this.Controls.Add(this.textBoxResult);
             this.Controls.Add(this.buttonSend);
             this.Controls.Add(this.checkBoxHtml);
@@ -209,7 +209,7 @@
         private System.Windows.Forms.CheckBox checkBoxHtml;
         private System.Windows.Forms.Button buttonSend;
         private System.Windows.Forms.TextBox textBoxResult;
-        private System.Windows.Forms.Button buttonWaitAsync;
+        private System.Windows.Forms.Button buttonCheckAsync;
         private System.Windows.Forms.TextBox textBoxProvider;
         private System.Windows.Forms.Label label1;
     }

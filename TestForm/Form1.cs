@@ -78,7 +78,7 @@ namespace TestForm
             textBoxResult.Text = string.Format("Async ID: {0}", asyncId);
         }
 
-        private void buttonWaitAsync_Click(object sender, EventArgs e)
+        private void buttonCheckAsync_Click(object sender, EventArgs e)
         {
             if (asyncId == null)
             {
@@ -90,7 +90,7 @@ namespace TestForm
             try
             {
                 // Call translate intent synchroniously
-                result = translate.CheckAsyncJob(asyncId);
+                result = intento.CheckAsyncJob(asyncId);
             }
             catch (AggregateException ex2)
             {
