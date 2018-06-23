@@ -1,11 +1,11 @@
 # C# SDK
 
 ## Overview
-Solution consist of two projects: 
-- IntentoSDK - SDK itself as a library
-- TestForm - simple test form application. 
+The solution consist of two projects: 
+- IntentoSDK: SDK itself as a library
+- TestForm: simple test form application. 
 
-To use test application you need to provide your ApiKey in TestForm/Program.cs line 20.
+You may provide your ApiKey in TestForm/Program.cs line 20. If you do not provide it, TestForm application will ask your ApiKey every time you run it. 
 
 ## Making connection to Intento API
 Firstly you need to make connection to Intento API:
@@ -14,7 +14,7 @@ Intento intento = Intento.Create(apiKey)
 ```
 
 ## Making conection to translate intent
-To obtain conection to translation intent you need: 
+Obtain conection to translation intent: 
 ```csharp
 IntentoAiTextTranslate translate = intento.Ai.Text.Translate;
 ```
@@ -56,5 +56,6 @@ If results.done is not true: operation is not completed yet and you must request
 Be careful! CheckAsyncJob methos is in intento, not in translate. 
 
 ## async-await
-All API calls are available in synchronious and asynchronious versions, all asynchronious has the same parameters but name ends with Async. All synchronious versiona implemented by calling corresponding asynchronious version. 
+All API calls are available in synchronious and asynchronious versions, all asynchronious has the same parameters but name ends with Async. 
+All synchronious versions are implemented by calling corresponding asynchronious version. 
 
