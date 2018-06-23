@@ -35,7 +35,8 @@ namespace TestForm
             try
             {
                 // Call translate intent synchroniously
-                result = translate.Fulfill(this.textBoxText.Text, textBoxTo.Text, from: textBoxFrom.Text, async: false, provider: textBoxProvider.Text);
+                result = translate.Fulfill(this.textBoxText.Text, textBoxTo.Text, from: textBoxFrom.Text, async: false, 
+                    provider: textBoxProvider.Text, format: checkBoxHtml.Checked ? "html" : null);
             }
             catch(AggregateException ex2)
             {
@@ -59,7 +60,8 @@ namespace TestForm
             try
             {
                 // Call translate intent synchroniously
-                result = translate.Fulfill(this.textBoxText.Text, textBoxTo.Text, from: textBoxFrom.Text, async: true, provider: textBoxProvider.Text);
+                result = translate.Fulfill(this.textBoxText.Text, textBoxTo.Text, from: textBoxFrom.Text, async: true, 
+                    provider: textBoxProvider.Text, format: checkBoxHtml.Checked ? "html" : null);
             }
             catch (AggregateException ex2)
             {

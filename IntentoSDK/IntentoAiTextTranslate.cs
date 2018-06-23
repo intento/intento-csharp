@@ -23,7 +23,6 @@ namespace IntentoSDK
             this.intento = parent.Intento;
         }
 
-
         public Intento Intento
         { get { return intento; } }
 
@@ -31,19 +30,19 @@ namespace IntentoSDK
         { get { return parent; } }
 
         public dynamic Fulfill(string text, string to, string from = null, string provider = null, 
-            List<Dictionary<string, object>> auth = null, bool async = false)
+            bool async = false, string format = null)
         {
             Task<dynamic> taskReadResult = Task.Run<dynamic>(async () => await this.FulfillAsync(text, to, from: from, 
-                provider: provider, auth: auth, async: async));
+                provider: provider, async: async, format: format));
             return taskReadResult.Result;
         }
 
         async public Task<dynamic> FulfillAsync(string text, string to, string from = null, string provider = null, 
-            List<Dictionary<string, object>> auth = null, bool async = false)
+            bool async = false, string format = null)
         {
             // Create body for Intento API request
             string jsonData = JsonConvert.SerializeObject(new {
-                context = new { text = text, from = from, to = to },
+                context = new { text = text, from = from, to = to, format = format },
                 service = new { async = async, provider = provider },
             });
             HttpContent requestBody = new StringContent(jsonData);

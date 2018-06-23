@@ -8,9 +8,7 @@ C:\Users\anton\source\repos\Intento\IntentoSDK\IntentoSDK\bin\Debug\Newtonsoft.J
 C:\Users\anton\source\repos\Intento\IntentoSDK\IntentoSDK\obj\Debug\IntentoSDK.csproj.CopyComplete
 C:\Users\anton\source\repos\Intento\intento-csharp\IntentoSDK\bin\Debug\IntentoSDK.dll
 C:\Users\anton\source\repos\Intento\intento-csharp\IntentoSDK\bin\Debug\IntentoSDK.pdb
-C:\Users\anton\source\repos\Intento\intento-csharp\IntentoSDK\bin\Debug\Newtonsoft.Json.dll
-C:\Users\anton\source\repos\Intento\intento-csharp\IntentoSDK\obj\Debug\IntentoSDK.csprojAssemblyReference.cache
 C:\Users\anton\source\repos\Intento\intento-csharp\IntentoSDK\obj\Debug\IntentoSDK.csproj.CoreCompileInputs.cache
-C:\Users\anton\source\repos\Intento\intento-csharp\IntentoSDK\obj\Debug\IntentoSDK.csproj.CopyComplete
 C:\Users\anton\source\repos\Intento\intento-csharp\IntentoSDK\obj\Debug\IntentoSDK.dll
 C:\Users\anton\source\repos\Intento\intento-csharp\IntentoSDK\obj\Debug\IntentoSDK.pdb
+C:\Users\anton\source\repos\Intento\intento-csharp\IntentoSDK\obj\Debug\IntentoSDK.csprojAssemblyReference.cache

@@ -20,6 +20,7 @@ C:\Users\anton\source\repos\Intento\intento-csharp\TestForm\bin\Debug\IntentoSDK
 C:\Users\anton\source\repos\Intento\intento-csharp\TestForm\bin\Debug\Newtonsoft.Json.dll
 C:\Users\anton\source\repos\Intento\intento-csharp\TestForm\bin\Debug\IntentoSDK.pdb
 C:\Users\anton\source\repos\Intento\intento-csharp\TestForm\obj\Debug\TestForm.csprojAssemblyReference.cache
+C:\Users\anton\source\repos\Intento\intento-csharp\TestForm\obj\Debug\TestForm.Form2.resources
 C:\Users\anton\source\repos\Intento\intento-csharp\TestForm\obj\Debug\TestForm.Form1.resources
 C:\Users\anton\source\repos\Intento\intento-csharp\TestForm\obj\Debug\TestForm.Properties.Resources.resources
 C:\Users\anton\source\repos\Intento\intento-csharp\TestForm\obj\Debug\TestForm.csproj.GenerateResource.cache
@@ -27,4 +28,3 @@ C:\Users\anton\source\repos\Intento\intento-csharp\TestForm\obj\Debug\TestForm.c
 C:\Users\anton\source\repos\Intento\intento-csharp\TestForm\obj\Debug\TestForm.csproj.CopyComplete
 C:\Users\anton\source\repos\Intento\intento-csharp\TestForm\obj\Debug\TestForm.exe
 C:\Users\anton\source\repos\Intento\intento-csharp\TestForm\obj\Debug\TestForm.pdb
-C:\Users\anton\source\repos\Intento\intento-csharp\TestForm\obj\Debug\TestForm.Form2.resources
