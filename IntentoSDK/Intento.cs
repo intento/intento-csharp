@@ -49,7 +49,7 @@ namespace IntentoSDK
             client.DefaultRequestHeaders.Add("apikey", apiKey);
 
             // Call to Intento API and get json result
-            HttpResponseMessage response = await client.GetAsync(string.Format("{0}operation/{1}", serverUrl, asyncId));
+            HttpResponseMessage response = await client.GetAsync(string.Format("{0}operations/{1}", serverUrl, asyncId));
             string stringRresult = await response.Content.ReadAsStringAsync();
             dynamic jsonResult = JObject.Parse(stringRresult);
 
