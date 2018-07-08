@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using IntentoSDK;
 
 namespace TestForm
 {
@@ -18,14 +19,16 @@ namespace TestForm
             Application.SetCompatibleTextRenderingDefault(false);
 
             string apiKey = "Your Api Key";
-            if (string.IsNullOrEmpty(apiKey) || apiKey == "Your Api Key")
-            {   // Show form to enter api key
-                Form2 form2 = new Form2();
-                Application.Run(form2);
-                apiKey = form2.apiKey;
-            }
+            Intento intento;
+            IntentoAiTextTranslate translate;
+            Dictionary<string, string> providers;
+            Dictionary<string, string> languages;
+            Form2 form2;
 
-            Application.Run(new Form1(apiKey));
+            form2 = new Form2();
+            Application.Run(form2);
+
+            Application.Run(new Form1(form2.apiKey, form2.intento, form2.translate, form2.providers, form2.languages));
         }
     }
 }

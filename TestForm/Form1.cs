@@ -15,28 +15,75 @@ namespace TestForm
     {
         Intento intento;
         IntentoAiTextTranslate translate;
+        List<dynamic> providers;
+        List<dynamic> languages;
         string asyncId;
 
-        public Form1(string apiKey)
+        public Form1(string apiKey, Intento intento, IntentoAiTextTranslate translate, List<dynamic> providers, List<dynamic> languages)
         {
             InitializeComponent();
 
-            // Create connection to Intento API
-            intento = Intento.Create(apiKey);
+            this.intento = intento;
+            this.translate = translate;
+            this.providers = providers;
+            this.languages = languages;
 
-            // Get translate intent
-            translate = intento.Ai.Text.Translate;
+            // Initialize source and target languages
+            comboBoxFrom.DisplayMember = "Key";
+            comboBoxTo.DisplayMember = "Key";
 
+            comboBoxFrom.Items.Add(new KeyValuePair<string, string>("autodetect", ""));
+            comboBoxTo.Items.Add(new KeyValuePair<string, string>("select...", ""));
+
+            comboBoxFrom.SelectedIndex = 0;
+            comboBoxTo.SelectedIndex = 0;
+
+            List<KeyValuePair<string, string>> dataLanguages = languages.Select(i => new KeyValuePair<string, string>((string)i.iso_name, (string)i.intento_code)).ToList();
+            dataLanguages.Sort((a, b) => string.Compare(a.Key, b.Key));
+
+            foreach (KeyValuePair<string, string> pair in dataLanguages)
+            {
+                comboBoxFrom.Items.Add(pair);
+                comboBoxTo.Items.Add(pair);
+            }
+
+            // Initialize list of providers
+            comboBoxProvider.DisplayMember = "Key";
+            comboBoxProvider.Items.Add(new KeyValuePair<string, string>("smart routing", ""));
+            comboBoxProvider.SelectedIndex = 0;
+
+            List<KeyValuePair<string, string>> dataProviders = providers.Select(i => new KeyValuePair<string, string>((string)i.name, (string)i.id)).ToList();
+            dataProviders.Sort((a, b) => string.Compare(a.Key, b.Key));
+
+            foreach (KeyValuePair<string, string> pair in dataProviders)
+                comboBoxProvider.Items.Add(pair);
         }
 
         private void buttonSend_Click(object sender, EventArgs e)
         {
+            labelError.Visible = false;
+            labelTo.ForeColor = Color.FromName("black");
+
+            string to = ((KeyValuePair<string, string>)comboBoxTo.SelectedItem).Value;
+            if (string.IsNullOrEmpty(to))
+            {
+                labelTo.ForeColor = Color.FromName("red");
+                labelError.Visible = true;
+                labelError.Text = "Please select Target Language";
+                return;
+            }
+
             dynamic result;
             try
             {
                 // Call translate intent synchroniously
-                result = translate.Fulfill(this.textBoxText.Text, textBoxTo.Text, from: textBoxFrom.Text, async: false, 
-                    provider: comboBoxProvider.Text, format: checkBoxHtml.Checked ? "html" : null);
+                result = translate.Fulfill(
+                    this.textBoxText.Text, 
+                    to, 
+                    from: ((KeyValuePair<string, string>)comboBoxFrom.SelectedItem).Value, 
+                    async: false,
+                    provider: ((KeyValuePair<string, string>)comboBoxProvider.SelectedItem).Value, 
+                    format: checkBoxHtml.Checked ? "html" : null);
             }
             catch(AggregateException ex2)
             {
@@ -52,6 +99,7 @@ namespace TestForm
 
             // Show result
             textBoxResult.Text = result.results[0];
+            labelTranslateProvider.Text = "via MT provier: " + result.service.provider.name;
         }
 
         private void buttonSendAsync_Click(object sender, EventArgs e)
@@ -60,7 +108,7 @@ namespace TestForm
             try
             {
                 // Call translate intent synchroniously
-                result = translate.Fulfill(this.textBoxText.Text, textBoxTo.Text, from: textBoxFrom.Text, async: true, 
+                result = translate.Fulfill(this.textBoxText.Text, (string)comboBoxTo.SelectedValue, from: (string)comboBoxFrom.SelectedValue, async: true, 
                     provider: comboBoxProvider.Text, format: checkBoxHtml.Checked ? "html" : null);
             }
             catch (AggregateException ex2)
@@ -125,5 +173,6 @@ namespace TestForm
             }
 
         }
+
     }
 }
