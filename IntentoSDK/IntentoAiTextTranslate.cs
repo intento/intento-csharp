@@ -67,13 +67,13 @@ namespace IntentoSDK
             throw ex;
         }
 
-        public List<dynamic> Providers(string to = null, string from = null)
+        public IList<dynamic> Providers(string to = null, string from = null)
         {
-            Task<List<dynamic>> taskReadResult = Task.Run<List<dynamic>>(async () => await this.ProvidersAsync(to: to, from: from));
+            Task<IList<dynamic>> taskReadResult = Task.Run<IList<dynamic>>(async () => await this.ProvidersAsync(to: to, from: from));
             return taskReadResult.Result;
         }
 
-        async public Task<List<dynamic>> ProvidersAsync(string to = null, string from = null, bool lang_detect = false, bool bulk = false)
+        async public Task<IList<dynamic>> ProvidersAsync(string to = null, string from = null, bool lang_detect = false, bool bulk = false)
         {
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Add("apikey", intento.apiKey);
@@ -113,13 +113,13 @@ namespace IntentoSDK
             throw ex;
         }
 
-        public List<dynamic> Languages()
+        public IList<dynamic> Languages()
         {
-            Task<List<dynamic>> taskReadResult = Task.Run<List<dynamic>>(async () => await this.LanguagesAsync());
+            Task<IList<dynamic>> taskReadResult = Task.Run<IList<dynamic>>(async () => await this.LanguagesAsync());
             return taskReadResult.Result;
         }
 
-        async public Task<List<dynamic>> LanguagesAsync()
+        async public Task<IList<dynamic>> LanguagesAsync()
         {
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Add("apikey", intento.apiKey);

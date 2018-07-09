@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 using IntentoSDK;
 
 namespace TestForm
@@ -15,11 +16,11 @@ namespace TestForm
     {
         Intento intento;
         IntentoAiTextTranslate translate;
-        List<dynamic> providers;
-        List<dynamic> languages;
+        IList<dynamic> providers;
+        IList<dynamic> languages;
         string asyncId;
 
-        public Form1(string apiKey, Intento intento, IntentoAiTextTranslate translate, List<dynamic> providers, List<dynamic> languages)
+        public Form1(string apiKey, Intento intento, IntentoAiTextTranslate translate, IList<dynamic> providers, IList<dynamic> languages)
         {
             InitializeComponent();
 
@@ -78,7 +79,7 @@ namespace TestForm
             {
                 // Call translate intent synchroniously
                 result = translate.Fulfill(
-                    this.textBoxText.Text, 
+                    textBoxText.Text, 
                     to, 
                     from: ((KeyValuePair<string, string>)comboBoxFrom.SelectedItem).Value, 
                     async: false,
@@ -174,5 +175,37 @@ namespace TestForm
 
         }
 
+        private void buttonReadFromFile_Click(object sender, EventArgs e)
+        {
+            var dialog = new OpenFileDialog();
+            dialog.Filter = "txt files (*.txt)|*.txt|html files (*.html)|*.txt|All files (*.*)|*.*";
+            dialog.FilterIndex = 1;
+            dialog.RestoreDirectory = false;
+
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                var fileName = dialog.FileName;
+                FileInfo file = new FileInfo(fileName);
+                using (var textStream = file.OpenText())
+                    textBoxText.Text = textStream.ReadToEnd();
+            }
+        }
+
+        private void buttonSaveToFile_Click(object sender, EventArgs e)
+        {
+            var dialog = new SaveFileDialog();
+            dialog.Filter = "txt files (*.txt)|*.txt|html files (*.html)|*.txt|All files (*.*)|*.*";
+            dialog.FilterIndex = 1;
+            dialog.RestoreDirectory = false;
+
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                using (var stream = dialog.OpenFile())
+                {
+                    var bytes = Encoding.UTF8.GetBytes(textBoxResult.Text);
+                    stream.Write(bytes, 0, bytes.Length);
+                }
+            }
+        }
     }
 }

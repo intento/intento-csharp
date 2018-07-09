@@ -16,8 +16,8 @@ namespace TestForm
         public string apiKey = null;
         public Intento intento;
         public IntentoAiTextTranslate translate;
-        public List<dynamic> providers;
-        public List<dynamic> languages;
+        public IList<dynamic> providers;
+        public IList<dynamic> languages;
 
         public Form2()
         {

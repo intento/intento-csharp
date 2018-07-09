@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.buttonSendAsync = new System.Windows.Forms.Button();
             this.textBoxText = new System.Windows.Forms.TextBox();
             this.labelTo = new System.Windows.Forms.Label();
@@ -183,13 +184,13 @@
             // 
             // buttonReadFromFile
             // 
-            this.buttonReadFromFile.Enabled = false;
             this.buttonReadFromFile.Location = new System.Drawing.Point(301, 12);
             this.buttonReadFromFile.Name = "buttonReadFromFile";
             this.buttonReadFromFile.Size = new System.Drawing.Size(128, 23);
             this.buttonReadFromFile.TabIndex = 19;
             this.buttonReadFromFile.Text = "Read From File";
             this.buttonReadFromFile.UseVisualStyleBackColor = true;
+            this.buttonReadFromFile.Click += new System.EventHandler(this.buttonReadFromFile_Click);
             // 
             // label5
             // 
@@ -344,13 +345,13 @@
             // 
             // buttonSaveToFile
             // 
-            this.buttonSaveToFile.Enabled = false;
             this.buttonSaveToFile.Location = new System.Drawing.Point(301, 113);
             this.buttonSaveToFile.Name = "buttonSaveToFile";
             this.buttonSaveToFile.Size = new System.Drawing.Size(128, 23);
             this.buttonSaveToFile.TabIndex = 14;
             this.buttonSaveToFile.Text = "Save to File";
             this.buttonSaveToFile.UseVisualStyleBackColor = true;
+            this.buttonSaveToFile.Click += new System.EventHandler(this.buttonSaveToFile_Click);
             // 
             // labelTranslateProvider
             // 
@@ -374,6 +375,7 @@
             this.Controls.Add(this.buttonCheckAsync);
             this.Controls.Add(this.buttonSend);
             this.Controls.Add(this.buttonSendAsync);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "Intento MT";
             this.groupBox1.ResumeLayout(false);

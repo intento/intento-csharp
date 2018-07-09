@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form2));
             this.textBoxApiKey = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.buttonContinue = new System.Windows.Forms.Button();
@@ -91,6 +92,7 @@
             this.Controls.Add(this.buttonContinue);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.textBoxApiKey);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form2";
             this.Text = "Intento MT";
             this.ResumeLayout(false);
