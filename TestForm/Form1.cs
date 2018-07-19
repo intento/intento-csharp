@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using IntentoSDK;
+using System.Threading;
 
 namespace TestForm
 {
@@ -18,7 +19,8 @@ namespace TestForm
         IntentoAiTextTranslate translate;
         IList<dynamic> providers;
         IList<dynamic> languages;
-        string asyncId;
+        string asyncId = null;
+        bool sendInAction = false;
 
         public Form1(string apiKey, Intento intento, IntentoAiTextTranslate translate, IList<dynamic> providers, IList<dynamic> languages)
         {
@@ -31,12 +33,11 @@ namespace TestForm
 
             // Initialize source and target languages
             comboBoxFrom.DisplayMember = "Key";
-            comboBoxTo.DisplayMember = "Key";
-
             comboBoxFrom.Items.Add(new KeyValuePair<string, string>("autodetect", ""));
-            comboBoxTo.Items.Add(new KeyValuePair<string, string>("select...", ""));
-
             comboBoxFrom.SelectedIndex = 0;
+
+            comboBoxTo.DisplayMember = "Key";
+            comboBoxTo.Items.Add(new KeyValuePair<string, string>("select...", ""));
             comboBoxTo.SelectedIndex = 0;
 
             List<KeyValuePair<string, string>> dataLanguages = languages.Select(i => new KeyValuePair<string, string>((string)i.iso_name, (string)i.intento_code)).ToList();
@@ -74,17 +75,27 @@ namespace TestForm
                 return;
             }
 
+            asyncId = null;
+            sendInAction = true;
+            textBoxResult.Text = null;
+            OverallEnableDisable();
+
             dynamic result;
             try
             {
                 // Call translate intent synchroniously
                 result = translate.Fulfill(
-                    textBoxText.Text, 
-                    to, 
-                    from: ((KeyValuePair<string, string>)comboBoxFrom.SelectedItem).Value, 
-                    async: false,
-                    provider: ((KeyValuePair<string, string>)comboBoxProvider.SelectedItem).Value, 
-                    format: checkBoxHtml.Checked ? "html" : null);
+                    textBoxText.Text,
+                    to,
+                    from: ((KeyValuePair<string, string>)comboBoxFrom.SelectedItem).Value,
+                    provider: ProviderId,
+                    format: checkBoxHtml.Checked ? "html" : null,
+                    async: checkBoxAsync.Checked,
+                    auth: checkBoxOwnCredentials.Enabled && checkBoxOwnCredentials.Checked ? GetAuth(textBoxOwnCredentials.Text) : null,
+                    pre_processing: checkBoxPreProcessing.Enabled && checkBoxPreProcessing.Checked ? textBoxPreProcessing.Text : null,
+                    post_processing: checkBoxPostProcessing.Enabled && checkBoxPostProcessing.Checked ? textBoxPostProcessing.Text : null,
+                    custom_model: checkBoxCustomModel.Enabled && checkBoxCustomModel.Checked ? textBoxCustomModel.Text : null
+                    );
             }
             catch(AggregateException ex2)
             {
@@ -95,48 +106,60 @@ namespace TestForm
                     textBoxResult.Text = string.Format("Exception {2}: {0}: {1}", ex.Message, ((IntentoException)ex).Content, ex.GetType().Name);
                 else
                     textBoxResult.Text = string.Format("Unexpected exception {0}: {1}", ex.GetType().Name, ex.Message);
+
+                sendInAction = false;
+                asyncId = null;
+                OverallEnableDisable();
                 return;
             }
 
-            // Show result
-            textBoxResult.Text = result.results[0];
-            labelTranslateProvider.Text = "via MT provier: " + result.service.provider.name;
+            if (!checkBoxAsync.Checked)
+            {
+                // Show result
+                labelTranslateProvider.Text = "via MT provier: " + result.service.provider.name;
+                textBoxResult.Text = result.results[0];
+                sendInAction = false;
+                OverallEnableDisable();
+            }
+            else
+            {
+                asyncId = result.id;
+                OverallEnableDisable();
+                labelAsync.Text = string.Format("Async {0} in process, 0 sec", asyncId);
+
+                // Wait for result
+                string resultText;
+                int n = 0;
+                while ((resultText = CheckAsync()) == null)
+                {
+                    OverallEnableDisable();
+                    labelAsync.Text = string.Format("Async {0} in process, {1} sec", asyncId, (int)n/500);
+                    Thread.Sleep(500);
+                    n += 500;
+                }
+
+                asyncId = null;
+                textBoxResult.Text = resultText;
+                sendInAction = false;
+                OverallEnableDisable();
+            }
         }
 
-        private void buttonSendAsync_Click(object sender, EventArgs e)
-        {
-            dynamic result;
-            try
-            {
-                // Call translate intent synchroniously
-                result = translate.Fulfill(this.textBoxText.Text, (string)comboBoxTo.SelectedValue, from: (string)comboBoxFrom.SelectedValue, async: true, 
-                    provider: comboBoxProvider.Text, format: checkBoxHtml.Checked ? "html" : null);
-            }
-            catch (AggregateException ex2)
-            {
-                Exception ex = ex2.InnerExceptions[0];
-                if (ex is IntentoInvalidApiKeyException)
-                    textBoxResult.Text = string.Format("Invalid api key");
-                else if (ex is IntentoException)
-                    textBoxResult.Text = string.Format("Exception {2}: {0}: {1}", ex.Message, ((IntentoException)ex).Content, ex.GetType().Name);
-                else
-                    textBoxResult.Text = string.Format("Unexpected exception {0}: {1}", ex.GetType().Name, ex.Message);
-                return;
-            }
+        private string ProviderId
+        { get { return ((KeyValuePair<string, string>)comboBoxProvider.SelectedItem).Value; } }
 
-            // Show result
-            asyncId = result.id;
-            textBoxResult.Text = string.Format("Async ID: {0}", asyncId);
+        // Make auth parameter for Fulfill call
+        private string GetAuth(string auth)
+        {
+            if (string.IsNullOrEmpty(auth))
+                return null;
+            if (string.IsNullOrEmpty(ProviderId))
+                throw new Exception("Own Key parameter is incompatible with smart mode");
+            return string.Format("{{'{0}':[{1}]}}", ProviderId, auth).Replace('\'', '"');
         }
 
-        private void buttonCheckAsync_Click(object sender, EventArgs e)
+        private string CheckAsync()
         {
-            if (asyncId == null)
-            {
-                textBoxResult.Text = "No Async ID";
-                return;
-            }
-
             dynamic result;
             try
             {
@@ -147,12 +170,12 @@ namespace TestForm
             {
                 Exception ex = ex2.InnerExceptions[0];
                 if (ex is IntentoInvalidApiKeyException)
-                    textBoxResult.Text = string.Format("Invalid api key");
+                    return string.Format("Error: Invalid api key");
                 else if (ex is IntentoException)
-                    textBoxResult.Text = string.Format("Exception {2}: {0}: {1}", ex.Message, ((IntentoException)ex).Content, ex.GetType().Name);
+                    return string.Format("Error: Exception {2}: {0}: {1}", ex.Message, ((IntentoException)ex).Content, ex.GetType().Name);
                 else
-                    textBoxResult.Text = string.Format("Unexpected exception {0}: {1}", ex.GetType().Name, ex.Message);
-                return;
+                    return string.Format("Error: Unexpected exception {0}: {1}", ex.GetType().Name, ex.Message);
+                return null;
             }
 
             // 
@@ -161,18 +184,15 @@ namespace TestForm
             {
                 if (response != null)
                 {   // Bug in returned json - need to be in another format
-                    textBoxResult.Text = response[0].results;
+                    return response[0].results[0];
                 }
                 else
                 {   // Correct answer, but not implemented yet
-                    textBoxResult.Text = result.response.results[0];
+                    return result.response.results[0];
                 }
             }
             else
-            {
-                textBoxResult.Text = "Not ready yet";
-            }
-
+                return null;
         }
 
         private void buttonReadFromFile_Click(object sender, EventArgs e)
@@ -207,5 +227,32 @@ namespace TestForm
                 }
             }
         }
+
+        private void checkBoxCustomModel_CheckedChanged(object sender, EventArgs e)
+        {
+            textBoxCustomModel.Enabled = checkBoxCustomModel.Checked;
+        }
+
+        private void comboBoxProvider_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            OverallEnableDisable();
+        }
+
+        private bool IsSmartMode
+        { get { return ((KeyValuePair<string, string>)comboBoxProvider.SelectedItem).Value != ""; } }
+
+        private void textBoxText_TextChanged(object sender, EventArgs e)
+        {
+            OverallEnableDisable();
+        }
+
+        private void OverallEnableDisable()
+        {
+            checkBoxCustomModel.Enabled = textBoxCustomModel.Enabled = checkBoxOwnCredentials.Enabled = textBoxOwnCredentials.Enabled = IsSmartMode;
+            labelAsync.Visible = progressBarAsync.Visible = asyncId != null;
+            buttonSend.Enabled = !string.IsNullOrEmpty(textBoxText.Text) && !sendInAction;
+            // textBoxResult.Enabled = sendInAction;
+        }
+
     }
 }

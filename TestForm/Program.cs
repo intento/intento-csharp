@@ -18,14 +18,7 @@ namespace TestForm
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            string apiKey = "Your Api Key";
-            Intento intento;
-            IntentoAiTextTranslate translate;
-            Dictionary<string, string> providers;
-            Dictionary<string, string> languages;
-            Form2 form2;
-
-            form2 = new Form2();
+            Form2 form2 = new Form2();
             Application.Run(form2);
 
             Application.Run(new Form1(form2.apiKey, form2.intento, form2.translate, form2.providers, form2.languages));

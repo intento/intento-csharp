@@ -34,21 +34,23 @@
             this.buttonContinue = new System.Windows.Forms.Button();
             this.labelWait = new System.Windows.Forms.Label();
             this.labelError = new System.Windows.Forms.Label();
+            this.checkBoxSaveApiKey = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // textBoxApiKey
             // 
             this.textBoxApiKey.Location = new System.Drawing.Point(117, 12);
             this.textBoxApiKey.Name = "textBoxApiKey";
-            this.textBoxApiKey.Size = new System.Drawing.Size(296, 20);
+            this.textBoxApiKey.Size = new System.Drawing.Size(296, 29);
             this.textBoxApiKey.TabIndex = 0;
+            this.textBoxApiKey.TextChanged += new System.EventHandler(this.textBoxApiKey_TextChanged);
             // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(30, 12);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(43, 13);
+            this.label5.Size = new System.Drawing.Size(81, 25);
             this.label5.TabIndex = 1;
             this.label5.Text = "Api Key";
             // 
@@ -66,9 +68,9 @@
             // 
             this.labelWait.AutoSize = true;
             this.labelWait.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.labelWait.Location = new System.Drawing.Point(114, 44);
+            this.labelWait.Location = new System.Drawing.Point(103, 78);
             this.labelWait.Name = "labelWait";
-            this.labelWait.Size = new System.Drawing.Size(121, 13);
+            this.labelWait.Size = new System.Drawing.Size(220, 25);
             this.labelWait.TabIndex = 3;
             this.labelWait.Text = "Initializing. Please wait...";
             this.labelWait.Visible = false;
@@ -77,16 +79,27 @@
             // 
             this.labelError.AutoSize = true;
             this.labelError.ForeColor = System.Drawing.Color.Red;
-            this.labelError.Location = new System.Drawing.Point(30, 35);
+            this.labelError.Location = new System.Drawing.Point(19, 69);
             this.labelError.Name = "labelError";
-            this.labelError.Size = new System.Drawing.Size(29, 13);
+            this.labelError.Size = new System.Drawing.Size(54, 25);
             this.labelError.TabIndex = 4;
             this.labelError.Text = "Error";
             this.labelError.Visible = false;
             // 
+            // checkBoxSaveApiKey
+            // 
+            this.checkBoxSaveApiKey.AutoSize = true;
+            this.checkBoxSaveApiKey.Location = new System.Drawing.Point(117, 46);
+            this.checkBoxSaveApiKey.Name = "checkBoxSaveApiKey";
+            this.checkBoxSaveApiKey.Size = new System.Drawing.Size(264, 29);
+            this.checkBoxSaveApiKey.TabIndex = 5;
+            this.checkBoxSaveApiKey.Text = "Save ApiKey into Registry";
+            this.checkBoxSaveApiKey.UseVisualStyleBackColor = true;
+            // 
             // Form2
             // 
-            this.ClientSize = new System.Drawing.Size(614, 79);
+            this.ClientSize = new System.Drawing.Size(614, 128);
+            this.Controls.Add(this.checkBoxSaveApiKey);
             this.Controls.Add(this.labelError);
             this.Controls.Add(this.labelWait);
             this.Controls.Add(this.buttonContinue);
@@ -119,6 +132,7 @@
         private System.Windows.Forms.Button buttonContinue;
         private System.Windows.Forms.Label labelWait;
         private System.Windows.Forms.Label labelError;
+        private System.Windows.Forms.CheckBox checkBoxSaveApiKey;
     }
 }
 

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using IntentoSDK;
+using Microsoft.Win32;
 
 namespace TestForm
 {
@@ -22,15 +23,31 @@ namespace TestForm
         public Form2()
         {
             InitializeComponent();
+            apiKey = (string)Registry.GetValue("HKEY_CURRENT_USER\\Software\\Intento", "DemoFormApiKey", null);
+            if (string.IsNullOrEmpty(apiKey))
+            {
+                apiKey = System.Environment.GetEnvironmentVariable("APIKEY");
+                if (apiKey == "")
+                    apiKey = null;
+            }
+            textBoxApiKey.Text = apiKey;
         }
 
         private void buttonContinue_Click(object sender, EventArgs e)
+        {
+            Prepare(textBoxApiKey.Text);
+
+            // Save ApiKey into registry
+            if (checkBoxSaveApiKey.Checked)
+                Registry.SetValue("HKEY_CURRENT_USER\\Software\\Intento", "DemoFormApiKey", apiKey);
+        }
+
+        public void Prepare(string apiKey)
         {
             buttonContinue.Enabled = false;
             textBoxApiKey.Enabled = false;
             labelWait.Visible = true;
             labelError.Visible = false;
-            apiKey = textBoxApiKey.Text;
 
             this.Refresh();
 
@@ -63,6 +80,16 @@ namespace TestForm
                     labelError.Text = string.Format("Unexpected exception {0}: {1}", ex.GetType().Name, ex.Message);
                 return;
             }
+        }
+
+        private void textBoxApiKey_TextChanged(object sender, EventArgs e)
+        {
+            OverallEnableDisable();
+        }
+
+        private void OverallEnableDisable()
+        {
+            buttonContinue.Enabled = !string.IsNullOrEmpty(textBoxApiKey.Text);
         }
     }
 }

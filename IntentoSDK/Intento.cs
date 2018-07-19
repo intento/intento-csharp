@@ -16,20 +16,18 @@ namespace IntentoSDK
     {
         public string apiKey;
         public Dictionary<string, object> auth;
-        public bool isProd = false;
         public string serverUrl;
 
-        private Intento(string apiKey, Dictionary<string, object> auth=null, bool isProd=false)
+        private Intento(string apiKey, Dictionary<string, object> auth=null, string path="https://api.inten.to/")
         {
             this.apiKey = apiKey;
             this.auth = auth != null ? new Dictionary<string, object>(auth) : null;
-            this.isProd = isProd;
-            this.serverUrl = "https://api.inten.to/";
+            this.serverUrl = path;
         }
 
-        public static Intento Create(string intentoKey, Dictionary<string, object> auth=null, bool isProd = false)
+        public static Intento Create(string intentoKey, Dictionary<string, object> auth=null, string path = "https://api.inten.to/")
         {
-            Intento intento = new Intento(intentoKey, auth:auth, isProd:isProd);
+            Intento intento = new Intento(intentoKey, auth:auth, path: path);
             return intento;
         }
 

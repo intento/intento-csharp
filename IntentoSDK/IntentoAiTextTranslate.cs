@@ -31,24 +31,90 @@ namespace IntentoSDK
         { get { return parent; } }
 
         public dynamic Fulfill(string text, string to, string from = null, string provider = null, 
-            bool async = false, string format = null)
+            bool async = false, string format = null, object auth = null, string custom_model = null, 
+            object pre_processing = null, object post_processing = null,
+            bool failover=false, object failover_list=null, string bidding=null)
         {
-            Task<dynamic> taskReadResult = Task.Run<dynamic>(async () => await this.FulfillAsync(text, to, from: from, 
-                provider: provider, async: async, format: format));
+            Task<dynamic> taskReadResult = Task.Run<dynamic>(async () => await this.FulfillAsync(text, to, from: from, provider: provider, 
+                async: async, format: format, auth: auth, custom_model: custom_model, pre_processing: pre_processing, post_processing: post_processing,
+                failover: failover, failover_list: failover_list, bidding: bidding));
             return taskReadResult.Result;
         }
 
         async public Task<dynamic> FulfillAsync(string text, string to, string from = null, string provider = null, 
-            bool async = false, string format = null)
+            bool async = false, string format = null, object auth = null, string custom_model = null,
+            object pre_processing = null, object post_processing = null,
+            bool failover = false, object failover_list = null, string bidding = null)
         {
             if (string.IsNullOrEmpty(from))
                 from = null;
 
+            dynamic preProcessingJson = GetJson(pre_processing, "pre_processing");
+            dynamic postProcessingJson = GetJson(post_processing, "post_processing");
+
+            dynamic json = new JObject();
+            dynamic context = new JObject();
+            context.text = text;
+            context.to = to;
+            if (!string.IsNullOrEmpty(from))
+                context.from = from;
+            if (!string.IsNullOrEmpty(format))
+                context.format = format;
+            if (!string.IsNullOrEmpty(custom_model))
+                context.category = custom_model;
+            json.context = context;
+
+            dynamic service = new JObject();
+            service.provider = provider;
+
+            // async parameter
+            if (async)
+                service.async = true;
+
+            // auth parameter
+            service.auth = GetJson(auth, "auth");
+
+            // pre-post processing paramters
+            if (preProcessingJson != null || postProcessingJson != null)
+            {
+                dynamic processing = new JObject();
+                if (preProcessingJson != null)
+                    processing.pre = preProcessingJson;
+                if (postProcessingJson != null)
+                    processing.post = postProcessingJson;
+                service.processing = processing;
+            }
+
+            // failover parameters
+            if (failover)
+            {
+                service.failover = true;
+
+                JArray failoverJson;
+                if (failover_list != null)
+                {
+                    if (failover_list is string)
+                        failoverJson = JArray.Parse((string)failover_list);
+                    else if (failover_list is JArray)
+                        failoverJson = (JArray)failover_list;
+                    else
+                        throw new Exception("Invalid failover_list parameter: need to json-list-string or Newtonsoft JArray");
+                    service.failover_list = failover_list;
+                }
+                if (!string.IsNullOrEmpty(bidding))
+                    service.bidding = bidding;
+            }
+
+            json.service = service;
+
+            string jsonData = JsonConvert.SerializeObject(json);
+
             // Create body for Intento API request
-            string jsonData = JsonConvert.SerializeObject(new {
-                context = new Dictionary<string, string>{ { "text", text }, { "from", from }, { "to", to }, { "format", format } },
-                service = new { async = async, provider = provider },
-            });
+            // string jsonData = JsonConvert.SerializeObject(new {
+            //     context = new Dictionary<string, string>{ { "text", text }, { "from", from }, { "to", to }, { "format", format } },
+            //    service = new { async = async, provider = provider },
+            // });
+
             HttpContent requestBody = new StringContent(jsonData);
 
             // Open connection to Intento API and set ApiKey
@@ -57,6 +123,61 @@ namespace IntentoSDK
 
             // Call to Intento API and get json result
             HttpResponseMessage response = await client.PostAsync(intento.serverUrl + "ai/text/translate", requestBody);
+            string stringResult = await response.Content.ReadAsStringAsync();
+            dynamic jsonResult = JObject.Parse(stringResult);
+
+            if (response.IsSuccessStatusCode)
+                return jsonResult;
+
+            Exception ex = IntentoException.Make(response, jsonResult);
+            throw ex;
+        }
+
+        private dynamic GetJson(object data, string name)
+        {
+            if (data == null)
+                return null;
+            else if (data is string)
+            {
+                string z = ((string)data).Trim();
+                if (string.IsNullOrEmpty(z))
+                    return null;
+                if (z[0] == '[')
+                    return JArray.Parse(z);
+                return JObject.Parse(z);
+            }
+            else if (data is JObject)
+                return (JObject)data;
+            else if (data is Dictionary<string, string>)
+                return (JObject.FromObject((Dictionary<string, string>)data));
+            throw new Exception(string.Format("Invalid {0} parameter: need to be null or json-string or Newtonsoft JObject", name));
+        }
+
+        /// <summary>
+        /// Detailed information on provider features
+        /// </summary>
+        /// <param name="provider">Provider id</param>
+        /// <returns>dynamic (json) with requested information</returns>
+        public dynamic Provider(string provider)
+        {
+            Task<dynamic> taskReadResult = Task.Run<dynamic>(async () => await this.ProviderAsync(provider));
+            return taskReadResult.Result;
+        }
+
+        /// <summary>
+        /// Detailed information on provider features
+        /// </summary>
+        /// <param name="provider">Provider id</param>
+        /// <returns>dynamic (json) with requested information</returns>
+        async public Task<dynamic> ProviderAsync(string provider)
+        {
+            string url = intento.serverUrl + "ai/text/translate/" + provider;
+
+            // Call to Intento API and get json result
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Add("apikey", intento.apiKey);
+            HttpResponseMessage response = await client.GetAsync(url);
+
             string stringResult = await response.Content.ReadAsStringAsync();
             dynamic jsonResult = JObject.Parse(stringResult);
 
