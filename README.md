@@ -58,7 +58,7 @@ dynamic result = translate.Fulfill(text, to, from: from, provider: provider, asy
 string asyncId = result.id;
 ```
 
-asyncId you must use to get results of operation: 
+By calling CheckAsyncJob you may check is operation complete and to get results: 
 ```csharp
 dynamic result = intento.CheckAsyncJob(asyncId);
 if (result.done == true)
@@ -84,7 +84,7 @@ Result: A list of items described each language. Each item is an dynamic object 
 
 
 ## async-await
-Do not confuse async-await practice to call any of Intento C# SDK methods with Async Mode of processing of Fulfill call. 
-All API calls are available in synchronious and asynchronious versions, all asynchronious has the same parameters but name ends with Async, like FulfillAsync. 
+Do not confuse async-await practice to call any of Intento C# SDK methods with parameter async of Fulfill call. 
+All API methods are available in synchronious and asynchronious versions, all asynchronious mathods has the same parameters but name ends with Async, like FulfillAsync. 
 All synchronious versions are implemented by calling corresponding asynchronious version. 
 
