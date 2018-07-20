@@ -30,7 +30,7 @@ namespace IntentoSDK
         public IntentoAiText Parent
         { get { return parent; } }
 
-        public dynamic Fulfill(string text, string to, string from = null, string provider = null, 
+        public dynamic Fulfill(object text, string to, string from = null, string provider = null, 
             bool async = false, string format = null, object auth = null, string custom_model = null, 
             object pre_processing = null, object post_processing = null,
             bool failover=false, object failover_list=null, string bidding=null)
@@ -41,7 +41,7 @@ namespace IntentoSDK
             return taskReadResult.Result;
         }
 
-        async public Task<dynamic> FulfillAsync(string text, string to, string from = null, string provider = null, 
+        async public Task<dynamic> FulfillAsync(object text, string to, string from = null, string provider = null, 
             bool async = false, string format = null, object auth = null, string custom_model = null,
             object pre_processing = null, object post_processing = null,
             bool failover = false, object failover_list = null, string bidding = null)
@@ -53,17 +53,31 @@ namespace IntentoSDK
             dynamic postProcessingJson = GetJson(post_processing, "post_processing");
 
             dynamic json = new JObject();
+
+            // context section
             dynamic context = new JObject();
-            context.text = text;
+
+            // text
+            context.text = GetJson(text, "text");
+
+            // to
             context.to = to;
+
+            // from
             if (!string.IsNullOrEmpty(from))
                 context.from = from;
+
+            // format
             if (!string.IsNullOrEmpty(format))
                 context.format = format;
+
+            // custom_model
             if (!string.IsNullOrEmpty(custom_model))
                 context.category = custom_model;
+
             json.context = context;
 
+            // service section
             dynamic service = new JObject();
             service.provider = provider;
 
@@ -108,13 +122,6 @@ namespace IntentoSDK
             json.service = service;
 
             string jsonData = JsonConvert.SerializeObject(json);
-
-            // Create body for Intento API request
-            // string jsonData = JsonConvert.SerializeObject(new {
-            //     context = new Dictionary<string, string>{ { "text", text }, { "from", from }, { "to", to }, { "format", format } },
-            //    service = new { async = async, provider = provider },
-            // });
-
             HttpContent requestBody = new StringContent(jsonData);
 
             // Open connection to Intento API and set ApiKey
@@ -144,13 +151,19 @@ namespace IntentoSDK
                     return null;
                 if (z[0] == '[')
                     return JArray.Parse(z);
-                return JObject.Parse(z);
+                if (z[0] == '{')
+                    return JObject.Parse(z);
+                return (string)data;
             }
             else if (data is JObject)
                 return (JObject)data;
-            else if (data is Dictionary<string, string>)
+            else if (data is JArray)
+                return (JArray)data;
+            else if (data is IDictionary<string, string>)
                 return (JObject.FromObject((Dictionary<string, string>)data));
-            throw new Exception(string.Format("Invalid {0} parameter: need to be null or json-string or Newtonsoft JObject", name));
+            else if (data is IEnumerable<string>)
+                return (JArray.FromObject((IEnumerable<string>)data));
+            throw new Exception(string.Format("Invalid {0} parameter: need to be null or string or json-string or Newtonsoft JObject/JArray", name));
         }
 
         /// <summary>
