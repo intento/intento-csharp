@@ -10,16 +10,18 @@ namespace IntentoSDK
 {
     public class IntentoException : Exception
     {
-        HttpResponseMessage response;
-        dynamic jsonResult;
+        string messaage;
 
-        protected internal IntentoException(HttpResponseMessage response, object jsonResult)
+        protected internal IntentoException(string message)
         {
-            this.response = response;
-            this.jsonResult = jsonResult;
         }
 
-        // Make is used because in the future we may have more specific Exceptions with additional fields like invalid lang pair
+        /// <summary>
+        /// Makes appropriate Exception depending on response
+        /// </summary>
+        /// <param name="response"></param>
+        /// <param name="jsonResult"></param>
+        /// <returns></returns>
         public static IntentoException Make(HttpResponseMessage response, dynamic jsonResult)
         {
             switch(response.StatusCode)
@@ -28,7 +30,37 @@ namespace IntentoSDK
                     return new IntentoInvalidApiKeyException(response, jsonResult);
             }
 
-            return new IntentoException(response, jsonResult);
+            return new IntentoApiException(response, jsonResult);
+        }
+
+    }
+
+    public class IntentoSdkException : IntentoException
+    {
+        protected internal IntentoSdkException(string message)
+            : base(message)
+        {
+        }
+    }
+
+    public class IntentoInvalidApiKeyException : IntentoApiException
+    {
+        protected internal IntentoInvalidApiKeyException(HttpResponseMessage response, object jsonResult)
+            : base(response, jsonResult)
+        {
+        }
+    }
+    
+    public class IntentoApiException : IntentoException
+    {
+        HttpResponseMessage response;
+        dynamic jsonResult;
+
+        protected internal IntentoApiException(HttpResponseMessage response, object jsonResult)
+            : base("Error in Intento API call")
+        {
+            this.response = response;
+            this.jsonResult = jsonResult;
         }
 
         public HttpStatusCode StatusCode
@@ -43,12 +75,17 @@ namespace IntentoSDK
         public dynamic Content
         { get { return jsonResult; } }
 
+        public dynamic JsonResult
+        { get { return jsonResult; } }
+
     }
 
-    public class IntentoInvalidApiKeyException: IntentoException
+    public class IntentoInvalidParameterException: IntentoException
     {
-        protected internal IntentoInvalidApiKeyException(HttpResponseMessage response, object jsonResult)
-            : base(response, jsonResult)
+        public IntentoInvalidParameterException(string parameterName, string hint = null)
+            : base(hint != null ? 
+                  string.Format("Invalid {0} parameter: {1}", parameterName, hint) : 
+                  string.Format("Invalid {0} parameter", parameterName))
         { }
     }
 }

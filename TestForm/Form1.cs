@@ -102,8 +102,10 @@ namespace TestForm
                 Exception ex = ex2.InnerExceptions[0];
                 if (ex is IntentoInvalidApiKeyException)
                     textBoxResult.Text = string.Format("Invalid api key");
-                else if (ex is IntentoException)
-                    textBoxResult.Text = string.Format("Exception {2}: {0}: {1}", ex.Message, ((IntentoException)ex).Content, ex.GetType().Name);
+                else if (ex is IntentoApiException)
+                    textBoxResult.Text = string.Format("Api Exception {2}: {0}: {1}", ex.Message, ((IntentoApiException)ex).Content, ex.GetType().Name);
+                else if (ex is IntentoSdkException)
+                    textBoxResult.Text = string.Format("Sdk Exception {1}: {0}", ex.Message, ex.GetType().Name);
                 else
                     textBoxResult.Text = string.Format("Unexpected exception {0}: {1}", ex.GetType().Name, ex.Message);
 
@@ -171,8 +173,8 @@ namespace TestForm
                 Exception ex = ex2.InnerExceptions[0];
                 if (ex is IntentoInvalidApiKeyException)
                     return string.Format("Error: Invalid api key");
-                else if (ex is IntentoException)
-                    return string.Format("Error: Exception {2}: {0}: {1}", ex.Message, ((IntentoException)ex).Content, ex.GetType().Name);
+                else if (ex is IntentoApiException)
+                    return string.Format("Error: Exception {2}: {0}: {1}", ex.Message, ((IntentoApiException)ex).Content, ex.GetType().Name);
                 else
                     return string.Format("Error: Unexpected exception {0}: {1}", ex.GetType().Name, ex.Message);
                 return null;

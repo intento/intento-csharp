@@ -112,11 +112,11 @@ namespace IntentoSDK
                     else if (failover_list is JArray)
                         failoverJson = (JArray)failover_list;
                     else
-                        throw new Exception("Invalid failover_list parameter: need to json-list-string or Newtonsoft JArray");
+                        throw new IntentoInvalidParameterException("failover_list", "need to json-list-string or Newtonsoft JArray");
                     service.failover_list = failover_list;
                 }
                 if (!string.IsNullOrEmpty(bidding))
-                    service.bidding = bidding;
+                    service.bidding = bidding; 
             }
 
             json.service = service;
@@ -163,7 +163,7 @@ namespace IntentoSDK
                 return (JObject.FromObject((Dictionary<string, string>)data));
             else if (data is IEnumerable<string>)
                 return (JArray.FromObject((IEnumerable<string>)data));
-            throw new Exception(string.Format("Invalid {0} parameter: need to be null or string or json-string or Newtonsoft JObject/JArray", name));
+            throw new IntentoInvalidParameterException(name, "need to be null or string or json-string or Newtonsoft JObject/JArray");
         }
 
         /// <summary>

@@ -74,8 +74,10 @@ namespace TestForm
                 Exception ex = ex2.InnerExceptions[0];
                 if (ex is IntentoInvalidApiKeyException)
                     labelError.Text = string.Format("Invalid api key");
-                else if (ex is IntentoException)
-                    labelError.Text = string.Format("Exception {2}: {0}: {1}", ex.Message, ((IntentoException)ex).Content, ex.GetType().Name);
+                else if (ex is IntentoApiException)
+                    labelError.Text = string.Format("Api Exception {2}: {0}: {1}", ex.Message, ((IntentoApiException)ex).Content, ex.GetType().Name);
+                else if (ex is IntentoSdkException)
+                    labelError.Text = string.Format("Sdk Exception {1}: {0}", ex.Message, ex.GetType().Name);
                 else
                     labelError.Text = string.Format("Unexpected exception {0}: {1}", ex.GetType().Name, ex.Message);
                 return;
