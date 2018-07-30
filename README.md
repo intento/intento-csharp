@@ -85,6 +85,6 @@ Result: A list of items described each language. Each item is an dynamic object 
 
 ## async-await
 Do not confuse async-await practice to call any of Intento C# SDK methods with parameter async of Fulfill call. 
-All API methods are available in synchronious and asynchronious versions, all asynchronious mathods has the same parameters but name ends with Async, like FulfillAsync. 
-All synchronious versions are implemented by calling corresponding asynchronious version. 
+All API methods are available in synchronous and asynchronous versions, all asynchronous mathods has the same parameters but name ends with Async, like FulfillAsync. 
+All synchronous versions are implemented by calling corresponding asynchronous version. 
 

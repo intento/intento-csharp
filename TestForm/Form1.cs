@@ -83,7 +83,7 @@ namespace TestForm
             dynamic result;
             try
             {
-                // Call translate intent synchroniously
+                // Call translate intent synchronously
                 result = translate.Fulfill(
                     textBoxText.Text,
                     to,
@@ -165,7 +165,7 @@ namespace TestForm
             dynamic result;
             try
             {
-                // Call translate intent synchroniously
+                // Call translate intent synchronously
                 result = intento.CheckAsyncJob(asyncId);
             }
             catch (AggregateException ex2)
