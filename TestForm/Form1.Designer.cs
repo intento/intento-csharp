@@ -58,6 +58,8 @@
             this.checkBoxAsync = new System.Windows.Forms.CheckBox();
             this.labelAsync = new System.Windows.Forms.Label();
             this.progressBarAsync = new System.Windows.Forms.ProgressBar();
+            this.buttonLanguagePairs = new System.Windows.Forms.Button();
+            this.checkBoxWaitAsync = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -66,11 +68,11 @@
             // 
             // textBoxText
             // 
-            this.textBoxText.Location = new System.Drawing.Point(8, 51);
-            this.textBoxText.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxText.Location = new System.Drawing.Point(6, 41);
             this.textBoxText.Multiline = true;
             this.textBoxText.Name = "textBoxText";
-            this.textBoxText.Size = new System.Drawing.Size(563, 121);
+            this.textBoxText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBoxText.Size = new System.Drawing.Size(423, 99);
             this.textBoxText.TabIndex = 3;
             this.textBoxText.Text = "Hi!";
             this.textBoxText.TextChanged += new System.EventHandler(this.textBoxText_TextChanged);
@@ -79,10 +81,9 @@
             // 
             this.labelTo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelTo.AutoSize = true;
-            this.labelTo.Location = new System.Drawing.Point(268, 20);
-            this.labelTo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelTo.Location = new System.Drawing.Point(201, 16);
             this.labelTo.Name = "labelTo";
-            this.labelTo.Size = new System.Drawing.Size(118, 17);
+            this.labelTo.Size = new System.Drawing.Size(89, 13);
             this.labelTo.TabIndex = 6;
             this.labelTo.Text = "Target Language";
             // 
@@ -90,30 +91,27 @@
             // 
             this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(8, 20);
-            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4.Location = new System.Drawing.Point(6, 16);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(121, 17);
+            this.label4.Size = new System.Drawing.Size(92, 13);
             this.label4.TabIndex = 7;
             this.label4.Text = "Source Language";
             // 
             // checkBoxHtml
             // 
             this.checkBoxHtml.AutoSize = true;
-            this.checkBoxHtml.Location = new System.Drawing.Point(8, 21);
-            this.checkBoxHtml.Margin = new System.Windows.Forms.Padding(4);
+            this.checkBoxHtml.Location = new System.Drawing.Point(6, 17);
             this.checkBoxHtml.Name = "checkBoxHtml";
-            this.checkBoxHtml.Size = new System.Drawing.Size(58, 21);
+            this.checkBoxHtml.Size = new System.Drawing.Size(47, 17);
             this.checkBoxHtml.TabIndex = 9;
             this.checkBoxHtml.Text = "Html";
             this.checkBoxHtml.UseVisualStyleBackColor = true;
             // 
             // buttonSend
             // 
-            this.buttonSend.Location = new System.Drawing.Point(23, 533);
-            this.buttonSend.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonSend.Location = new System.Drawing.Point(17, 433);
             this.buttonSend.Name = "buttonSend";
-            this.buttonSend.Size = new System.Drawing.Size(167, 28);
+            this.buttonSend.Size = new System.Drawing.Size(125, 23);
             this.buttonSend.TabIndex = 11;
             this.buttonSend.Text = "Translate";
             this.buttonSend.UseVisualStyleBackColor = true;
@@ -121,18 +119,21 @@
             // 
             // textBoxResult
             // 
-            this.textBoxResult.Location = new System.Drawing.Point(7, 22);
+            this.textBoxResult.Location = new System.Drawing.Point(5, 18);
+            this.textBoxResult.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxResult.Multiline = true;
             this.textBoxResult.Name = "textBoxResult";
-            this.textBoxResult.Size = new System.Drawing.Size(564, 109);
+            this.textBoxResult.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBoxResult.Size = new System.Drawing.Size(424, 89);
             this.textBoxResult.TabIndex = 12;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 70);
+            this.label1.Location = new System.Drawing.Point(6, 57);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(85, 17);
+            this.label1.Size = new System.Drawing.Size(65, 13);
             this.label1.TabIndex = 15;
             this.label1.Text = "MT Provider";
             // 
@@ -140,9 +141,10 @@
             // 
             this.comboBoxProvider.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxProvider.FormattingEnabled = true;
-            this.comboBoxProvider.Location = new System.Drawing.Point(12, 89);
+            this.comboBoxProvider.Location = new System.Drawing.Point(9, 72);
+            this.comboBoxProvider.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxProvider.Name = "comboBoxProvider";
-            this.comboBoxProvider.Size = new System.Drawing.Size(203, 24);
+            this.comboBoxProvider.Size = new System.Drawing.Size(153, 21);
             this.comboBoxProvider.TabIndex = 16;
             this.comboBoxProvider.SelectedIndexChanged += new System.EventHandler(this.comboBoxProvider_SelectedIndexChanged);
             // 
@@ -150,28 +152,26 @@
             // 
             this.comboBoxTo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxTo.FormattingEnabled = true;
-            this.comboBoxTo.Location = new System.Drawing.Point(272, 41);
-            this.comboBoxTo.Margin = new System.Windows.Forms.Padding(4);
+            this.comboBoxTo.Location = new System.Drawing.Point(204, 33);
             this.comboBoxTo.Name = "comboBoxTo";
-            this.comboBoxTo.Size = new System.Drawing.Size(203, 24);
+            this.comboBoxTo.Size = new System.Drawing.Size(153, 21);
             this.comboBoxTo.TabIndex = 17;
             // 
             // comboBoxFrom
             // 
             this.comboBoxFrom.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFrom.FormattingEnabled = true;
-            this.comboBoxFrom.Location = new System.Drawing.Point(12, 41);
-            this.comboBoxFrom.Margin = new System.Windows.Forms.Padding(4);
+            this.comboBoxFrom.Location = new System.Drawing.Point(9, 33);
             this.comboBoxFrom.Name = "comboBoxFrom";
-            this.comboBoxFrom.Size = new System.Drawing.Size(203, 24);
+            this.comboBoxFrom.Size = new System.Drawing.Size(153, 21);
             this.comboBoxFrom.TabIndex = 18;
+            this.comboBoxFrom.SelectedIndexChanged += new System.EventHandler(this.comboBoxFrom_SelectedIndexChanged);
             // 
             // buttonReadFromFile
             // 
-            this.buttonReadFromFile.Location = new System.Drawing.Point(401, 15);
-            this.buttonReadFromFile.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonReadFromFile.Location = new System.Drawing.Point(301, 12);
             this.buttonReadFromFile.Name = "buttonReadFromFile";
-            this.buttonReadFromFile.Size = new System.Drawing.Size(171, 28);
+            this.buttonReadFromFile.Size = new System.Drawing.Size(128, 23);
             this.buttonReadFromFile.TabIndex = 19;
             this.buttonReadFromFile.Text = "Read From File";
             this.buttonReadFromFile.UseVisualStyleBackColor = true;
@@ -180,10 +180,9 @@
             // checkBoxPostProcessing
             // 
             this.checkBoxPostProcessing.AutoSize = true;
-            this.checkBoxPostProcessing.Location = new System.Drawing.Point(8, 105);
-            this.checkBoxPostProcessing.Margin = new System.Windows.Forms.Padding(4);
+            this.checkBoxPostProcessing.Location = new System.Drawing.Point(6, 85);
             this.checkBoxPostProcessing.Name = "checkBoxPostProcessing";
-            this.checkBoxPostProcessing.Size = new System.Drawing.Size(132, 21);
+            this.checkBoxPostProcessing.Size = new System.Drawing.Size(102, 17);
             this.checkBoxPostProcessing.TabIndex = 24;
             this.checkBoxPostProcessing.Text = "Post Processing";
             this.checkBoxPostProcessing.UseVisualStyleBackColor = true;
@@ -191,10 +190,9 @@
             // checkBoxCustomModel
             // 
             this.checkBoxCustomModel.AutoSize = true;
-            this.checkBoxCustomModel.Location = new System.Drawing.Point(8, 50);
-            this.checkBoxCustomModel.Margin = new System.Windows.Forms.Padding(4);
+            this.checkBoxCustomModel.Location = new System.Drawing.Point(6, 41);
             this.checkBoxCustomModel.Name = "checkBoxCustomModel";
-            this.checkBoxCustomModel.Size = new System.Drawing.Size(119, 21);
+            this.checkBoxCustomModel.Size = new System.Drawing.Size(93, 17);
             this.checkBoxCustomModel.TabIndex = 25;
             this.checkBoxCustomModel.Text = "Custom Model";
             this.checkBoxCustomModel.UseVisualStyleBackColor = true;
@@ -202,10 +200,9 @@
             // 
             // textBoxCustomModel
             // 
-            this.textBoxCustomModel.Location = new System.Drawing.Point(135, 48);
-            this.textBoxCustomModel.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxCustomModel.Location = new System.Drawing.Point(104, 39);
             this.textBoxCustomModel.Name = "textBoxCustomModel";
-            this.textBoxCustomModel.Size = new System.Drawing.Size(436, 22);
+            this.textBoxCustomModel.Size = new System.Drawing.Size(325, 20);
             this.textBoxCustomModel.TabIndex = 26;
             // 
             // groupBox1
@@ -216,11 +213,9 @@
             this.groupBox1.Controls.Add(this.comboBoxTo);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.comboBoxProvider);
-            this.groupBox1.Location = new System.Drawing.Point(16, 202);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.groupBox1.Location = new System.Drawing.Point(12, 164);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox1.Size = new System.Drawing.Size(580, 134);
+            this.groupBox1.Size = new System.Drawing.Size(435, 109);
             this.groupBox1.TabIndex = 27;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Settings";
@@ -230,11 +225,9 @@
             this.groupBox2.Controls.Add(this.labelError);
             this.groupBox2.Controls.Add(this.textBoxText);
             this.groupBox2.Controls.Add(this.buttonReadFromFile);
-            this.groupBox2.Location = new System.Drawing.Point(16, 15);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(4);
+            this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox2.Size = new System.Drawing.Size(583, 180);
+            this.groupBox2.Size = new System.Drawing.Size(437, 146);
             this.groupBox2.TabIndex = 28;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Text to Translate";
@@ -243,10 +236,9 @@
             // 
             this.labelError.AutoSize = true;
             this.labelError.ForeColor = System.Drawing.Color.Red;
-            this.labelError.Location = new System.Drawing.Point(12, 21);
-            this.labelError.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelError.Location = new System.Drawing.Point(9, 17);
             this.labelError.Name = "labelError";
-            this.labelError.Size = new System.Drawing.Size(0, 17);
+            this.labelError.Size = new System.Drawing.Size(0, 13);
             this.labelError.TabIndex = 20;
             // 
             // groupBox3
@@ -260,28 +252,28 @@
             this.groupBox3.Controls.Add(this.checkBoxHtml);
             this.groupBox3.Controls.Add(this.checkBoxPostProcessing);
             this.groupBox3.Controls.Add(this.textBoxCustomModel);
-            this.groupBox3.Location = new System.Drawing.Point(16, 343);
-            this.groupBox3.Margin = new System.Windows.Forms.Padding(4);
+            this.groupBox3.Location = new System.Drawing.Point(12, 279);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox3.Size = new System.Drawing.Size(580, 169);
+            this.groupBox3.Size = new System.Drawing.Size(435, 137);
             this.groupBox3.TabIndex = 29;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Options";
             // 
             // textBoxPreProcessing
             // 
-            this.textBoxPreProcessing.Location = new System.Drawing.Point(138, 75);
+            this.textBoxPreProcessing.Location = new System.Drawing.Point(104, 61);
+            this.textBoxPreProcessing.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxPreProcessing.Name = "textBoxPreProcessing";
-            this.textBoxPreProcessing.Size = new System.Drawing.Size(433, 22);
+            this.textBoxPreProcessing.Size = new System.Drawing.Size(325, 20);
             this.textBoxPreProcessing.TabIndex = 31;
             // 
             // checkBoxPreProcessing
             // 
             this.checkBoxPreProcessing.AutoSize = true;
-            this.checkBoxPreProcessing.Location = new System.Drawing.Point(8, 78);
+            this.checkBoxPreProcessing.Location = new System.Drawing.Point(6, 63);
+            this.checkBoxPreProcessing.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxPreProcessing.Name = "checkBoxPreProcessing";
-            this.checkBoxPreProcessing.Size = new System.Drawing.Size(126, 21);
+            this.checkBoxPreProcessing.Size = new System.Drawing.Size(97, 17);
             this.checkBoxPreProcessing.TabIndex = 30;
             this.checkBoxPreProcessing.Text = "Pre Processing";
             this.checkBoxPreProcessing.UseVisualStyleBackColor = true;
@@ -289,27 +281,30 @@
             // textBoxOwnCredentials
             // 
             this.textBoxOwnCredentials.AccessibleDescription = "";
-            this.textBoxOwnCredentials.Location = new System.Drawing.Point(140, 132);
+            this.textBoxOwnCredentials.Location = new System.Drawing.Point(105, 107);
+            this.textBoxOwnCredentials.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxOwnCredentials.Name = "textBoxOwnCredentials";
-            this.textBoxOwnCredentials.Size = new System.Drawing.Size(431, 22);
+            this.textBoxOwnCredentials.Size = new System.Drawing.Size(324, 20);
             this.textBoxOwnCredentials.TabIndex = 29;
             this.textBoxOwnCredentials.Tag = "";
             // 
             // checkBoxOwnCredentials
             // 
             this.checkBoxOwnCredentials.AutoSize = true;
-            this.checkBoxOwnCredentials.Location = new System.Drawing.Point(8, 133);
+            this.checkBoxOwnCredentials.Location = new System.Drawing.Point(6, 108);
+            this.checkBoxOwnCredentials.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxOwnCredentials.Name = "checkBoxOwnCredentials";
-            this.checkBoxOwnCredentials.Size = new System.Drawing.Size(133, 21);
+            this.checkBoxOwnCredentials.Size = new System.Drawing.Size(103, 17);
             this.checkBoxOwnCredentials.TabIndex = 28;
             this.checkBoxOwnCredentials.Text = "Own Credentials";
             this.checkBoxOwnCredentials.UseVisualStyleBackColor = true;
             // 
             // textBoxPostProcessing
             // 
-            this.textBoxPostProcessing.Location = new System.Drawing.Point(140, 103);
+            this.textBoxPostProcessing.Location = new System.Drawing.Point(105, 84);
+            this.textBoxPostProcessing.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxPostProcessing.Name = "textBoxPostProcessing";
-            this.textBoxPostProcessing.Size = new System.Drawing.Size(431, 22);
+            this.textBoxPostProcessing.Size = new System.Drawing.Size(324, 20);
             this.textBoxPostProcessing.TabIndex = 27;
             // 
             // groupBoxTranslated
@@ -317,21 +312,18 @@
             this.groupBoxTranslated.Controls.Add(this.buttonSaveToFile);
             this.groupBoxTranslated.Controls.Add(this.labelTranslateProvider);
             this.groupBoxTranslated.Controls.Add(this.textBoxResult);
-            this.groupBoxTranslated.Location = new System.Drawing.Point(16, 593);
-            this.groupBoxTranslated.Margin = new System.Windows.Forms.Padding(4);
+            this.groupBoxTranslated.Location = new System.Drawing.Point(12, 482);
             this.groupBoxTranslated.Name = "groupBoxTranslated";
-            this.groupBoxTranslated.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBoxTranslated.Size = new System.Drawing.Size(583, 181);
+            this.groupBoxTranslated.Size = new System.Drawing.Size(437, 147);
             this.groupBoxTranslated.TabIndex = 32;
             this.groupBoxTranslated.TabStop = false;
             this.groupBoxTranslated.Text = "Translated";
             // 
             // buttonSaveToFile
             // 
-            this.buttonSaveToFile.Location = new System.Drawing.Point(401, 139);
-            this.buttonSaveToFile.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonSaveToFile.Location = new System.Drawing.Point(301, 113);
             this.buttonSaveToFile.Name = "buttonSaveToFile";
-            this.buttonSaveToFile.Size = new System.Drawing.Size(171, 28);
+            this.buttonSaveToFile.Size = new System.Drawing.Size(128, 23);
             this.buttonSaveToFile.TabIndex = 14;
             this.buttonSaveToFile.Text = "Save to File";
             this.buttonSaveToFile.UseVisualStyleBackColor = true;
@@ -340,46 +332,71 @@
             // labelTranslateProvider
             // 
             this.labelTranslateProvider.AutoSize = true;
-            this.labelTranslateProvider.Location = new System.Drawing.Point(12, 139);
-            this.labelTranslateProvider.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelTranslateProvider.Location = new System.Drawing.Point(9, 113);
             this.labelTranslateProvider.Name = "labelTranslateProvider";
-            this.labelTranslateProvider.Size = new System.Drawing.Size(0, 17);
+            this.labelTranslateProvider.Size = new System.Drawing.Size(0, 13);
             this.labelTranslateProvider.TabIndex = 13;
             // 
             // checkBoxAsync
             // 
             this.checkBoxAsync.AutoSize = true;
-            this.checkBoxAsync.Location = new System.Drawing.Point(207, 533);
+            this.checkBoxAsync.Location = new System.Drawing.Point(155, 433);
+            this.checkBoxAsync.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxAsync.Name = "checkBoxAsync";
-            this.checkBoxAsync.Size = new System.Drawing.Size(68, 21);
+            this.checkBoxAsync.Size = new System.Drawing.Size(55, 17);
             this.checkBoxAsync.TabIndex = 33;
             this.checkBoxAsync.Text = "Async";
             this.checkBoxAsync.UseVisualStyleBackColor = true;
+            this.checkBoxAsync.CheckedChanged += new System.EventHandler(this.checkBoxAsync_CheckedChanged);
             // 
             // labelAsync
             // 
             this.labelAsync.AutoSize = true;
             this.labelAsync.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.labelAsync.Location = new System.Drawing.Point(228, 572);
+            this.labelAsync.Location = new System.Drawing.Point(171, 465);
+            this.labelAsync.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelAsync.Name = "labelAsync";
-            this.labelAsync.Size = new System.Drawing.Size(115, 17);
+            this.labelAsync.Size = new System.Drawing.Size(87, 13);
             this.labelAsync.TabIndex = 34;
             this.labelAsync.Text = "Async in process";
             // 
             // progressBarAsync
             // 
-            this.progressBarAsync.Location = new System.Drawing.Point(23, 568);
+            this.progressBarAsync.Location = new System.Drawing.Point(17, 462);
+            this.progressBarAsync.Margin = new System.Windows.Forms.Padding(2);
             this.progressBarAsync.Name = "progressBarAsync";
-            this.progressBarAsync.Size = new System.Drawing.Size(199, 23);
+            this.progressBarAsync.Size = new System.Drawing.Size(149, 19);
             this.progressBarAsync.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.progressBarAsync.TabIndex = 35;
             this.progressBarAsync.UseWaitCursor = true;
             // 
+            // buttonLanguagePairs
+            // 
+            this.buttonLanguagePairs.Location = new System.Drawing.Point(328, 433);
+            this.buttonLanguagePairs.Name = "buttonLanguagePairs";
+            this.buttonLanguagePairs.Size = new System.Drawing.Size(113, 25);
+            this.buttonLanguagePairs.TabIndex = 36;
+            this.buttonLanguagePairs.Text = "LanguagePairs";
+            this.buttonLanguagePairs.UseVisualStyleBackColor = true;
+            this.buttonLanguagePairs.Click += new System.EventHandler(this.buttonLanguagePairs_Click);
+            // 
+            // checkBoxWaitAsync
+            // 
+            this.checkBoxWaitAsync.AutoSize = true;
+            this.checkBoxWaitAsync.Location = new System.Drawing.Point(216, 433);
+            this.checkBoxWaitAsync.Name = "checkBoxWaitAsync";
+            this.checkBoxWaitAsync.Size = new System.Drawing.Size(77, 17);
+            this.checkBoxWaitAsync.TabIndex = 37;
+            this.checkBoxWaitAsync.Text = "WaitAsync";
+            this.checkBoxWaitAsync.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(616, 787);
+            this.ClientSize = new System.Drawing.Size(462, 639);
+            this.Controls.Add(this.checkBoxWaitAsync);
+            this.Controls.Add(this.buttonLanguagePairs);
             this.Controls.Add(this.progressBarAsync);
             this.Controls.Add(this.labelAsync);
             this.Controls.Add(this.checkBoxAsync);
@@ -389,7 +406,6 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.buttonSend);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "Intento MT";
             this.groupBox1.ResumeLayout(false);
@@ -435,6 +451,8 @@
         private System.Windows.Forms.CheckBox checkBoxAsync;
         private System.Windows.Forms.Label labelAsync;
         private System.Windows.Forms.ProgressBar progressBarAsync;
+        private System.Windows.Forms.Button buttonLanguagePairs;
+        private System.Windows.Forms.CheckBox checkBoxWaitAsync;
     }
 }
 

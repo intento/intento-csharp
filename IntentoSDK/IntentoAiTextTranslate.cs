@@ -10,6 +10,7 @@ using System.Web;
 using System.Net.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Threading;
 
 namespace IntentoSDK
 {
@@ -30,19 +31,20 @@ namespace IntentoSDK
         public IntentoAiText Parent
         { get { return parent; } }
 
-        public dynamic Fulfill(object text, string to, string from = null, string provider = null, 
-            bool async = false, string format = null, object auth = null, string custom_model = null, 
+        public dynamic Fulfill(object text, string to, string from = null, string provider = null,
+            bool async = false, bool wait_async = false, string format = null, object auth = null, string custom_model = null,
             object pre_processing = null, object post_processing = null,
-            bool failover=false, object failover_list=null, string bidding=null)
+            bool failover = false, object failover_list = null, string bidding = null)
         {
-            Task<dynamic> taskReadResult = Task.Run<dynamic>(async () => await this.FulfillAsync(text, to, from: from, provider: provider, 
-                async: async, format: format, auth: auth, custom_model: custom_model, pre_processing: pre_processing, post_processing: post_processing,
+            Task<dynamic> taskReadResult = Task.Run<dynamic>(async () => await this.FulfillAsync(text, to, from: from, provider: provider,
+                async: async, wait_async: wait_async, format: format, auth: auth, custom_model: custom_model,
+                pre_processing: pre_processing, post_processing: post_processing,
                 failover: failover, failover_list: failover_list, bidding: bidding));
             return taskReadResult.Result;
         }
 
-        async public Task<dynamic> FulfillAsync(object text, string to, string from = null, string provider = null, 
-            bool async = false, string format = null, object auth = null, string custom_model = null,
+        async public Task<dynamic> FulfillAsync(object text, string to, string from = null, string provider = null,
+            bool async = false, bool wait_async = false, string format = null, object auth = null, string custom_model = null,
             object pre_processing = null, object post_processing = null,
             bool failover = false, object failover_list = null, string bidding = null)
         {
@@ -79,7 +81,7 @@ namespace IntentoSDK
 
             // service section
             dynamic service = new JObject();
-            service.provider = provider;
+            service.provider = provider == "" ? null : provider;
 
             // async parameter
             if (async)
@@ -116,28 +118,21 @@ namespace IntentoSDK
                     service.failover_list = failover_list;
                 }
                 if (!string.IsNullOrEmpty(bidding))
-                    service.bidding = bidding; 
+                    service.bidding = bidding;
             }
-
             json.service = service;
 
-            string jsonData = JsonConvert.SerializeObject(json);
-            HttpContent requestBody = new StringContent(jsonData);
-
-            // Open connection to Intento API and set ApiKey
-            HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Add("apikey", intento.apiKey);
-
             // Call to Intento API and get json result
-            HttpResponseMessage response = await client.PostAsync(intento.serverUrl + "ai/text/translate", requestBody);
-            string stringResult = await response.Content.ReadAsStringAsync();
-            dynamic jsonResult = JObject.Parse(stringResult);
+            HttpConnector conn = new HttpConnector(Intento);
+            dynamic jsonResult = await conn.PostAsync("ai/text/translate", json);
 
-            if (response.IsSuccessStatusCode)
-                return jsonResult;
+            if (async && wait_async)
+            {   // async opertation (in terms of IntentoApi) and we need to wait result of it
+                string id = jsonResult.id;
+                jsonResult = await Intento.WaitAsyncJobAsync(id);
+            }
 
-            Exception ex = IntentoException.Make(response, jsonResult);
-            throw ex;
+            return jsonResult;
         }
 
         private dynamic GetJson(object data, string name)
@@ -182,69 +177,55 @@ namespace IntentoSDK
         /// </summary>
         /// <param name="provider">Provider id</param>
         /// <returns>dynamic (json) with requested information</returns>
-        async public Task<dynamic> ProviderAsync(string provider)
+        async public Task<dynamic> ProviderAsync(string providerId)
         {
-            string url = intento.serverUrl + "ai/text/translate/" + provider;
+            string path = "ai/text/translate/" + providerId;
 
             // Call to Intento API and get json result
-            HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Add("apikey", intento.apiKey);
-            HttpResponseMessage response = await client.GetAsync(url);
+            HttpConnector conn = new HttpConnector(Intento);
+            dynamic jsonResult = await conn.GetAsync(path);
 
-            string stringResult = await response.Content.ReadAsStringAsync();
-            dynamic jsonResult = JObject.Parse(stringResult);
-
-            if (response.IsSuccessStatusCode)
-                return jsonResult;
-
-            Exception ex = IntentoException.Make(response, jsonResult);
-            throw ex;
+            return jsonResult;
         }
 
-        public IList<dynamic> Providers(string to = null, string from = null)
+        public IList<dynamic> Providers(string to = null, string from = null, bool lang_detect = false, bool bulk = false,
+            Dictionary<string, string> filter = null)
         {
-            Task<IList<dynamic>> taskReadResult = Task.Run<IList<dynamic>>(async () => await this.ProvidersAsync(to: to, from: from));
+            Task<IList<dynamic>> taskReadResult = Task.Run<IList<dynamic>>(async () => 
+                await this.ProvidersAsync(to: to, from: from, lang_detect: lang_detect, bulk: bulk, filter: filter));
             return taskReadResult.Result;
         }
 
-        async public Task<IList<dynamic>> ProvidersAsync(string to = null, string from = null, bool lang_detect = false, bool bulk = false)
+        async public Task<IList<dynamic>> ProvidersAsync(string to = null, string from = null, bool lang_detect = false, bool bulk = false,
+            Dictionary<string, string> filter = null)
         {
-            HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Add("apikey", intento.apiKey);
+            Dictionary<string, string> f = new Dictionary<string, string>(filter);
+            if (!string.IsNullOrEmpty(to))
+                f["to"] = to;
+            if (!string.IsNullOrEmpty(from))
+                f["from"] = from;
+            if (lang_detect)
+                f["lang_detect"] = "true";
+            if (bulk)
+                f["bulk"] = "true";
 
             List<string> p = new List<string>();
-            if (!string.IsNullOrEmpty(to))
-                p.Add(string.Format("to={0}", System.Web.HttpUtility.UrlEncode(to)));
-            if (!string.IsNullOrEmpty(to))
-                p.Add(string.Format("from={0}", System.Web.HttpUtility.UrlEncode(from)));
-            if (lang_detect)
-                p.Add("lang_detect=true");
-            if (bulk)
-                p.Add("bulk=true");
-
-            string url = intento.serverUrl + "ai/text/translate";
+            foreach(KeyValuePair<string, string> pair in f)
+                p.Add(string.Format("{0}={1}", pair.Key, System.Web.HttpUtility.UrlEncode(pair.Value)));
+            string url = "ai/text/translate";
             if (p.Count != 0)
                 url += "?" + string.Join("&", p);
 
             // Call to Intento API and get json result
-            HttpResponseMessage response = await client.GetAsync(url);
+            HttpConnector conn = new HttpConnector(Intento);
+            dynamic jsonResult = await conn.GetAsync(url);
 
             List<dynamic> providers = new List<dynamic>();
-            string stringResult = await response.Content.ReadAsStringAsync();
 
-            if (response.IsSuccessStatusCode)
-            {
-                JArray jsonResult = JArray.Parse(stringResult);
+            foreach (dynamic providerInfo in jsonResult)
+                providers.Add(providerInfo);
 
-                foreach (dynamic providerInfo in jsonResult)
-                    providers.Add(providerInfo);
-
-                return providers;
-            }
-
-            dynamic jsonErrorResult = JObject.Parse(stringResult);
-            Exception ex = IntentoException.Make(response, jsonErrorResult);
-            throw ex;
+            return providers;
         }
 
         public IList<dynamic> Languages()
@@ -255,30 +236,49 @@ namespace IntentoSDK
 
         async public Task<IList<dynamic>> LanguagesAsync()
         {
-            HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Add("apikey", intento.apiKey);
-
-            string url = intento.serverUrl + "ai/text/translate/languages";
+            string url = "ai/text/translate/languages";
 
             // Call to Intento API and get json result
-            HttpResponseMessage response = await client.GetAsync(url);
+            HttpConnector conn = new HttpConnector(Intento);
+            dynamic jsonResult = await conn.GetAsync(url);
 
             List<dynamic> languages = new List<dynamic>();
-            string stringResult = await response.Content.ReadAsStringAsync();
+            foreach (dynamic languageInfo in jsonResult)
+                languages.Add(languageInfo);
 
-            if (response.IsSuccessStatusCode)
+            return languages;
+        }
+
+        public IList<IList<string>> ProviderLanguagePairs(string providerId)
+        {
+            Task<IList<IList<string>>> taskReadResult = Task.Run<IList<IList<string>>>(async () => await this.ProviderLanguagePairsAsync(providerId));
+            return taskReadResult.Result;
+        }
+
+        async public Task<IList<IList<string>>> ProviderLanguagePairsAsync(string providerId)
+        {
+            dynamic providerInfo = await ProviderAsync(providerId);
+
+            List<IList<string>> res = new List<IList<string>>();
+            dynamic languages = providerInfo.languages;
+
+            dynamic symmetric = languages.symmetric;
+            if (symmetric != null)
             {
-                JArray jsonResult = JArray.Parse(stringResult);
-
-                foreach (dynamic languageInfo in jsonResult)
-                    languages.Add(languageInfo);
-
-                return languages;
+                foreach (string l1 in symmetric)
+                    foreach (string l2 in symmetric)
+                        if (l1 != l2)
+                            res.Add(new List<string> { l1, l2 });
             }
 
-            dynamic jsonErrorResult = JObject.Parse(stringResult);
-            Exception ex = IntentoException.Make(response, jsonErrorResult);
-            throw ex;
+            dynamic pairs = languages.pairs;
+            if (pairs != null)
+            {
+                foreach (dynamic pair in pairs)
+                    res.Add(new List<string> { pair.from, pair.to });
+            }
+
+            return res;
         }
     }
 }

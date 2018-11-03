@@ -10,8 +10,6 @@ namespace IntentoSDK
 {
     public class IntentoException : Exception
     {
-        string messaage;
-
         protected internal IntentoException(string message)
         {
         }

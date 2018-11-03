@@ -61,12 +61,18 @@ namespace TestForm
                 comboBoxProvider.Items.Add(pair);
         }
 
+        private string From
+        { get { return ((KeyValuePair<string, string>)comboBoxFrom.SelectedItem).Value; } }
+
+        private string To
+        { get { return ((KeyValuePair<string, string>)comboBoxTo.SelectedItem).Value; } }
+
         private void buttonSend_Click(object sender, EventArgs e)
         {
             labelError.Visible = false;
             labelTo.ForeColor = Color.FromName("black");
 
-            string to = ((KeyValuePair<string, string>)comboBoxTo.SelectedItem).Value;
+            string to = To;
             if (string.IsNullOrEmpty(to))
             {
                 labelTo.ForeColor = Color.FromName("red");
@@ -87,14 +93,15 @@ namespace TestForm
                 result = translate.Fulfill(
                     textBoxText.Text,
                     to,
-                    from: ((KeyValuePair<string, string>)comboBoxFrom.SelectedItem).Value,
+                    from: From,
                     provider: ProviderId,
                     format: checkBoxHtml.Checked ? "html" : null,
                     async: checkBoxAsync.Checked,
                     auth: checkBoxOwnCredentials.Enabled && checkBoxOwnCredentials.Checked ? GetAuth(textBoxOwnCredentials.Text) : null,
                     pre_processing: checkBoxPreProcessing.Enabled && checkBoxPreProcessing.Checked ? textBoxPreProcessing.Text : null,
                     post_processing: checkBoxPostProcessing.Enabled && checkBoxPostProcessing.Checked ? textBoxPostProcessing.Text : null,
-                    custom_model: checkBoxCustomModel.Enabled && checkBoxCustomModel.Checked ? textBoxCustomModel.Text : null
+                    custom_model: checkBoxCustomModel.Enabled && checkBoxCustomModel.Checked ? textBoxCustomModel.Text : null,
+                    wait_async: checkBoxWaitAsync.Checked
                     );
             }
             catch(AggregateException ex2)
@@ -121,34 +128,50 @@ namespace TestForm
                 labelTranslateProvider.Text = "via MT provier: " + result.service.provider.name;
                 textBoxResult.Text = result.results[0];
                 sendInAction = false;
-                OverallEnableDisable();
             }
             else
-            {
-                asyncId = result.id;
-                OverallEnableDisable();
-                labelAsync.Text = string.Format("Async {0} in process, 0 sec", asyncId);
-
-                // Wait for result
-                string resultText;
-                int n = 0;
-                while ((resultText = CheckAsync()) == null)
+            {   // async
+                if (checkBoxWaitAsync.Checked)
                 {
-                    OverallEnableDisable();
-                    labelAsync.Text = string.Format("Async {0} in process, {1} sec", asyncId, (int)n/500);
-                    Thread.Sleep(500);
-                    n += 500;
+                    // Show result - async + wait
+                    textBoxResult.Text = result.ToString();
+                    sendInAction = false;
                 }
+                else
+                {   // pure async - wait on client side
+                    asyncId = result.id;
+                    OverallEnableDisable();
+                    labelAsync.Text = string.Format("Async {0} in process, 0 sec", asyncId);
 
-                asyncId = null;
-                textBoxResult.Text = resultText;
-                sendInAction = false;
-                OverallEnableDisable();
+                    // Wait for result
+                    string resultText;
+                    int n = 0;
+                    while ((resultText = CheckAsync()) == null)
+                    {
+                        OverallEnableDisable();
+                        labelAsync.Text = string.Format("Async {0} in process, {1} sec", asyncId, (int)n / 500);
+                        Thread.Sleep(500);
+                        n += 500;
+                    }
+
+                    asyncId = null;
+                    textBoxResult.Text = resultText;
+                    sendInAction = false;
+                }
             }
+            OverallEnableDisable();
         }
 
         private string ProviderId
-        { get { return ((KeyValuePair<string, string>)comboBoxProvider.SelectedItem).Value; } }
+        {
+            get
+            {
+                object item = comboBoxProvider.SelectedItem;
+                if (item == null)
+                    return null;
+                return ((KeyValuePair<string, string>)item).Value;
+            }
+        }
 
         // Make auth parameter for Fulfill call
         private string GetAuth(string auth)
@@ -175,9 +198,7 @@ namespace TestForm
                     return string.Format("Error: Invalid api key");
                 else if (ex is IntentoApiException)
                     return string.Format("Error: Exception {2}: {0}: {1}", ex.Message, ((IntentoApiException)ex).Content, ex.GetType().Name);
-                else
-                    return string.Format("Error: Unexpected exception {0}: {1}", ex.GetType().Name, ex.Message);
-                return null;
+                return string.Format("Error: Unexpected exception {0}: {1}", ex.GetType().Name, ex.Message);
             }
 
             // 
@@ -241,7 +262,15 @@ namespace TestForm
         }
 
         private bool IsSmartMode
-        { get { return ((KeyValuePair<string, string>)comboBoxProvider.SelectedItem).Value != ""; } }
+        {
+            get
+            {
+                object item = comboBoxProvider.SelectedItem;
+                if (item == null)
+                    return false;
+                return !string.IsNullOrEmpty(((KeyValuePair<string, string>)item).Value);
+            }
+        }
 
         private void textBoxText_TextChanged(object sender, EventArgs e)
         {
@@ -253,8 +282,28 @@ namespace TestForm
             checkBoxCustomModel.Enabled = textBoxCustomModel.Enabled = checkBoxOwnCredentials.Enabled = textBoxOwnCredentials.Enabled = IsSmartMode;
             labelAsync.Visible = progressBarAsync.Visible = asyncId != null;
             buttonSend.Enabled = !string.IsNullOrEmpty(textBoxText.Text) && !sendInAction;
-            // textBoxResult.Enabled = sendInAction;
+            buttonLanguagePairs.Enabled = !string.IsNullOrEmpty(ProviderId);
+            checkBoxAsync.Enabled = !string.IsNullOrEmpty(From) && !string.IsNullOrEmpty(ProviderId);
+            checkBoxWaitAsync.Enabled = checkBoxAsync.Enabled && checkBoxAsync.Checked;
         }
 
+        private void buttonLanguagePairs_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(ProviderId))
+                return;
+            IList<IList<string>> pairs = translate.ProviderLanguagePairs(ProviderId);
+
+            textBoxResult.Text = string.Join("\r\n", pairs.Select(i => string.Format("{0} -> {1}", i[0], i[1])));
+        }
+
+        private void comboBoxFrom_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            OverallEnableDisable();
+        }
+
+        private void checkBoxAsync_CheckedChanged(object sender, EventArgs e)
+        {
+            OverallEnableDisable();
+        }
     }
 }

@@ -35,14 +35,15 @@ namespace TestForm
 
         private void buttonContinue_Click(object sender, EventArgs e)
         {
-            Prepare(textBoxApiKey.Text);
+            apiKey = textBoxApiKey.Text;
+            Prepare();
 
             // Save ApiKey into registry
             if (checkBoxSaveApiKey.Checked)
                 Registry.SetValue("HKEY_CURRENT_USER\\Software\\Intento", "DemoFormApiKey", apiKey);
         }
 
-        public void Prepare(string apiKey)
+        public void Prepare()
         {
             buttonContinue.Enabled = false;
             textBoxApiKey.Enabled = false;
@@ -59,7 +60,7 @@ namespace TestForm
                 // Get translate intent
                 translate = intento.Ai.Text.Translate;
 
-                providers = translate.Providers();
+                providers = translate.Providers(filter: new Dictionary<string, string> { { "integrated", "true" } });
                 languages = translate.Languages();
 
                 this.Close();
