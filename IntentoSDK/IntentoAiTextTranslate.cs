@@ -11,6 +11,7 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Threading;
+using System.Globalization;
 
 namespace IntentoSDK
 {
@@ -34,19 +35,19 @@ namespace IntentoSDK
         public dynamic Fulfill(object text, string to, string from = null, string provider = null,
             bool async = false, bool wait_async = false, string format = null, object auth = null, string custom_model = null,
             object pre_processing = null, object post_processing = null,
-            bool failover = false, object failover_list = null, string bidding = null)
+            bool failover = false, object failover_list = null, string bidding = null, bool trace = false)
         {
             Task<dynamic> taskReadResult = Task.Run<dynamic>(async () => await this.FulfillAsync(text, to, from: from, provider: provider,
                 async: async, wait_async: wait_async, format: format, auth: auth, custom_model: custom_model,
                 pre_processing: pre_processing, post_processing: post_processing,
-                failover: failover, failover_list: failover_list, bidding: bidding));
+                failover: failover, failover_list: failover_list, bidding: bidding, trace: trace));
             return taskReadResult.Result;
         }
 
         async public Task<dynamic> FulfillAsync(object text, string to, string from = null, string provider = null,
             bool async = false, bool wait_async = false, string format = null, object auth = null, string custom_model = null,
             object pre_processing = null, object post_processing = null,
-            bool failover = false, object failover_list = null, string bidding = null)
+            bool failover = false, object failover_list = null, string bidding = null, bool trace = false)
         {
             if (string.IsNullOrEmpty(from))
                 from = null;
@@ -122,9 +123,15 @@ namespace IntentoSDK
             }
             json.service = service;
 
+
+            string url = "ai/text/translate";
+            if (trace)
+                url += "?trace=true";
+
+
             // Call to Intento API and get json result
             HttpConnector conn = new HttpConnector(Intento);
-            dynamic jsonResult = await conn.PostAsync("ai/text/translate", json);
+            dynamic jsonResult = await conn.PostAsync(url, json);
 
             if (async && wait_async)
             {   // async opertation (in terms of IntentoApi) and we need to wait result of it
@@ -189,17 +196,17 @@ namespace IntentoSDK
         }
 
         public IList<dynamic> Providers(string to = null, string from = null, bool lang_detect = false, bool bulk = false,
-            Dictionary<string, string> filter = null)
+            Dictionary<string, string> filter = null, List<string> fields = null)
         {
             Task<IList<dynamic>> taskReadResult = Task.Run<IList<dynamic>>(async () => 
-                await this.ProvidersAsync(to: to, from: from, lang_detect: lang_detect, bulk: bulk, filter: filter));
+                await this.ProvidersAsync(to: to, from: from, lang_detect: lang_detect, bulk: bulk, filter: filter, fields: fields));
             return taskReadResult.Result;
         }
 
         async public Task<IList<dynamic>> ProvidersAsync(string to = null, string from = null, bool lang_detect = false, bool bulk = false,
-            Dictionary<string, string> filter = null)
+            Dictionary<string, string> filter = null, List<string> fields = null)
         {
-            Dictionary<string, string> f = new Dictionary<string, string>(filter);
+            Dictionary<string, string> f = new Dictionary<string, string>();
             if (!string.IsNullOrEmpty(to))
                 f["to"] = to;
             if (!string.IsNullOrEmpty(from))
@@ -208,6 +215,13 @@ namespace IntentoSDK
                 f["lang_detect"] = "true";
             if (bulk)
                 f["bulk"] = "true";
+            if (fields != null)
+                f["fields"] = string.Join(",", fields);
+            if (filter != null)
+            {
+                foreach(string key in filter.Keys)
+                    f[key] = filter[key];
+            }
 
             List<string> p = new List<string>();
             foreach(KeyValuePair<string, string> pair in f)
@@ -247,6 +261,19 @@ namespace IntentoSDK
                 languages.Add(languageInfo);
 
             return languages;
+        }
+
+        public IList<IList<CultureInfo>> ProviderCulturePairs(string providerId)
+        {
+            Task<IList<IList<CultureInfo>>> taskReadResult = Task.Run<IList<IList<CultureInfo>>>(async () => await this.ProviderCulturePairsAsync(providerId));
+            return taskReadResult.Result;
+        }
+
+        async public Task<IList<IList<CultureInfo>>> ProviderCulturePairsAsync(string providerId)
+        {
+            var lang_pairs = await ProviderLanguagePairsAsync(providerId);
+            IList<IList<CultureInfo>> res = lang_pairs.Select(i => (IList<CultureInfo>)new List<CultureInfo> { new CultureInfo (i[0]), new CultureInfo(i[1]) }).ToList();
+            return res;
         }
 
         public IList<IList<string>> ProviderLanguagePairs(string providerId)
