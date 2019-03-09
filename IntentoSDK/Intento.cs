@@ -34,7 +34,7 @@ namespace IntentoSDK
         {
             try
             {
-                Assembly currentAssem = typeof(HttpConnector).Assembly;
+                Assembly currentAssem = typeof(Intento).Assembly;
                 string version = string.Format("{0}", currentAssem.GetName().Version);
                 version = version.Substring(0, version.Length - 2);
                 return version;
