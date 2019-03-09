@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ namespace IntentoSDK
         internal Dictionary<string, object> auth;
         internal string serverUrl;
         internal string otherUserAgent;
-        internal string version = "1.1.0";
+        internal static string version = GetVersion();
 
         private Intento(string apiKey, Dictionary<string, object> auth=null, string path="https://api.inten.to/",
             string userAgent = null)
@@ -27,6 +28,20 @@ namespace IntentoSDK
             this.auth = auth != null ? new Dictionary<string, object>(auth) : null;
             this.serverUrl = path;
             otherUserAgent = userAgent;
+        }
+
+        private static string GetVersion()
+        {
+            try
+            {
+                Assembly currentAssem = typeof(HttpConnector).Assembly;
+                string version = string.Format("{0}", currentAssem.GetName().Version);
+                version = version.Substring(0, version.Length - 2);
+                return version;
+            }
+            catch { }
+
+            return "Unknown";
         }
 
         public static Intento Create(string intentoKey, Dictionary<string, object> auth=null, string path = "https://api.inten.to/",

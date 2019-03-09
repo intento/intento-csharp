@@ -114,19 +114,6 @@
         }
 
         #endregion
-        private System.Windows.Forms.Button buttonSendAsync;
-        private System.Windows.Forms.TextBox textBoxText;
-        private System.Windows.Forms.TextBox textBoxTo;
-        private System.Windows.Forms.TextBox textBoxFrom;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.CheckBox checkBoxHtml;
-        private System.Windows.Forms.Button buttonSend;
-        private System.Windows.Forms.TextBox textBoxResult;
-        private System.Windows.Forms.Button buttonWaitAsync;
-        private System.Windows.Forms.TextBox textBoxProvider;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBoxApiKey;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button buttonContinue;
