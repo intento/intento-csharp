@@ -302,7 +302,7 @@ namespace IntentoSDK
             if (pairs != null)
             {
                 foreach (dynamic pair in pairs)
-                    // Important! Явное приведение к string тут важно! 
+                    // Important! Conversion to string is important here!  
                     res.Add(new List<string> { (string)pair.from, (string)pair.to });
             }
 
