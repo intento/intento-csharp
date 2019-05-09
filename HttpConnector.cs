@@ -10,7 +10,6 @@ using Newtonsoft.Json.Linq;
 using System.Web;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Reflection;
 
 namespace IntentoSDK
 {
@@ -26,7 +25,7 @@ namespace IntentoSDK
 
             client = new HttpClient();
             client.DefaultRequestHeaders.Add("apikey", intento.apiKey);
-            string userAgent = string.Format("Intento.CSharpSDK/{0} {1}", Intento.version, intento.otherUserAgent);
+            string userAgent = string.Format("Intento.CSharpSDK/{0} {1}", intento.version, intento.otherUserAgent);
             client.DefaultRequestHeaders.Add("User-Agent", userAgent);
         }
 
@@ -45,7 +44,8 @@ namespace IntentoSDK
 
         async public Task<dynamic> GetAsync(string path)
         {
-            HttpResponseMessage response = await client.GetAsync(intento.serverUrl + path);
+            var url = intento.serverUrl + path;
+            HttpResponseMessage response = await client.GetAsync(url);
             dynamic jsonResult = await GetJson(response);
 
             if (response.StatusCode != HttpStatusCode.OK)

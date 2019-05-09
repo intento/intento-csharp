@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Net;
+using System.Reflection;
+using System.Diagnostics;
 
 namespace IntentoSDK
 {
@@ -19,7 +21,17 @@ namespace IntentoSDK
         internal Dictionary<string, object> auth;
         internal string serverUrl;
         internal string otherUserAgent;
-        internal static string version = GetVersion();
+        internal string version;
+
+        // Revision history 
+        // 1.1.0: Public version
+        // 1.1.1: 2019-01-06
+        //   - Corrected behaviour for async-wait-async request with sandbox apikey or error in validation of prarmeters. 
+        //     In this case no operation id returned from IntentoAPI, but result (in case of sandbox key) or error information. 
+        // 1.1.2: 2019-02-02
+        //   - More correct processing of text parameter of Fulfill operation
+        // 1.1.3: 2019-03-31
+        //   - Added methods for obtaining models and glossaries from the provider
 
         private Intento(string apiKey, Dictionary<string, object> auth=null, string path="https://api.inten.to/",
             string userAgent = null)
@@ -28,20 +40,10 @@ namespace IntentoSDK
             this.auth = auth != null ? new Dictionary<string, object>(auth) : null;
             this.serverUrl = path;
             otherUserAgent = userAgent;
-        }
-
-        private static string GetVersion()
-        {
-            try
-            {
-                Assembly currentAssem = typeof(Intento).Assembly;
-                string version = string.Format("{0}", currentAssem.GetName().Version);
-                version = version.Substring(0, version.Length - 2);
-                return version;
-            }
-            catch { }
-
-            return "Unknown";
+            System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+            var assembly = Assembly.GetExecutingAssembly();
+            var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+            this.version = string.Format("{0}.{1}.{2}", fvi.FileMajorPart, fvi.FileMinorPart, fvi.FileBuildPart);
         }
 
         public static Intento Create(string intentoKey, Dictionary<string, object> auth=null, string path = "https://api.inten.to/",
