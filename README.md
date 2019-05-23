@@ -1,6 +1,7 @@
 # Intento C# SDK
 
 An adapter to query Intento API.
+Compile by Visual Studio 2017. 
 
 Intento provides a single API to Cognitive AI services from many vendors.
 
