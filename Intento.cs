@@ -78,18 +78,38 @@ namespace IntentoSDK
             return taskResult.Result;
         }
 
+        private List<int> CalcDelays(int delay)
+        {
+            List<int> delays = new List<int>();
+            do
+            {
+                delays.Add(delay);
+                delay += 100;
+            } while (delay < 3000);
+            return delays;
+        }
+
         async public Task<dynamic> WaitAsyncJobAsync(string asyncId, int delay = 0)
         {
-            if (delay == 0)
-                delay = 3000;
+            List<int> delays;
+            int n = 0;
 
+            if (delay == 0)
+                delays = CalcDelays(400);
+            else
+                delays = CalcDelays(delay);
+
+            delay = delays[0];
             while (true)
             {
+                Thread.Sleep(delay);
+
                 dynamic result = await CheckAsyncJobAsync(asyncId);
                 if (((bool)result.done))
                     return result;
-
-                Thread.Sleep(delay);
+                n++;
+                if (n < delays.Count)
+                    delay = delays[n];
             }
         }
 
