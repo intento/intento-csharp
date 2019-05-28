@@ -32,6 +32,8 @@ namespace IntentoSDK
         //   - More correct processing of text parameter of Fulfill operation
         // 1.1.3: 2019-03-31
         //   - Added methods for obtaining models and glossaries from the provider
+        // 1.2.1: 2019-05-28
+        //   - Smart delays in wait-async mode
 
         private Intento(string apiKey, Dictionary<string, object> auth=null, string path="https://api.inten.to/",
             string userAgent = null)
