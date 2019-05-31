@@ -57,7 +57,7 @@ namespace IntentoSDK
 
             dynamic json = new JObject();
 
-            // context section
+            // ------ context section
             dynamic context = new JObject();
 
             // text
@@ -87,15 +87,14 @@ namespace IntentoSDK
             if (!string.IsNullOrWhiteSpace(glossary))
                 context.glossary = glossary;
 
-            // provider
-            if (!string.IsNullOrWhiteSpace(provider))
-                context.provider = provider;
-
             json.context = context;
 
-            // service section
+            // ----- service section
             dynamic service = new JObject();
-            service.provider = provider == "" ? null : provider;
+
+            // provider
+            if (!string.IsNullOrWhiteSpace(provider))
+                service.provider = provider;
 
             // async parameter
             if (async)
@@ -103,6 +102,10 @@ namespace IntentoSDK
 
             // auth parameter
             service.auth = GetJson(auth, "auth");
+
+            // routing
+            if (!string.IsNullOrEmpty(routing))
+                service.routing = routing;
 
             // pre-post processing paramters
             if (preProcessingJson != null || postProcessingJson != null)
@@ -132,14 +135,16 @@ namespace IntentoSDK
                     service.failover_list = failover_list;
                 }
             }
-            if (!string.IsNullOrEmpty(routing))
-                service.routing = routing;
 
             json.service = service;
 
             // Call to Intento API and get json result
             HttpConnector conn = new HttpConnector(Intento);
-            dynamic jsonResult = await conn.PostAsync("ai/text/translate" + (trace ? "?trace=true" : ""), json);
+            string url = "ai/text/translate";
+            if (trace)
+                url += "?trace=true";
+
+            dynamic jsonResult = await conn.PostAsync(url, json);
 
             if (async && wait_async)
             {   // async opertation (in terms of IntentoApi) and we need to wait result of it
