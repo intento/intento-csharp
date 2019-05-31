@@ -41,7 +41,7 @@ namespace IntentoSDK
                 async: async, wait_async: wait_async, format: format, auth: auth,
                 custom_model: custom_model, glossary: glossary,
                 pre_processing: pre_processing, post_processing: post_processing,
-                failover: failover, failover_list: failover_list, bidding: routing, trace: trace));
+                failover: failover, failover_list: failover_list, routing: routing, trace: trace));
             return taskReadResult.Result;
         }
 
@@ -49,7 +49,7 @@ namespace IntentoSDK
             bool async = false, bool wait_async = false, string format = null, object auth = null,
             string custom_model = null, string glossary = null,
             object pre_processing = null, object post_processing = null,
-            bool failover = false, object failover_list = null, string bidding = null, bool trace = false, bool deserialize_text=false)
+            bool failover = false, object failover_list = null, string routing = null, bool trace = false, bool deserialize_text=false)
         {
 
             dynamic preProcessingJson = GetJson(pre_processing, "pre_processing");
@@ -131,9 +131,9 @@ namespace IntentoSDK
                         throw new IntentoInvalidParameterException("failover_list", "need to json-list-string or Newtonsoft JArray");
                     service.failover_list = failover_list;
                 }
-                if (!string.IsNullOrEmpty(bidding))
-                    service.bidding = bidding;
             }
+            if (!string.IsNullOrEmpty(routing))
+                service.routing = routing;
 
             json.service = service;
 
