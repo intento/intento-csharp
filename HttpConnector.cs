@@ -31,26 +31,56 @@ namespace IntentoSDK
 
         async public Task<dynamic> PostAsync(string path, dynamic json)
         {
-            string jsonData = JsonConvert.SerializeObject(json);
-            HttpContent requestBody = new StringContent(jsonData);
+            try
+            {
+                string jsonData = JsonConvert.SerializeObject(json);
+                HttpContent requestBody = new StringContent(jsonData);
 
-            HttpResponseMessage response = await client.PostAsync(intento.serverUrl + path, requestBody);
-            dynamic jsonResult = await GetJson(response);
+                LogHttpRequest("POST", intento.serverUrl + path, jsonData, client.DefaultRequestHeaders.ToString());
+                HttpResponseMessage response = await client.PostAsync(intento.serverUrl + path, requestBody);
+                LogHttpAfterSend();
+                dynamic jsonResult = await GetJson(response);
+                LogHttpResponse(jsonResult);
 
-            if (response.StatusCode != HttpStatusCode.OK)
-                throw (Exception)IntentoException.Make(response, jsonResult);
-            return jsonResult;
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    Exception ex = (Exception)IntentoException.Make(response, jsonResult);
+                    LogHttpException(ex);
+                    throw ex;
+                }
+                return jsonResult;
+            }
+            catch (Exception ex)
+            {
+                LogHttpException(ex);
+                throw;
+            }
         }
 
         async public Task<dynamic> GetAsync(string path)
         {
-            var url = intento.serverUrl + path;
-            HttpResponseMessage response = await client.GetAsync(url);
-            dynamic jsonResult = await GetJson(response);
+            try
+            {
+                var url = intento.serverUrl + path;
+                LogHttpRequest("GET", intento.serverUrl + path, null, client.DefaultRequestHeaders.ToString());
+                HttpResponseMessage response = await client.GetAsync(url);
+                LogHttpAfterSend();
+                dynamic jsonResult = await GetJson(response);
+                LogHttpResponse(jsonResult);
 
-            if (response.StatusCode != HttpStatusCode.OK)
-                throw (Exception)IntentoException.Make(response, jsonResult);
-            return jsonResult;
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    Exception ex = (Exception)IntentoException.Make(response, jsonResult);
+                    LogHttpException(ex);
+                    throw ex;
+                }
+                return jsonResult;
+            }
+            catch (Exception ex)
+            {
+                LogHttpException(ex);
+                throw;
+            }
         }
 
         async private Task<dynamic> GetJson(HttpResponseMessage response)
@@ -64,6 +94,26 @@ namespace IntentoSDK
             else
                 throw new IntentoException(string.Format("Invalid json returned from IntentoAPI: '{0}'", stringResult));
             return jsonResult;
+        }
+
+        private void LogHttpRequest(string method, string url, string body, string headers)
+        {
+            intento.Log("HTTP Request", string.Format("method: {0}\r\nurl: {1}\r\nbody: {2}\r\nheaders: {3}", method, url, body, headers));
+        }
+
+        private void LogHttpAfterSend()
+        {
+            intento.Log("HTTP after send");
+        }
+
+        private void LogHttpResponse(dynamic jsonResult)
+        {
+            intento.Log("HTTP response", string.Format("body: {0}", jsonResult));
+        }
+
+        private void LogHttpException(Exception ex)
+        {
+            intento.Log("HTTP exception", ex: ex);
         }
 
     }

@@ -22,6 +22,7 @@ namespace IntentoSDK
         internal string serverUrl;
         internal string otherUserAgent;
         internal string version;
+        internal Action<string, string, Exception> loggingCallback;
 
         // Revision history 
         // 1.1.0: Public version
@@ -34,9 +35,17 @@ namespace IntentoSDK
         //   - Added methods for obtaining models and glossaries from the provider
         // 1.2.1: 2019-05-28
         //   - Smart delays in wait-async mode
+        // 1.2.2: 2019-06-08
+        //   - Logging callback.
+        //   - Call logging callback for successfull and non-susscessfull Intento API calls. 
+        //   - try-catch around calls to http to write log. 
 
-        private Intento(string apiKey, Dictionary<string, object> auth=null, string path="https://api.inten.to/",
-            string userAgent = null)
+        private Intento(
+            string apiKey, 
+            Dictionary<string, object> auth=null, 
+            string path="https://api.inten.to/",
+            string userAgent = null,
+            Action<string, string, Exception> loggingCallback = null)
         {
             this.apiKey = apiKey;
             this.auth = auth != null ? new Dictionary<string, object>(auth) : null;
@@ -46,12 +55,19 @@ namespace IntentoSDK
             var assembly = Assembly.GetExecutingAssembly();
             var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
             this.version = string.Format("{0}.{1}.{2}", fvi.FileMajorPart, fvi.FileMinorPart, fvi.FileBuildPart);
+            this.loggingCallback = loggingCallback;
+            if (loggingCallback != null)
+                loggingCallback("IntentoSDK: Intento.ctor", null, null);
         }
 
-        public static Intento Create(string intentoKey, Dictionary<string, object> auth=null, string path = "https://api.inten.to/",
-            string userAgent = null)
+        public static Intento Create(
+            string intentoKey, 
+            Dictionary<string, object> auth=null, 
+            string path = "https://api.inten.to/",
+            string userAgent = null,
+            Action<string, string, Exception> loggingCallback = null)
         {
-            Intento intento = new Intento(intentoKey, auth:auth, path: path, userAgent: userAgent);
+            Intento intento = new Intento(intentoKey, auth:auth, path: path, userAgent: userAgent, loggingCallback: loggingCallback);
             return intento;
         }
 
@@ -67,10 +83,14 @@ namespace IntentoSDK
         async public Task<dynamic> CheckAsyncJobAsync(string asyncId)
         {
             // Open connection to Intento API and set ApiKey
+            Log(string.Format("CheckAsyncJobAsync-1: {0}ms", asyncId));
             HttpConnector client = new HttpConnector(this);
+            Log(string.Format("CheckAsyncJobAsync-2: {0}ms", asyncId));
 
             // async operations inside
+            Log(string.Format("CheckAsyncJobAsync-3: {0}ms", asyncId));
             dynamic result = await client.GetAsync(string.Format("operations/{0}", asyncId));
+            Log(string.Format("CheckAsyncJobAsync-4: {0}ms", asyncId));
             return result;
         }
 
@@ -91,8 +111,16 @@ namespace IntentoSDK
             return delays;
         }
 
+        public void Log(string subject, string comment=null, Exception ex=null)
+        {
+            if (loggingCallback == null)
+                return;
+            loggingCallback(subject, comment, ex);
+        }
+
         async public Task<dynamic> WaitAsyncJobAsync(string asyncId, int delay = 0)
         {
+            Log(string.Format("WaitAsyncJobAsync-start: {0} - {1}ms", asyncId, delay));
             List<int> delays;
             int n = 0;
 
@@ -104,14 +132,19 @@ namespace IntentoSDK
             delay = delays[0];
             while (true)
             {
+                Log(string.Format("WaitAsyncJobAsync-loop: {0} - {1}ms", asyncId, delay));
                 Thread.Sleep(delay);
+                Log(string.Format("WaitAsyncJobAsync-loop after sleep: {0} - {1}ms", asyncId, delay));
 
                 dynamic result = await CheckAsyncJobAsync(asyncId);
+
+                Log(string.Format("WaitAsyncJobAsync-loop1a: {0} - {1}ms", asyncId, delay));
                 if (((bool)result.done))
                     return result;
                 n++;
                 if (n < delays.Count)
                     delay = delays[n];
+                Log(string.Format("WaitAsyncJobAsync-loop2: {0} - {1}ms", asyncId, delay));
             }
         }
 

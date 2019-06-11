@@ -51,7 +51,6 @@ namespace IntentoSDK
             object pre_processing = null, object post_processing = null,
             bool failover = false, object failover_list = null, string routing = null, bool trace = false, bool deserialize_text=false)
         {
-
             dynamic preProcessingJson = GetJson(pre_processing, "pre_processing");
             dynamic postProcessingJson = GetJson(post_processing, "post_processing");
 
