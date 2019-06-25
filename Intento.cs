@@ -52,9 +52,14 @@ namespace IntentoSDK
             this.serverUrl = path;
             otherUserAgent = userAgent;
             System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+
             var assembly = Assembly.GetExecutingAssembly();
-            var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-            this.version = string.Format("{0}.{1}.{2}", fvi.FileMajorPart, fvi.FileMinorPart, fvi.FileBuildPart);
+            var fvi = assembly.GetName().Version;
+            this.version = string.Format("{0}.{1}.{2}", fvi.Major, fvi.Minor, fvi.Build);
+            // var assembly = Assembly.GetExecutingAssembly();
+            // var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+            // this.version = string.Format("{0}.{1}.{2}", fvi.FileMajorPart, fvi.FileMinorPart, fvi.FileBuildPart);
+
             this.loggingCallback = loggingCallback;
             if (loggingCallback != null)
                 loggingCallback("IntentoSDK: Intento.ctor", null, null);
