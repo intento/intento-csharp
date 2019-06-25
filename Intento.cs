@@ -39,6 +39,8 @@ namespace IntentoSDK
         //   - Logging callback.
         //   - Call logging callback for successfull and non-susscessfull Intento API calls. 
         //   - try-catch around calls to http to write log. 
+        // 1.2.3: 2019-06-25
+        // - Bug with extracting version from dll
 
         private Intento(
             string apiKey, 
