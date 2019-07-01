@@ -13,6 +13,39 @@ using System.Diagnostics;
 namespace IntentoSDK
 {
     /// <summary>
+    /// Proxy server configuration class for service requests
+    /// </summary>
+    public class ProxySettings
+    {
+        private string proxyUserName;
+        private string proxyPassword;
+        private string proxyAddress;
+        private string proxyPort;
+
+
+        public bool ProxyEnabled { get; set; }
+        /// <summary>
+        /// Proxy address
+        /// </summary>
+        public string ProxyAddress { get => proxyAddress; set => proxyAddress = value; }
+        /// <summary>
+        /// Proxy port number.
+        /// </summary>
+        public string ProxyPort { get => proxyPort; set => proxyPort = value; }
+        public Uri ProxyUri {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(proxyAddress) || string.IsNullOrWhiteSpace(proxyPort))
+                {
+                    return null;
+                }
+                return new Uri($"http://{proxyAddress}:{proxyPort}");
+            }
+        }
+        public string ProxyUserName { get => proxyUserName; set => proxyUserName = value; }
+        public string ProxyPassword { get => proxyPassword; set => proxyPassword = value; }
+    }
+    /// <summary>
     /// Root class for all Intento services. 
     /// </summary>
     public class Intento
@@ -23,6 +56,7 @@ namespace IntentoSDK
         internal string otherUserAgent;
         internal string version;
         internal Action<string, string, Exception> loggingCallback;
+        internal ProxySettings proxy;
 
         // Revision history 
         // 1.1.0: Public version
@@ -45,7 +79,8 @@ namespace IntentoSDK
             Dictionary<string, object> auth=null, 
             string path="https://api.inten.to/",
             string userAgent = null,
-            Action<string, string, Exception> loggingCallback = null)
+            Action<string, string, Exception> loggingCallback = null,
+            ProxySettings proxySet = null)
         {
             this.apiKey = apiKey;
             this.auth = auth != null ? new Dictionary<string, object>(auth) : null;
@@ -58,6 +93,7 @@ namespace IntentoSDK
             this.loggingCallback = loggingCallback;
             if (loggingCallback != null)
                 loggingCallback("IntentoSDK: Intento.ctor", null, null);
+            this.proxy = proxySet;
         }
 
         public static Intento Create(
@@ -65,9 +101,11 @@ namespace IntentoSDK
             Dictionary<string, object> auth=null, 
             string path = "https://api.inten.to/",
             string userAgent = null,
-            Action<string, string, Exception> loggingCallback = null)
+            Action<string, string, Exception> loggingCallback = null, 
+            ProxySettings proxySet = null)
+            
         {
-            Intento intento = new Intento(intentoKey, auth:auth, path: path, userAgent: userAgent, loggingCallback: loggingCallback);
+            Intento intento = new Intento(intentoKey, auth:auth, path: path, userAgent: userAgent, loggingCallback: loggingCallback, proxySet: proxySet);
             return intento;
         }
 
