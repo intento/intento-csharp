@@ -41,13 +41,26 @@ namespace IntentoSDK
         //   - try-catch around calls to http to write log. 
         // 1.2.3: 2019-06-25
         // - Bug with extracting version from dll
+        // 1.2.4: 2019-07-02
+        // - waitAsyncDelay
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="apiKey"></param>
+        /// <param name="auth"></param>
+        /// <param name="path"></param>
+        /// <param name="userAgent"></param>
+        /// <param name="loggingCallback"></param>
+        /// <param name="asyncDelay">Delay for waitAsync operations in sec. Default: 30 sec</param>
         private Intento(
             string apiKey, 
             Dictionary<string, object> auth=null, 
             string path="https://api.inten.to/",
             string userAgent = null,
-            Action<string, string, Exception> loggingCallback = null)
+            Action<string, string, Exception> loggingCallback = null,
+            int waitAsyncDelay=30)
         {
             this.apiKey = apiKey;
             this.auth = auth != null ? new Dictionary<string, object>(auth) : null;
@@ -127,6 +140,8 @@ namespace IntentoSDK
 
         async public Task<dynamic> WaitAsyncJobAsync(string asyncId, int delay = 0)
         {
+            DateTime dt = DateTime.Now;
+
             Log(string.Format("WaitAsyncJobAsync-start: {0} - {1}ms", asyncId, delay));
             List<int> delays;
             int n = 0;
@@ -137,7 +152,7 @@ namespace IntentoSDK
                 delays = CalcDelays(delay);
 
             delay = delays[0];
-            while (true)
+            while (DateTime.Now < dt.AddSeconds(delay))
             {
                 Log(string.Format("WaitAsyncJobAsync-loop: {0} - {1}ms", asyncId, delay));
                 Thread.Sleep(delay);
@@ -153,6 +168,20 @@ namespace IntentoSDK
                     delay = delays[n];
                 Log(string.Format("WaitAsyncJobAsync-loop2: {0} - {1}ms", asyncId, delay));
             }
+
+            // Timeout
+            dynamic json = new JObject();
+            json.id = asyncId;
+            json.done = false;
+            json.response = null;
+
+            dynamic error = new JObject();
+            error.type = "Timeout";
+            error.reason = "Too long response from Intento MT plugin";
+            error.data = null;
+            json.error = error;
+
+            return json;
         }
 
     }
