@@ -40,11 +40,13 @@ namespace IntentoSDK
         //   - Call logging callback for successfull and non-susscessfull Intento API calls. 
         //   - try-catch around calls to http to write log. 
         // 1.2.3: 2019-06-25
-        // - Bug with extracting version from dll
+        // - Bug with extracting version from dll        
         // 1.2.4: 2019-07-02
         // - waitAsyncDelay
-
-
+        // 1.2.5: 2019-07-03
+        // - The version in useragent now has a commit hash in git
+        // - Auxiliary public methods for extracting information from the assembly
+        
         /// <summary>
         /// 
         /// </summary>
@@ -69,13 +71,10 @@ namespace IntentoSDK
             System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
             var assembly = Assembly.GetExecutingAssembly();
-            var fvi = assembly.GetName().Version;
-            this.version = string.Format("{0}.{1}.{2}", fvi.Major, fvi.Minor, fvi.Build);
-            // var assembly = Assembly.GetExecutingAssembly();
-            // var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-            // this.version = string.Format("{0}.{1}.{2}", fvi.FileMajorPart, fvi.FileMinorPart, fvi.FileBuildPart);
+            version = string.Format("{0}-{1}", IntentoHelpers.GetVersion(assembly), IntentoHelpers.GetGitCommitHash(assembly));
 
-            this.loggingCallback = loggingCallback;
+            
+this.loggingCallback = loggingCallback;
             if (loggingCallback != null)
                 loggingCallback("IntentoSDK: Intento.ctor", null, null);
         }
@@ -185,4 +184,14 @@ namespace IntentoSDK
         }
 
     }
+
+    [AttributeUsage(AttributeTargets.Assembly)]
+    public class AssemblyGitHash : Attribute
+    {
+        public string hash;
+        public AssemblyGitHash() : this(string.Empty) { }
+        public AssemblyGitHash(string txt) { hash = txt; }
+        public string Hash() { return hash; }
+    }
+
 }

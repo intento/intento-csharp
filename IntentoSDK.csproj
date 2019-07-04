@@ -56,6 +56,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GitHash.cs" />
+    <Compile Include="Helpers.cs" />
     <Compile Include="HttpConnector.cs" />
     <Compile Include="IntentoAi.cs" />
     <Compile Include="IntentoAiText.cs" />
@@ -72,6 +74,9 @@
   <PropertyGroup>
     <PostBuildEvent>
     </PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>$(ProjectDir)githashForm.bat &gt;$(ProjectDir)GitHash.cs</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
