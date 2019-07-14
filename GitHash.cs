@@ -1,5 +1,5 @@
 namespace IntentoSDK { 
    static internal class GitHash    {    
        public const string hash =           
-"9f27f276b06a7daa7e64912dea9eb0a281c2895b"                                   
+"ebc32afd3efcf004517dd4e1fe6cb9d618951796"                                   
            ;}}                               

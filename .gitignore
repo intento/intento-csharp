@@ -30,3 +30,4 @@ _ReSharper*/
 .vs/
 
 /IntentoSDK.dll
+GitHash.cs
