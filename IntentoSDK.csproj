@@ -71,6 +71,7 @@
     <None Include="Embed.bat" />
     <None Include="githashForm.bat" />
     <None Include="intento.pfx" />
+    <None Include="IntentoSDK.config" />
     <None Include="Newtonsoft\LICENSE.md" />
     <None Include="README.md" />
   </ItemGroup>
@@ -78,7 +79,6 @@
     <Content Include="ILMerge\ILMerge.exe" />
     <Content Include="ILMerge\License.txt" />
     <Content Include="Newtonsoft\Newtonsoft.Json.dll" />
-    <Content Include="Newtonsoft\Newtonsoft.Json.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
