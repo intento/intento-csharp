@@ -35,6 +35,8 @@ using System.Diagnostics;
 // - Auxiliary public methods for extracting information from the assembly
 // 1.2.6: 2019-07-14
 // - Minor changes in processing of Modes and Glossaries operations. 
+// 1.2.7: 2019-08-14
+// - Change version of Newtonsoft dll to be compatible with other products (downgrade to 10.0.3)
 
 
 namespace IntentoSDK
