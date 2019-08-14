@@ -71,6 +71,7 @@
     <None Include="Embed.bat" />
     <None Include="githashForm.bat" />
     <None Include="intento.pfx" />
+    <None Include="IntentoSDK.config" />
     <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
