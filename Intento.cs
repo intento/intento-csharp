@@ -52,6 +52,7 @@ namespace IntentoSDK
         internal string otherUserAgent;
         internal string version;
         internal Action<string, string, Exception> loggingCallback;
+        internal int waitAsyncDelay = 0;
 
         /// <summary>
         /// 
@@ -68,13 +69,14 @@ namespace IntentoSDK
             string path=null,
             string userAgent = null,
             Action<string, string, Exception> loggingCallback = null,
-            int waitAsyncDelay=30)
+            int waitAsyncDelay=0)
         {
             this.apiKey = apiKey;
             this.auth = auth != null ? new Dictionary<string, object>(auth) : null;
             this.serverUrl = string.IsNullOrEmpty(path) ? "https://api.inten.to/" : path;
             otherUserAgent = userAgent;
             System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+            this.waitAsyncDelay = waitAsyncDelay;
 
             var assembly = Assembly.GetExecutingAssembly();
             version = string.Format("{0}-{1}", IntentoHelpers.GetVersion(assembly), IntentoHelpers.GetGitCommitHash(assembly));
@@ -121,7 +123,7 @@ this.loggingCallback = loggingCallback;
 
         public dynamic WaitAsyncJob(string asyncId, int delay = 0)
         {
-            Task<dynamic> taskResult = Task.Run<dynamic>(async () => await this.WaitAsyncJobAsync(asyncId, delay: delay));
+            Task<dynamic> taskResult = Task.Run<dynamic>(async () => await this.WaitAsyncJobAsync(asyncId, delay: delay == 0 ? waitAsyncDelay));
             return taskResult.Result;
         }
 
