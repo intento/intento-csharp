@@ -123,7 +123,7 @@ this.loggingCallback = loggingCallback;
 
         public dynamic WaitAsyncJob(string asyncId, int delay = 0)
         {
-            Task<dynamic> taskResult = Task.Run<dynamic>(async () => await this.WaitAsyncJobAsync(asyncId, delay: delay == 0 ? waitAsyncDelay));
+            Task<dynamic> taskResult = Task.Run<dynamic>(async () => await this.WaitAsyncJobAsync(asyncId, delay: delay == 0 ? waitAsyncDelay : delay));
             return taskResult.Result;
         }
 
