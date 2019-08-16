@@ -65,14 +65,14 @@ namespace IntentoSDK
         private Intento(
             string apiKey, 
             Dictionary<string, object> auth=null, 
-            string path="https://api.inten.to/",
+            string path=null,
             string userAgent = null,
             Action<string, string, Exception> loggingCallback = null,
             int waitAsyncDelay=30)
         {
             this.apiKey = apiKey;
             this.auth = auth != null ? new Dictionary<string, object>(auth) : null;
-            this.serverUrl = path;
+            this.serverUrl = string.IsNullOrEmpty(path) ? "https://api.inten.to/" : path;
             otherUserAgent = userAgent;
             System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
