@@ -52,14 +52,9 @@ namespace IntentoSDK
             this.serverUrl = path;
             otherUserAgent = userAgent;
             System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
-
             var assembly = Assembly.GetExecutingAssembly();
             var fvi = assembly.GetName().Version;
             this.version = string.Format("{0}.{1}.{2}", fvi.Major, fvi.Minor, fvi.Build);
-            // var assembly = Assembly.GetExecutingAssembly();
-            // var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-            // this.version = string.Format("{0}.{1}.{2}", fvi.FileMajorPart, fvi.FileMinorPart, fvi.FileBuildPart);
-
             this.loggingCallback = loggingCallback;
             if (loggingCallback != null)
                 loggingCallback("IntentoSDK: Intento.ctor", null, null);
@@ -89,12 +84,16 @@ namespace IntentoSDK
         {
             // Open connection to Intento API and set ApiKey
             Log(string.Format("CheckAsyncJobAsync-1: {0}ms", asyncId));
-            HttpConnector client = new HttpConnector(this);
-            Log(string.Format("CheckAsyncJobAsync-2: {0}ms", asyncId));
+            dynamic result;
+            using (HttpConnector client = new HttpConnector(this))
+            {
+                Log(string.Format("CheckAsyncJobAsync-2: {0}ms", asyncId));
 
-            // async operations inside
-            Log(string.Format("CheckAsyncJobAsync-3: {0}ms", asyncId));
-            dynamic result = await client.GetAsync(string.Format("operations/{0}", asyncId));
+                // async operations inside
+                Log(string.Format("CheckAsyncJobAsync-3: {0}ms", asyncId));
+                result = await client.GetAsync(string.Format("operations/{0}", asyncId));
+            }
+
             Log(string.Format("CheckAsyncJobAsync-4: {0}ms", asyncId));
             return result;
         }

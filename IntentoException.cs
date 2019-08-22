@@ -5,14 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net;
+using System.Runtime.Serialization;
 
 namespace IntentoSDK
 {
+    [Serializable]
     public class IntentoException : Exception
     {
         protected internal IntentoException(string message)
         {
         }
+
+        protected IntentoException(SerializationInfo info, StreamingContext context)
+            : base(info, context){ }
 
         /// <summary>
         /// Makes appropriate Exception depending on response
@@ -33,22 +38,31 @@ namespace IntentoSDK
 
     }
 
+    [Serializable]
     public class IntentoSdkException : IntentoException
     {
         protected internal IntentoSdkException(string message)
             : base(message)
         {
         }
+
+        protected IntentoSdkException(SerializationInfo info, StreamingContext context)
+            : base(info, context) { }
     }
 
+    [Serializable]
     public class IntentoInvalidApiKeyException : IntentoApiException
     {
         protected internal IntentoInvalidApiKeyException(HttpResponseMessage response, object jsonResult)
             : base(response, jsonResult)
         {
         }
+
+        protected IntentoInvalidApiKeyException(SerializationInfo info, StreamingContext context)
+            : base(info, context) { }
     }
-    
+
+    [Serializable]
     public class IntentoApiException : IntentoException
     {
         HttpResponseMessage response;
@@ -60,6 +74,9 @@ namespace IntentoSDK
             this.response = response;
             this.jsonResult = jsonResult;
         }
+
+        protected IntentoApiException(SerializationInfo info, StreamingContext context)
+            : base(info, context) { }
 
         public HttpStatusCode StatusCode
         { get { return response.StatusCode; } }
@@ -78,6 +95,7 @@ namespace IntentoSDK
 
     }
 
+    [Serializable]
     public class IntentoInvalidParameterException: IntentoException
     {
         public IntentoInvalidParameterException(string parameterName, string hint = null)
@@ -85,5 +103,8 @@ namespace IntentoSDK
                   string.Format("Invalid {0} parameter: {1}", parameterName, hint) : 
                   string.Format("Invalid {0} parameter", parameterName))
         { }
+
+        protected IntentoInvalidParameterException(SerializationInfo info, StreamingContext context)
+            : base(info, context) { }
     }
 }

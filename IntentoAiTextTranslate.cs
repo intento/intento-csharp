@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.IO;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
-using System.Web;
-using System.Net.Http;
+using MemoQ.Addins.Common.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Threading;
 
 namespace IntentoSDK
 {
@@ -137,13 +131,15 @@ namespace IntentoSDK
 
             json.service = service;
 
-            // Call to Intento API and get json result
-            HttpConnector conn = new HttpConnector(Intento);
+            dynamic jsonResult;
             string url = "ai/text/translate";
             if (trace)
                 url += "?trace=true";
-
-            dynamic jsonResult = await conn.PostAsync(url, json);
+            // Call to Intento API and get json result
+            using (HttpConnector conn = new HttpConnector(Intento))
+            {
+                jsonResult = await conn.PostAsync(url, json);
+            }
 
             if (async && wait_async)
             {   // async opertation (in terms of IntentoApi) and we need to wait result of it
@@ -237,9 +233,10 @@ namespace IntentoSDK
             if (additionalParams != null)
                 path += additionalParams;
 
+            dynamic jsonResult;
             // Call to Intento API and get json result
-            HttpConnector conn = new HttpConnector(Intento);
-            dynamic jsonResult = await conn.GetAsync(path);
+            using (HttpConnector conn = new HttpConnector(Intento))
+                jsonResult = await conn.GetAsync(path);
 
             List<dynamic> models = new List<dynamic>();
 
@@ -288,9 +285,10 @@ namespace IntentoSDK
             if (additionalParams != null)
                 path += additionalParams;
 
+            dynamic jsonResult;
             // Call to Intento API and get json result
-            HttpConnector conn = new HttpConnector(Intento);
-            dynamic jsonResult = await conn.GetAsync(path);
+            using (HttpConnector conn = new HttpConnector(Intento))
+                jsonResult = await conn.GetAsync(path);
 
             List<dynamic> glossaries = new List<dynamic>();
 
@@ -323,9 +321,10 @@ namespace IntentoSDK
             if (additionalParams != null)
                 path += additionalParams;
 
+            dynamic jsonResult;
             // Call to Intento API and get json result
-            HttpConnector conn = new HttpConnector(Intento);
-            dynamic jsonResult = await conn.GetAsync(path);
+            using (HttpConnector conn = new HttpConnector(Intento))
+                jsonResult = await conn.GetAsync(path);
 
             List<dynamic> credentials = new List<dynamic>();
 
@@ -358,9 +357,10 @@ namespace IntentoSDK
             if (additionalParams != null)
                 path += additionalParams;
 
+            dynamic jsonResult;
             // Call to Intento API and get json result
-            HttpConnector conn = new HttpConnector(Intento);
-            dynamic jsonResult = await conn.GetAsync(path);
+            using (HttpConnector conn = new HttpConnector(Intento))
+                jsonResult = await conn.GetAsync(path);
 
             return jsonResult;
         }
@@ -388,14 +388,15 @@ namespace IntentoSDK
 
             List<string> p = new List<string>();
             foreach(KeyValuePair<string, string> pair in f)
-                p.Add(string.Format("{0}={1}", pair.Key, System.Web.HttpUtility.UrlEncode(pair.Value)));
+                p.Add(string.Format("{0}={1}", pair.Key, HttpUtility.UrlEncode(pair.Value)));
             string url = "ai/text/translate";
             if (p.Count != 0)
                 url += "?" + string.Join("&", p);
 
+            dynamic jsonResult;
             // Call to Intento API and get json result
-            HttpConnector conn = new HttpConnector(Intento);
-            dynamic jsonResult = await conn.GetAsync(url);
+            using (HttpConnector conn = new HttpConnector(Intento))
+                jsonResult = await conn.GetAsync(url);
 
             List<dynamic> providers = new List<dynamic>();
 
@@ -415,9 +416,10 @@ namespace IntentoSDK
         {
             string url = "ai/text/translate/languages";
 
+            dynamic jsonResult;
             // Call to Intento API and get json result
-            HttpConnector conn = new HttpConnector(Intento);
-            dynamic jsonResult = await conn.GetAsync(url);
+            using (HttpConnector conn = new HttpConnector(Intento))
+                jsonResult = await conn.GetAsync(url);
 
             List<dynamic> languages = new List<dynamic>();
             foreach (dynamic languageInfo in jsonResult)
