@@ -22,7 +22,7 @@ namespace IntentoSDK
         public HttpConnector(Intento _intento)
         {
             intento = _intento;
-            if (intento.proxy != null && intento.proxy.ProxyUri != null) {
+            if (intento.proxy?.ProxyUri != null && intento.proxy.ProxyEnabled) {
                 var proxy = new WebProxy() {
                     Address = intento.proxy.ProxyUri,
                     UseDefaultCredentials = false
