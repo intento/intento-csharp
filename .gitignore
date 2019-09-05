@@ -30,4 +30,6 @@ _ReSharper*/
 .vs/
 
 /IntentoSDK.dll
-/GitHash.cs
+
+#Ignore file with github hash
+GitHash.cs

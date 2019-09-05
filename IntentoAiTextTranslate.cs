@@ -225,14 +225,17 @@ namespace IntentoSDK
             if (credential_id != null)
             {
                 string json;
-                if (credential_id.Count == 1 && credential_id.ContainsKey("credential_id"))
-                    json = credential_id["credential_id"];
-                else
+                if (credential_id.Count != 0)
                 {
-                    json = JsonConvert.SerializeObject(credential_id, Formatting.Indented);
-                    json = HttpUtility.UrlEncode(json);
+                    if (credential_id.Count == 1 && credential_id.ContainsKey("credential_id"))
+                        json = credential_id["credential_id"];
+                    else
+                    {
+                        json = JsonConvert.SerializeObject(credential_id, Formatting.Indented);
+                        json = HttpUtility.UrlEncode(json);
+                    }
+                    path += String.Format("&credential_id={0}", json);
                 }
-                path += String.Format("&credential_id={0}", json);
             }
             if (additionalParams != null)
                 path += additionalParams;
@@ -276,14 +279,17 @@ namespace IntentoSDK
             if (credential_id != null)
             {
                 string json;
-                if (credential_id.Count == 1 && credential_id.ContainsKey("credential_id"))
-                    json = credential_id["credential_id"];
-                else
+                if (credential_id.Count != 0)
                 {
-                    json = JsonConvert.SerializeObject(credential_id, Formatting.Indented);
-                    json = HttpUtility.UrlEncode(json);
+                    if (credential_id.Count == 1 && credential_id.ContainsKey("credential_id"))
+                        json = credential_id["credential_id"];
+                    else
+                    {
+                        json = JsonConvert.SerializeObject(credential_id, Formatting.Indented);
+                        json = HttpUtility.UrlEncode(json);
+                    }
+                    path += String.Format("&credential_id={0}", json);
                 }
-                path += String.Format("&credential_id={0}", json);
             }
             if (additionalParams != null)
                 path += additionalParams;
