@@ -10,7 +10,6 @@ using System.Net;
 using System.Reflection;
 using System.Diagnostics;
 
-
 // Revision history 
 // 1.1.0: Public version
 // 1.1.1: 2019-01-06
@@ -37,10 +36,46 @@ using System.Diagnostics;
 // - Minor changes in processing of Modes and Glossaries operations. 
 // 1.2.7: 2019-08-14
 // - Change version of Newtonsoft dll to be compatible with other products (downgrade to 10.0.3)
-
+// 1.2.8: 2019-09-03
+// - http(s) proxy support
 
 namespace IntentoSDK
 {
+    /// <summary>
+    /// Proxy server configuration class for service requests
+    /// </summary>
+    public class ProxySettings
+    {
+        private string proxyUserName;
+        private string proxyPassword;
+        private string proxyAddress;
+        private string proxyPort;
+
+
+        public bool ProxyEnabled { get; set; }
+        /// <summary>
+        /// Proxy address
+        /// </summary>
+        public string ProxyAddress { get => proxyAddress; set => proxyAddress = value; }
+        /// <summary>
+        /// Proxy port number.
+        /// </summary>
+        public string ProxyPort { get => proxyPort; set => proxyPort = value; }
+        public Uri ProxyUri {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(proxyAddress) || string.IsNullOrWhiteSpace(proxyPort))
+                {
+                    return null;
+                }
+                return new Uri($"http://{proxyAddress}:{proxyPort}");
+            }
+        }
+        public string ProxyUserName { get => proxyUserName; set => proxyUserName = value; }
+        public string ProxyPassword { get => proxyPassword; set => proxyPassword = value; }
+    }
+
+
     /// <summary>
     /// Root class for all Intento services. 
     /// </summary>
@@ -53,6 +88,7 @@ namespace IntentoSDK
         internal string version;
         internal Action<string, string, Exception> loggingCallback;
         internal int waitAsyncDelay = 0;
+        internal ProxySettings proxy;
 
         /// <summary>
         /// 
@@ -69,7 +105,7 @@ namespace IntentoSDK
             string path=null,
             string userAgent = null,
             Action<string, string, Exception> loggingCallback = null,
-            int waitAsyncDelay=0)
+            int waitAsyncDelay=0,ProxySettings proxySet = null)
         {
             this.apiKey = apiKey;
             this.auth = auth != null ? new Dictionary<string, object>(auth) : null;
@@ -85,6 +121,7 @@ namespace IntentoSDK
 this.loggingCallback = loggingCallback;
             if (loggingCallback != null)
                 loggingCallback("IntentoSDK: Intento.ctor", null, null);
+            this.proxy = proxySet;
         }
 
         public static Intento Create(
@@ -92,9 +129,11 @@ this.loggingCallback = loggingCallback;
             Dictionary<string, object> auth=null, 
             string path = "https://api.inten.to/",
             string userAgent = null,
-            Action<string, string, Exception> loggingCallback = null)
+            Action<string, string, Exception> loggingCallback = null, 
+            ProxySettings proxySet = null)
+            
         {
-            Intento intento = new Intento(intentoKey, auth:auth, path: path, userAgent: userAgent, loggingCallback: loggingCallback);
+            Intento intento = new Intento(intentoKey, auth:auth, path: path, userAgent: userAgent, loggingCallback: loggingCallback, proxySet: proxySet);
             return intento;
         }
 
