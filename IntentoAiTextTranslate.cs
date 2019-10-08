@@ -395,7 +395,7 @@ namespace IntentoSDK
 
             List<string> p = new List<string>();
             foreach(KeyValuePair<string, string> pair in f)
-                p.Add(string.Format("{0}={1}", pair.Key, System.Web.HttpUtility.UrlEncode(pair.Value)));
+                p.Add(string.Format("{0}={1}", pair.Key, HttpUtility.UrlEncode(pair.Value)));
             string url = "ai/text/translate";
             if (p.Count != 0)
                 url += "?" + string.Join("&", p);
