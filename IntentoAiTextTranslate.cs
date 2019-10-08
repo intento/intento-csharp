@@ -205,10 +205,10 @@ namespace IntentoSDK
         /// <param name="credential_id">Credential id</param>
         /// <param name="additionalParams">additional url params</param>
         /// <returns>dynamic (json) with requested information</returns>
-        public IList<dynamic> Models(string provider, Dictionary<string, string> credential_id, string additionalParams = null)
+        public IList<dynamic> Models(string provider, Dictionary<string, string> credentials, string additionalParams = null)
         {
             Task<dynamic> taskReadResult = Task.Run<dynamic>(async () => 
-                await this.ModelsAsync(provider, credential_id, additionalParams: additionalParams));
+                await this.ModelsAsync(provider, credentials, additionalParams: additionalParams));
             return taskReadResult.Result;
         }
 
@@ -219,19 +219,19 @@ namespace IntentoSDK
         /// <param name="credential_id">Credential id</param>
         /// <param name="additionalParams">additional url params</param>
         /// <returns>dynamic (json) with requested information</returns>
-        async public Task<IList<dynamic>> ModelsAsync(string providerId, Dictionary<string, string> credential_id, string additionalParams = null)
+        async public Task<IList<dynamic>> ModelsAsync(string providerId, Dictionary<string, string> credentials, string additionalParams = null)
         {
             string path = string.Format("ai/text/translate/models?provider={0}", providerId);
-            if (credential_id != null)
+            if (credentials != null)
             {
                 string json;
-                if (credential_id.Count != 0)
+                if (credentials.Count != 0)
                 {
-                    if (credential_id.Count == 1 && credential_id.ContainsKey("credential_id"))
-                        json = credential_id["credential_id"];
+                    if (credentials.Count == 1 && credentials.ContainsKey("credential_id"))
+                        json = credentials["credential_id"];
                     else
                     {
-                        json = JsonConvert.SerializeObject(credential_id, Formatting.Indented);
+                        json = JsonConvert.SerializeObject(credentials, Formatting.None);
                         json = HttpUtility.UrlEncode(json);
                     }
                     path += String.Format("&credential_id={0}", json);
@@ -259,10 +259,10 @@ namespace IntentoSDK
         /// <param name="credential_id">Credential id</param>
         /// <param name="additionalParams">additional url params</param>
         /// <returns>dynamic (json) with requested information</returns>
-        public IList<dynamic> Glossaries(string provider, Dictionary<string, string> credential_id, string additionalParams = null)
+        public IList<dynamic> Glossaries(string provider, Dictionary<string, string> credentials, string additionalParams = null)
         {
             Task<dynamic> taskReadResult = Task.Run<dynamic>(async () => 
-                await this.GlossariesAsync(provider, credential_id: credential_id, additionalParams: additionalParams));
+                await this.GlossariesAsync(provider, credentials: credentials, additionalParams: additionalParams));
             return taskReadResult.Result;
         }
 
@@ -273,19 +273,19 @@ namespace IntentoSDK
         /// <param name="credential_id">Credential id</param>
         /// <param name="additionalParams">additional url params</param>
         /// <returns>dynamic (json) with requested information</returns>
-        async public Task<IList<dynamic>> GlossariesAsync(string providerId, Dictionary<string, string> credential_id, string additionalParams = null)
+        async public Task<IList<dynamic>> GlossariesAsync(string providerId, Dictionary<string, string> credentials, string additionalParams = null)
         {
             string path = string.Format("ai/text/translate/glossaries?provider={0}", providerId);
-            if (credential_id != null)
+            if (credentials != null)
             {
                 string json;
-                if (credential_id.Count != 0)
+                if (credentials.Count != 0)
                 {
-                    if (credential_id.Count == 1 && credential_id.ContainsKey("credential_id"))
-                        json = credential_id["credential_id"];
+                    if (credentials.Count == 1 && credentials.ContainsKey("credential_id"))
+                        json = credentials["credential_id"];
                     else
                     {
-                        json = JsonConvert.SerializeObject(credential_id, Formatting.Indented);
+                        json = JsonConvert.SerializeObject(credentials, Formatting.None);
                         json = HttpUtility.UrlEncode(json);
                     }
                     path += String.Format("&credential_id={0}", json);

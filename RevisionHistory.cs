@@ -34,5 +34,7 @@ namespace IntentoSDK
     // - Change version of Newtonsoft dll to be compatible with other products (downgrade to 10.0.3)
     // 1.3.0: 2019-09-15
     // - http(s) proxy support
+    // 1.3.1: 2019-10-08
+    // - Minor changes in Models and Glossaries calls
 
 }
