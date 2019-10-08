@@ -22,8 +22,23 @@ namespace IntentoSDK
         public HttpConnector(Intento _intento)
         {
             intento = _intento;
+            if (intento.proxy?.ProxyUri != null && intento.proxy.ProxyEnabled) {
+                var proxy = new WebProxy() {
+                    Address = intento.proxy.ProxyUri,
+                    UseDefaultCredentials = false
+                };
 
-            client = new HttpClient();
+                if (!string.IsNullOrWhiteSpace(intento.proxy.ProxyUserName))
+                    proxy.Credentials = new NetworkCredential(userName: intento.proxy.ProxyUserName, password: intento.proxy.ProxyPassword);
+
+                var httpClientHandler = new HttpClientHandler()
+                {
+                    Proxy = proxy,
+                };
+                client = new HttpClient(httpClientHandler,false);
+            }
+            else
+                client = new HttpClient();
             client.DefaultRequestHeaders.Add("apikey", intento.apiKey);
             string userAgent = string.Format("Intento.CSharpSDK/{0} {1}", intento.version, intento.otherUserAgent);
             client.DefaultRequestHeaders.Add("User-Agent", userAgent);

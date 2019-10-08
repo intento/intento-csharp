@@ -56,6 +56,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GitHash.cs" />
+    <Compile Include="Helpers.cs" />
     <Compile Include="HttpConnector.cs" />
     <Compile Include="IntentoAi.cs" />
     <Compile Include="IntentoAiText.cs" />
@@ -63,15 +65,29 @@
     <Compile Include="Intento.cs" />
     <Compile Include="IntentoException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RevisionHistory.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".gitignore" />
     <None Include="Embed.bat" />
+    <None Include="githashForm.bat" />
     <None Include="intento.pfx" />
+    <None Include="IntentoSDK.config" />
+    <None Include="Newtonsoft\LICENSE.md" />
+    <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ILMerge\ILMerge.exe" />
+    <Content Include="ILMerge\License.txt" />
+    <Content Include="Newtonsoft\Newtonsoft.Json.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
     </PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>$(ProjectDir)githashForm.bat &gt;$(ProjectDir)GitHash.cs</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
