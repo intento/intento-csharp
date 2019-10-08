@@ -121,14 +121,16 @@ this.loggingCallback = loggingCallback;
         {
             // Open connection to Intento API and set ApiKey
             Log(string.Format("CheckAsyncJobAsync-1: {0}ms", asyncId));
-            HttpConnector client = new HttpConnector(this);
-            Log(string.Format("CheckAsyncJobAsync-2: {0}ms", asyncId));
+            using (HttpConnector client = new HttpConnector(this))
+            {
+                Log(string.Format("CheckAsyncJobAsync-2: {0}ms", asyncId));
 
-            // async operations inside
-            Log(string.Format("CheckAsyncJobAsync-3: {0}ms", asyncId));
-            dynamic result = await client.GetAsync(string.Format("operations/{0}", asyncId));
-            Log(string.Format("CheckAsyncJobAsync-4: {0}ms", asyncId));
-            return result;
+                // async operations inside
+                Log(string.Format("CheckAsyncJobAsync-3: {0}ms", asyncId));
+                dynamic result = await client.GetAsync(string.Format("operations/{0}", asyncId));
+                Log(string.Format("CheckAsyncJobAsync-4: {0}ms", asyncId));
+                return result;
+            }
         }
 
         public dynamic WaitAsyncJob(string asyncId, int delay = 0)

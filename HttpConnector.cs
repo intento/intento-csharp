@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace IntentoSDK
 {
-    public class HttpConnector
+    public class HttpConnector : IDisposable
     {
         Intento intento;
         HttpClient client;
@@ -49,21 +49,24 @@ namespace IntentoSDK
             try
             {
                 string jsonData = JsonConvert.SerializeObject(json);
-                HttpContent requestBody = new StringContent(jsonData);
-
-                LogHttpRequest("POST", intento.serverUrl + path, jsonData, client.DefaultRequestHeaders.ToString());
-                HttpResponseMessage response = await client.PostAsync(intento.serverUrl + path, requestBody);
-                LogHttpAfterSend();
-                dynamic jsonResult = await GetJson(response);
-                LogHttpResponse(jsonResult);
-
-                if (response.StatusCode != HttpStatusCode.OK)
+                using (HttpContent requestBody = new StringContent(jsonData))
                 {
-                    Exception ex = (Exception)IntentoException.Make(response, jsonResult);
-                    LogHttpException(ex);
-                    throw ex;
+                    LogHttpRequest("POST", intento.serverUrl + path, jsonData, client.DefaultRequestHeaders.ToString());
+                    using (HttpResponseMessage response = await client.PostAsync(intento.serverUrl + path, requestBody))
+                    {
+                        LogHttpAfterSend();
+                        dynamic jsonResult = await GetJson(response);
+                        LogHttpResponse(jsonResult);
+
+                        if (response.StatusCode != HttpStatusCode.OK)
+                        {
+                            Exception ex = (Exception)IntentoException.Make(response, jsonResult);
+                            LogHttpException(ex);
+                            throw ex;
+                        }
+                        return jsonResult;
+                    }
                 }
-                return jsonResult;
             }
             catch (Exception ex)
             {
@@ -78,18 +81,20 @@ namespace IntentoSDK
             {
                 var url = intento.serverUrl + path;
                 LogHttpRequest("GET", intento.serverUrl + path, null, client.DefaultRequestHeaders.ToString());
-                HttpResponseMessage response = await client.GetAsync(url);
-                LogHttpAfterSend();
-                dynamic jsonResult = await GetJson(response);
-                LogHttpResponse(jsonResult);
-
-                if (response.StatusCode != HttpStatusCode.OK)
+                using (HttpResponseMessage response = await client.GetAsync(url))
                 {
-                    Exception ex = (Exception)IntentoException.Make(response, jsonResult);
-                    LogHttpException(ex);
-                    throw ex;
+                    LogHttpAfterSend();
+                    dynamic jsonResult = await GetJson(response);
+                    LogHttpResponse(jsonResult);
+
+                    if (response.StatusCode != HttpStatusCode.OK)
+                    {
+                        Exception ex = (Exception)IntentoException.Make(response, jsonResult);
+                        LogHttpException(ex);
+                        throw ex;
+                    }
+                    return jsonResult;
                 }
-                return jsonResult;
             }
             catch (Exception ex)
             {
@@ -131,5 +136,9 @@ namespace IntentoSDK
             intento.Log("HTTP exception", ex: ex);
         }
 
+        public void Dispose()
+        {
+            client.Dispose();
+        }
     }
 }
