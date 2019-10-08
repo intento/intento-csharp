@@ -36,5 +36,7 @@ namespace IntentoSDK
     // - http(s) proxy support
     // 1.3.1: 2019-10-08
     // - Minor changes in Models and Glossaries calls
+    // 1.4.0: 2019-10-08
+    // - IDispose, Serialization for Exceptions, using, etc (from memoQ)
 
 }
