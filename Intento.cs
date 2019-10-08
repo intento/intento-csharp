@@ -86,10 +86,10 @@ namespace IntentoSDK
             this.waitAsyncDelay = waitAsyncDelay;
 
             var assembly = Assembly.GetExecutingAssembly();
-            version = string.Format("{0}-{1}", IntentoHelpers.GetVersion(assembly), IntentoHelpers.GetGitCommitHash(assembly));
-
+            var fvi = assembly.GetName().Version;
+            this.version = string.Format("{0}.{1}.{2}.{3}", fvi.Major, fvi.Minor, fvi.Build, IntentoHelpers.GetGitCommitHash(assembly));
             
-this.loggingCallback = loggingCallback;
+            this.loggingCallback = loggingCallback;
             if (loggingCallback != null)
                 loggingCallback("IntentoSDK: Intento.ctor", null, null);
             this.proxy = proxySet;
@@ -121,16 +121,17 @@ this.loggingCallback = loggingCallback;
         {
             // Open connection to Intento API and set ApiKey
             Log(string.Format("CheckAsyncJobAsync-1: {0}ms", asyncId));
+            dynamic result;
             using (HttpConnector client = new HttpConnector(this))
             {
                 Log(string.Format("CheckAsyncJobAsync-2: {0}ms", asyncId));
 
                 // async operations inside
                 Log(string.Format("CheckAsyncJobAsync-3: {0}ms", asyncId));
-                dynamic result = await client.GetAsync(string.Format("operations/{0}", asyncId));
-                Log(string.Format("CheckAsyncJobAsync-4: {0}ms", asyncId));
-                return result;
+                result = await client.GetAsync(string.Format("operations/{0}", asyncId));
             }
+            Log(string.Format("CheckAsyncJobAsync-4: {0}ms", asyncId));
+            return result;
         }
 
         public dynamic WaitAsyncJob(string asyncId, int delay = 0)

@@ -13,7 +13,7 @@ namespace IntentoSDK
         }
 
         protected IntentoException(SerializationInfo info, StreamingContext context)
-            : base(info, context) { }
+            : base(info, context){ }
 
         /// <summary>
         /// Makes appropriate Exception depending on response

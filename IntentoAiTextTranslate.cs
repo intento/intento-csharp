@@ -131,11 +131,11 @@ namespace IntentoSDK
 
             json.service = service;
 
+            dynamic jsonResult;
             string url = "ai/text/translate";
             if (trace)
                 url += "?trace=true";
 
-            dynamic jsonResult;
             // Call to Intento API and get json result
             using (HttpConnector conn = new HttpConnector(Intento))
             {
@@ -240,9 +240,7 @@ namespace IntentoSDK
             dynamic jsonResult;
             // Call to Intento API and get json result
             using (HttpConnector conn = new HttpConnector(Intento))
-            {
                 jsonResult = await conn.GetAsync(path);
-            }
 
             List<dynamic> models = new List<dynamic>();
 
@@ -297,9 +295,7 @@ namespace IntentoSDK
             dynamic jsonResult;
             // Call to Intento API and get json result
             using (HttpConnector conn = new HttpConnector(Intento))
-            {
                 jsonResult = await conn.GetAsync(path);
-            }
 
             List<dynamic> glossaries = new List<dynamic>();
 
@@ -335,9 +331,7 @@ namespace IntentoSDK
             dynamic jsonResult;
             // Call to Intento API and get json result
             using (HttpConnector conn = new HttpConnector(Intento))
-            {
                 jsonResult = await conn.GetAsync(path);
-            }
 
             List<dynamic> credentials = new List<dynamic>();
 
@@ -373,9 +367,7 @@ namespace IntentoSDK
             dynamic jsonResult;
             // Call to Intento API and get json result
             using (HttpConnector conn = new HttpConnector(Intento))
-            {
                 jsonResult = await conn.GetAsync(path);
-            }
 
             return jsonResult;
         }
@@ -411,9 +403,7 @@ namespace IntentoSDK
             dynamic jsonResult;
             // Call to Intento API and get json result
             using (HttpConnector conn = new HttpConnector(Intento))
-            {
                 jsonResult = await conn.GetAsync(url);
-            }
 
             List<dynamic> providers = new List<dynamic>();
 
@@ -436,9 +426,7 @@ namespace IntentoSDK
             dynamic jsonResult;
             // Call to Intento API and get json result
             using (HttpConnector conn = new HttpConnector(Intento))
-            {
                 jsonResult = await conn.GetAsync(url);
-            }
 
             List<dynamic> languages = new List<dynamic>();
             foreach (dynamic languageInfo in jsonResult)
