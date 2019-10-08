@@ -126,10 +126,12 @@ namespace IntentoSDK
             {
                 Log(string.Format("CheckAsyncJobAsync-2: {0}ms", asyncId));
 
+
                 // async operations inside
                 Log(string.Format("CheckAsyncJobAsync-3: {0}ms", asyncId));
                 result = await client.GetAsync(string.Format("operations/{0}", asyncId));
             }
+
             Log(string.Format("CheckAsyncJobAsync-4: {0}ms", asyncId));
             return result;
         }
