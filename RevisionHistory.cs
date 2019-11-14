@@ -38,5 +38,7 @@ namespace IntentoSDK
     // - Minor changes in Models and Glossaries calls
     // 1.4.0: 2019-10-08
     // - IDispose, Serialization for Exceptions, using, etc (from memoQ)
+    // 1.4.1: 2019-11-14
+    // - HttpStatusCode.Unauthorized is interpreted as invalid ApiKey
 
 }

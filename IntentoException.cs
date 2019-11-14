@@ -25,6 +25,7 @@ namespace IntentoSDK
         {
             switch(response.StatusCode)
             {
+                case HttpStatusCode.Unauthorized:
                 case HttpStatusCode.Forbidden:
                     return new IntentoInvalidApiKeyException(response, jsonResult);
             }
