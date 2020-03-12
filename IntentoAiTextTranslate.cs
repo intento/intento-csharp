@@ -383,7 +383,7 @@ namespace IntentoSDK
         async public Task<IList<dynamic>> ProvidersAsync(string to = null, string from = null, bool lang_detect = false, bool bulk = false,
             Dictionary<string, string> filter = null)
         {
-            Dictionary<string, string> f = new Dictionary<string, string>(filter);
+            Dictionary<string, string> f = filter == null ? new Dictionary<string, string>() : new Dictionary<string, string>(filter);
             if (!string.IsNullOrEmpty(to))
                 f["to"] = to;
             if (!string.IsNullOrEmpty(from))

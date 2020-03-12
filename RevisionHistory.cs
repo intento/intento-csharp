@@ -42,5 +42,8 @@ namespace IntentoSDK
     // - HttpStatusCode.Unauthorized is interpreted as invalid ApiKey
     // 1.4.2: 2019-12-14
     // - Version for memoQ 9.3
+    // 1.4.3: 2020-03-12
+    // - Demo
+    // - bug in Fulfill parameter
 
 }
