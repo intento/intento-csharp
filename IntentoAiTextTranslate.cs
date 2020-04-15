@@ -29,13 +29,14 @@ namespace IntentoSDK
             bool async = false, bool wait_async = false, string format = null, object auth = null,
             string custom_model = null, string glossary = null,
             object pre_processing = null, object post_processing = null,
-            bool failover = false, object failover_list = null, string routing = null, bool trace = false)
+            bool failover = false, object failover_list = null, string routing = null, bool trace = false,
+            Dictionary<string, string> special_headers=null)
         {
             Task<dynamic> taskReadResult = Task.Run<dynamic>(async () => await this.FulfillAsync(text, to, from: from, provider: provider,
                 async: async, wait_async: wait_async, format: format, auth: auth,
                 custom_model: custom_model, glossary: glossary,
                 pre_processing: pre_processing, post_processing: post_processing,
-                failover: failover, failover_list: failover_list, routing: routing, trace: trace));
+                failover: failover, failover_list: failover_list, routing: routing, trace: trace, special_headers: special_headers));
             return taskReadResult.Result;
         }
 
@@ -43,7 +44,8 @@ namespace IntentoSDK
             bool async = false, bool wait_async = false, string format = null, object auth = null,
             string custom_model = null, string glossary = null,
             object pre_processing = null, object post_processing = null,
-            bool failover = false, object failover_list = null, string routing = null, bool trace = false, bool deserialize_text=false)
+            bool failover = false, object failover_list = null, string routing = null, bool trace = false, 
+            Dictionary<string, string> special_headers = null)
         {
             dynamic preProcessingJson = GetJson(pre_processing, "pre_processing");
             dynamic postProcessingJson = GetJson(post_processing, "post_processing");

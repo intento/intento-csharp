@@ -44,15 +44,21 @@ namespace IntentoSDK
             client.DefaultRequestHeaders.Add("User-Agent", userAgent);
         }
 
-        async public Task<dynamic> PostAsync(string path, dynamic json)
+        async public Task<dynamic> PostAsync(string path, dynamic json, Dictionary<string, string> special_headers = null)
         {
             try
             {
                 string jsonData = JsonConvert.SerializeObject(json);
-                using (HttpContent requestBody = new StringContent(jsonData))
+                using (HttpContent httpContent = new StringContent(jsonData))
                 {
+                    if (special_headers != null && special_headers.Count != 0)
+                    {
+                        foreach (KeyValuePair<string, string> pair in special_headers)
+                            httpContent.Headers.Add(pair.Key, pair.Value);
+                    }
+
                     LogHttpRequest("POST", intento.serverUrl + path, jsonData, client.DefaultRequestHeaders.ToString());
-                    using (HttpResponseMessage response = await client.PostAsync(intento.serverUrl + path, requestBody))
+                    using (HttpResponseMessage response = await client.PostAsync(intento.serverUrl + path, httpContent))
                     {
                         LogHttpAfterSend();
                         dynamic jsonResult = await GetJson(response);
