@@ -167,13 +167,15 @@ namespace IntentoSDK
             List<int> delays;
             int n = 0;
 
-            if (delay == 0)
+            if (delay == -1)
+                delays = new List<int> { 0 };
+            else if (delay == 0)
                 delays = CalcDelays(400);
             else
                 delays = CalcDelays(delay);
 
             delay = delays[0];
-            while (DateTime.Now < dt.AddSeconds(delay))
+            do
             {
                 Log(string.Format("WaitAsyncJobAsync-loop: {0} - {1}ms", asyncId, delay));
                 Thread.Sleep(delay);
@@ -188,7 +190,7 @@ namespace IntentoSDK
                 if (n < delays.Count)
                     delay = delays[n];
                 Log(string.Format("WaitAsyncJobAsync-loop2: {0} - {1}ms", asyncId, delay));
-            }
+            } while (DateTime.Now < dt.AddSeconds(delay));
 
             // Timeout
             dynamic json = new JObject();
