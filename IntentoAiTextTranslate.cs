@@ -30,7 +30,7 @@ namespace IntentoSDK
             string custom_model = null, string glossary = null,
             object pre_processing = null, object post_processing = null,
             bool failover = false, object failover_list = null, string routing = null, bool trace = false,
-            Dictionary<string, string> special_headers=null)
+            Dictionary<string, string> special_headers = null)
         {
             Task<dynamic> taskReadResult = Task.Run<dynamic>(async () => await this.FulfillAsync(text, to, from: from, provider: provider,
                 async: async, wait_async: wait_async, format: format, auth: auth,
@@ -44,7 +44,7 @@ namespace IntentoSDK
             bool async = false, bool wait_async = false, string format = null, object auth = null,
             string custom_model = null, string glossary = null,
             object pre_processing = null, object post_processing = null,
-            bool failover = false, object failover_list = null, string routing = null, bool trace = false, 
+            bool failover = false, object failover_list = null, string routing = null, bool trace = false,
             Dictionary<string, string> special_headers = null)
         {
             dynamic preProcessingJson = GetJson(pre_processing, "pre_processing");
@@ -204,9 +204,9 @@ namespace IntentoSDK
         /// <param name="credential_id">Credential id</param>
         /// <param name="additionalParams">additional url params</param>
         /// <returns>dynamic (json) with requested information</returns>
-        public IList<dynamic> Models(string provider, Dictionary<string, string> credentials, string additionalParams = null)
+        public IList<dynamic> Models(string provider, Dictionary<string, string> credentials, Dictionary<string, string> additionalParams = null)
         {
-            Task<dynamic> taskReadResult = Task.Run<dynamic>(async () => 
+            Task<dynamic> taskReadResult = Task.Run<dynamic>(async () =>
                 await this.ModelsAsync(provider, credentials, additionalParams: additionalParams));
             return taskReadResult.Result;
         }
@@ -218,7 +218,7 @@ namespace IntentoSDK
         /// <param name="credential_id">Credential id</param>
         /// <param name="additionalParams">additional url params</param>
         /// <returns>dynamic (json) with requested information</returns>
-        async public Task<IList<dynamic>> ModelsAsync(string providerId, Dictionary<string, string> credentials, string additionalParams = null)
+        async public Task<IList<dynamic>> ModelsAsync(string providerId, Dictionary<string, string> credentials, Dictionary<string, string> additionalParams = null)
         {
             string path = string.Format("ai/text/translate/models?provider={0}", providerId);
             if (credentials != null)
@@ -236,13 +236,83 @@ namespace IntentoSDK
                     path += String.Format("&credential_id={0}", json);
                 }
             }
-            if (additionalParams != null)
-                path += additionalParams;
 
             dynamic jsonResult;
             // Call to Intento API and get json result
             using (HttpConnector conn = new HttpConnector(Intento))
-                jsonResult = await conn.GetAsync(path);
+                jsonResult = await conn.GetAsync(path, additionalParams: additionalParams);
+
+            List<dynamic> models = new List<dynamic>();
+
+            foreach (dynamic model in ((JContainer)jsonResult).First.First)
+                models.Add(model);
+
+            return models;
+        }
+
+        /// <summary>
+        /// Details of the models stored by the provider
+        /// </summary>
+        /// <param name="providerId">Provider id</param>
+        /// <param name="additionalParams">additional url params</param>
+        /// <returns>dynamic (json) with requested information</returns>
+        public IList<dynamic> Accounts(string providerId = null, Dictionary<string, string> additionalParams = null)
+        {
+            Task<dynamic> taskReadResult = Task.Run<dynamic>(async () =>
+                await this.AccountsAsync(providerId, additionalParams: additionalParams));
+            return taskReadResult.Result;
+        }
+
+        /// <summary>
+        /// Details of the models stored by the provider
+        /// </summary>
+        /// <param name="provider">Provider id</param>
+        /// <param name="additionalParams">additional url params</param>
+        /// <returns>dynamic (json) with requested information</returns>
+        async public Task<IList<dynamic>> AccountsAsync(string providerId = null, Dictionary<string, string> additionalParams = null)
+        {
+            string path = string.Format("accounts" + (providerId != null ? $"?provider={providerId}" : null));
+
+            dynamic jsonResult;
+            // Call to Intento API and get json result
+            using (HttpConnector conn = new HttpConnector(Intento))
+                jsonResult = await conn.GetAsync(path, additionalParams: additionalParams);
+
+            List<dynamic> models = new List<dynamic>();
+
+            foreach (dynamic model in ((JContainer)jsonResult).First.First)
+                models.Add(model);
+
+            return models;
+        }
+
+        /// <summary>
+        /// Details of the models stored by the provider
+        /// </summary>
+        /// <param name="providerId">Provider id</param>
+        /// <param name="additionalParams">additional url params</param>
+        /// <returns>dynamic (json) with requested information</returns>
+        public IList<dynamic> Routing(Dictionary<string, string> additionalParams = null)
+        {
+            Task<dynamic> taskReadResult = Task.Run<dynamic>(async () =>
+                await this.RoutingAsync(additionalParams: additionalParams));
+            return taskReadResult.Result;
+        }
+
+        /// <summary>
+        /// Details of the models stored by the provider
+        /// </summary>
+        /// <param name="provider">Provider id</param>
+        /// <param name="additionalParams">additional url params</param>
+        /// <returns>dynamic (json) with requested information</returns>
+        async public Task<IList<dynamic>> RoutingAsync(Dictionary<string, string> additionalParams = null)
+        {
+            string path = "ai/text/translate/routing";
+
+            dynamic jsonResult;
+            // Call to Intento API and get json result
+            using (HttpConnector conn = new HttpConnector(Intento))
+                jsonResult = await conn.GetAsync(path, additionalParams: additionalParams);
 
             List<dynamic> models = new List<dynamic>();
 
@@ -259,9 +329,9 @@ namespace IntentoSDK
         /// <param name="credential_id">Credential id</param>
         /// <param name="additionalParams">additional url params</param>
         /// <returns>dynamic (json) with requested information</returns>
-        public IList<dynamic> Glossaries(string provider, Dictionary<string, string> credentials, string additionalParams = null)
+        public IList<dynamic> Glossaries(string provider, Dictionary<string, string> credentials, Dictionary<string, string> additionalParams = null)
         {
-            Task<dynamic> taskReadResult = Task.Run<dynamic>(async () => 
+            Task<dynamic> taskReadResult = Task.Run<dynamic>(async () =>
                 await this.GlossariesAsync(provider, credentials: credentials, additionalParams: additionalParams));
             return taskReadResult.Result;
         }
@@ -273,7 +343,7 @@ namespace IntentoSDK
         /// <param name="credential_id">Credential id</param>
         /// <param name="additionalParams">additional url params</param>
         /// <returns>dynamic (json) with requested information</returns>
-        async public Task<IList<dynamic>> GlossariesAsync(string providerId, Dictionary<string, string> credentials, string additionalParams = null)
+        async public Task<IList<dynamic>> GlossariesAsync(string providerId, Dictionary<string, string> credentials, Dictionary<string, string> additionalParams = null)
         {
             string path = string.Format("ai/text/translate/glossaries?provider={0}", providerId);
             if (credentials != null)
@@ -291,13 +361,11 @@ namespace IntentoSDK
                     path += String.Format("&credential_id={0}", json);
                 }
             }
-            if (additionalParams != null)
-                path += additionalParams;
 
             dynamic jsonResult;
             // Call to Intento API and get json result
             using (HttpConnector conn = new HttpConnector(Intento))
-                jsonResult = await conn.GetAsync(path);
+                jsonResult = await conn.GetAsync(path, additionalParams: additionalParams);
 
             List<dynamic> glossaries = new List<dynamic>();
 
@@ -312,7 +380,7 @@ namespace IntentoSDK
         /// </summary>
         /// <param name="additionalParams">additional url params</param>
         /// <returns>dynamic (json) with requested information</returns>
-        public IList<dynamic> DelegatedCredentials(string additionalParams = null)
+        public IList<dynamic> DelegatedCredentials(Dictionary<string, string> additionalParams = null)
         {
             Task<dynamic> taskReadResult = Task.Run<dynamic>(async () =>
                 await this.DelegatedCredentialsAsync(additionalParams: additionalParams));
@@ -324,16 +392,14 @@ namespace IntentoSDK
         /// </summary>
         /// <param name="additionalParams">additional url params</param>
         /// <returns>dynamic (json) with requested information</returns>
-        async public Task<IList<dynamic>> DelegatedCredentialsAsync(string additionalParams = null)
+        async public Task<IList<dynamic>> DelegatedCredentialsAsync(Dictionary<string, string> additionalParams = null)
         {
             string path = "delegated_credentials";
-            if (additionalParams != null)
-                path += additionalParams;
 
             dynamic jsonResult;
             // Call to Intento API and get json result
             using (HttpConnector conn = new HttpConnector(Intento))
-                jsonResult = await conn.GetAsync(path);
+                jsonResult = await conn.GetAsync(path, additionalParams: additionalParams);
 
             List<dynamic> credentials = new List<dynamic>();
 
@@ -349,9 +415,9 @@ namespace IntentoSDK
         /// <param name="provider">Provider id</param>
         /// <param name="additionalParams">additional url params</param>
         /// <returns>dynamic (json) with requested information</returns>
-        public dynamic Provider(string provider, string additionalParams = null)
+        public dynamic Provider(string provider, Dictionary<string, string> additionalParams = null)
         {
-            Task<dynamic> taskReadResult = Task.Run<dynamic>(async () => await this.ProviderAsync(provider, additionalParams:additionalParams));
+            Task<dynamic> taskReadResult = Task.Run<dynamic>(async () => await this.ProviderAsync(provider, additionalParams: additionalParams));
             return taskReadResult.Result;
         }
 
@@ -360,16 +426,14 @@ namespace IntentoSDK
         /// </summary>
         /// <param name="provider">Provider id</param>
         /// <returns>dynamic (json) with requested information</returns>
-        async public Task<dynamic> ProviderAsync(string providerId, string additionalParams = null)
+        async public Task<dynamic> ProviderAsync(string providerId, Dictionary<string, string> additionalParams = null)
         {
             string path = string.Format("ai/text/translate/{0}", providerId);
-            if (additionalParams != null)
-                path += additionalParams;
 
             dynamic jsonResult;
             // Call to Intento API and get json result
             using (HttpConnector conn = new HttpConnector(Intento))
-                jsonResult = await conn.GetAsync(path);
+                jsonResult = await conn.GetAsync(path, additionalParams: additionalParams);
 
             return jsonResult;
         }
@@ -377,7 +441,7 @@ namespace IntentoSDK
         public IList<dynamic> Providers(string to = null, string from = null, bool lang_detect = false, bool bulk = false,
             Dictionary<string, string> filter = null)
         {
-            Task<IList<dynamic>> taskReadResult = Task.Run<IList<dynamic>>(async () => 
+            Task<IList<dynamic>> taskReadResult = Task.Run<IList<dynamic>>(async () =>
                 await this.ProvidersAsync(to: to, from: from, lang_detect: lang_detect, bulk: bulk, filter: filter));
             return taskReadResult.Result;
         }
@@ -396,7 +460,7 @@ namespace IntentoSDK
                 f["bulk"] = "true";
 
             List<string> p = new List<string>();
-            foreach(KeyValuePair<string, string> pair in f)
+            foreach (KeyValuePair<string, string> pair in f)
                 p.Add(string.Format("{0}={1}", pair.Key, HttpUtility.UrlEncode(pair.Value)));
             string url = "ai/text/translate";
             if (p.Count != 0)
