@@ -22,8 +22,10 @@ namespace IntentoSDK
         public HttpConnector(Intento _intento)
         {
             intento = _intento;
-            if (intento.proxy?.ProxyUri != null && intento.proxy.ProxyEnabled) {
-                var proxy = new WebProxy() {
+            if (intento.proxy?.ProxyUri != null && intento.proxy.ProxyEnabled)
+            {
+                var proxy = new WebProxy()
+                {
                     Address = intento.proxy.ProxyUri,
                     UseDefaultCredentials = false
                 };
@@ -35,7 +37,7 @@ namespace IntentoSDK
                 {
                     Proxy = proxy,
                 };
-                client = new HttpClient(httpClientHandler,false);
+                client = new HttpClient(httpClientHandler, false);
             }
             else
                 client = new HttpClient();
@@ -44,21 +46,22 @@ namespace IntentoSDK
             client.DefaultRequestHeaders.Add("User-Agent", userAgent);
         }
 
-        async public Task<dynamic> PostAsync(string path, dynamic json, Dictionary<string, string> special_headers = null)
+        async public Task<dynamic> PostAsync(string path, dynamic json, Dictionary<string, string> special_headers = null, Dictionary<string, string> additionalParams = null)
         {
             try
             {
                 string jsonData = JsonConvert.SerializeObject(json);
                 using (HttpContent httpContent = new StringContent(jsonData))
                 {
+                    var url = MakeUrl(path, additionalParams);
                     if (special_headers != null && special_headers.Count != 0)
                     {
                         foreach (KeyValuePair<string, string> pair in special_headers)
                             httpContent.Headers.Add(pair.Key, pair.Value);
                     }
 
-                    LogHttpRequest("POST", intento.serverUrl + path, jsonData, client.DefaultRequestHeaders.ToString());
-                    using (HttpResponseMessage response = await client.PostAsync(intento.serverUrl + path, httpContent))
+                    LogHttpRequest("POST", url, jsonData, client.DefaultRequestHeaders.ToString());
+                    using (HttpResponseMessage response = await client.PostAsync(url, httpContent))
                     {
                         LogHttpAfterSend();
                         dynamic jsonResult = await GetJson(response);
@@ -81,12 +84,12 @@ namespace IntentoSDK
             }
         }
 
-        async public Task<dynamic> GetAsync(string path)
+        async public Task<dynamic> GetAsync(string path, Dictionary<string, string> additionalParams = null)
         {
             try
             {
-                var url = intento.serverUrl + path;
-                LogHttpRequest("GET", intento.serverUrl + path, null, client.DefaultRequestHeaders.ToString());
+                var url = MakeUrl(intento.serverUrl + path, additionalParams);
+                LogHttpRequest("GET", url, null, client.DefaultRequestHeaders.ToString());
                 using (HttpResponseMessage response = await client.GetAsync(url))
                 {
                     LogHttpAfterSend();
@@ -107,6 +110,16 @@ namespace IntentoSDK
                 LogHttpException(ex);
                 throw;
             }
+        }
+
+        private string MakeUrl(string path, Dictionary<string, string> additionalParams)
+        {
+            UriBuilder uri = new UriBuilder(intento.serverUrl + path);
+            System.Collections.Specialized.NameValueCollection query = HttpUtility.ParseQueryString(uri.Query);
+            foreach (KeyValuePair<string, string> pair in additionalParams)
+                query[pair.Key] = pair.Value;
+            uri.Query = query.ToString();
+            return uri.ToString();
         }
 
         async private Task<dynamic> GetJson(HttpResponseMessage response)
