@@ -380,6 +380,7 @@ namespace IntentoSDK
         /// </summary>
         /// <param name="additionalParams">additional url params</param>
         /// <returns>dynamic (json) with requested information</returns>
+        [Obsolete]
         public IList<dynamic> DelegatedCredentials(Dictionary<string, string> additionalParams = null)
         {
             Task<dynamic> taskReadResult = Task.Run<dynamic>(async () =>
@@ -392,6 +393,7 @@ namespace IntentoSDK
         /// </summary>
         /// <param name="additionalParams">additional url params</param>
         /// <returns>dynamic (json) with requested information</returns>
+        [Obsolete]
         async public Task<IList<dynamic>> DelegatedCredentialsAsync(Dictionary<string, string> additionalParams = null)
         {
             string path = "delegated_credentials";

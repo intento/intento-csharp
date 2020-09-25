@@ -50,5 +50,8 @@ namespace IntentoSDK
     // 1.4.5: 2020-08-11
     // - Extended demo
     // - -1 as a special value for delay parameter of WaitAsyncJob
+    // 1.5.0: 2020-09-25
+    // - Added Accounts method
+    // - additionalParams now Dictionary<string, string>
 
 }

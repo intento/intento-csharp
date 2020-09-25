@@ -88,7 +88,7 @@ namespace IntentoSDK
         {
             try
             {
-                var url = MakeUrl(intento.serverUrl + path, additionalParams);
+                var url = MakeUrl(path, additionalParams);
                 LogHttpRequest("GET", url, null, client.DefaultRequestHeaders.ToString());
                 using (HttpResponseMessage response = await client.GetAsync(url))
                 {
@@ -114,6 +114,9 @@ namespace IntentoSDK
 
         private string MakeUrl(string path, Dictionary<string, string> additionalParams)
         {
+            if (additionalParams == null)
+                return intento.serverUrl + path;
+
             UriBuilder uri = new UriBuilder(intento.serverUrl + path);
             System.Collections.Specialized.NameValueCollection query = HttpUtility.ParseQueryString(uri.Query);
             foreach (KeyValuePair<string, string> pair in additionalParams)
