@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using Microsoft.Win32;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -12,11 +13,14 @@ namespace IntentoSDK
     {
         Intento intento;
         IntentoAiText parent;
+        string optimization;
 
         public IntentoAiTextTranslate(IntentoAiText parent)
         {
             this.parent = parent;
             this.intento = parent.Intento;
+            RegistryKey key = Registry.CurrentUser.CreateSubKey("Software\\Intento\\CSharpSDK");
+            optimization = (string)key.GetValue("Optimization", null);
         }
 
         public Intento Intento
@@ -50,8 +54,6 @@ namespace IntentoSDK
             dynamic preProcessingJson = GetJson(pre_processing, "pre_processing");
             dynamic postProcessingJson = GetJson(post_processing, "post_processing");
 
-            dynamic json = new JObject();
-
             // ------ context section
             dynamic context = new JObject();
 
@@ -82,18 +84,12 @@ namespace IntentoSDK
             if (!string.IsNullOrWhiteSpace(glossary))
                 context.glossary = glossary;
 
-            json.context = context;
-
             // ----- service section
             dynamic service = new JObject();
 
             // provider
             if (!string.IsNullOrWhiteSpace(provider))
                 service.provider = provider;
-
-            // async parameter
-            if (async)
-                service.async = true;
 
             // auth parameter
             service.auth = GetJson(auth, "auth");
@@ -131,35 +127,124 @@ namespace IntentoSDK
                 }
             }
 
-            json.service = service;
+            dynamic json = new JObject();
 
+            service.async = true;
+
+            json.service = service;
+            json.context = context;
+
+            string suffix = trace ? "?trace=true" : "";
+
+            if (!async)
+                return await SyncFulfill(suffix, json);
+
+            if (!wait_async)
+                return await JustAsyncFulfill(suffix, json);
+
+            return await WaitAsyncFulfill(suffix, json);
+        }
+
+        private int GetLen(dynamic data)
+        {
+            {
+                JContainer container = data as JContainer;
+                if (container != null)
+                {
+                    // text field as list
+                    int len = 0;
+                    foreach (string item in container)
+                        len += item.Length;
+                    return len;
+                }
+                else
+                {
+                    // text field as string, not a list
+                    string str = (string)data;
+                    if (str == null)
+                        return 0;
+                    return str.Length;
+                }
+
+            }
+        }
+
+            // async opertation (in terms of IntentoApi) and we need to wait result of it
+            async private Task<dynamic> WaitAsyncFulfill(string suffix, dynamic json)
+        {
+            if (string.IsNullOrEmpty(optimization) || optimization == "None")
+                return await WaitAsyncFulfill2(suffix, json);
+
+            int textLen = GetLen(json["context"]["text"]);
+
+            if (textLen > 9000)
+                return await WaitAsyncFulfill2(suffix, json);
+            if (textLen > 2000)
+                return await SyncwrapperFulfill(suffix, json);
+            else
+            {
+                if (optimization == "Sync")
+                    return await SyncFulfill(suffix, json);
+                return await SyncwrapperFulfill(suffix, json);
+            }
+        }
+
+        // async opertation (in terms of IntentoApi) and we need to wait result of it
+        async private Task<dynamic> WaitAsyncFulfill2(string suffix, dynamic json)
+        {
             dynamic jsonResult;
-            string url = "ai/text/translate";
-            if (trace)
-                url += "?trace=true";
 
             // Call to Intento API and get json result
             using (HttpConnector conn = new HttpConnector(Intento))
             {
-                jsonResult = await conn.PostAsync(url, json);
+                jsonResult = await conn.PostAsync("ai/text/translate" + suffix, json);
             }
 
-            if (async && wait_async)
-            {   // async opertation (in terms of IntentoApi) and we need to wait result of it
-                string id = jsonResult.id;
+            string id = jsonResult.id;
 
-                // In case of Sandbox key and some errors in parameters request to IntentoAPI may return:
-                // 1. id: async operation started
-                // 2. result of translation: Sandcox key
-                // 3. error: validation of arameters failed (like request to translate html with provider with no such capabilities)
-                if (id == null)
-                    // Not a (1) - return result immediately, nothing to wait
-                    return jsonResult;
+            // In case of Sandbox key and some errors in parameters request to IntentoAPI may return:
+            // 1. id: async operation started
+            // 2. result of translation: Sandcox key
+            // 3. error: validation of arameters failed (like request to translate html with provider with no such capabilities)
+            if (id == null)
+                // Not a (1) - return result immediately, nothing to wait
+                return jsonResult;
 
-                jsonResult = await Intento.WaitAsyncJobAsync(id);
-            }
+            jsonResult = await Intento.WaitAsyncJobAsync(id);
 
             return jsonResult;
+        }
+
+        async private Task<dynamic> SyncFulfill(string suffix, dynamic json)
+        {
+            // Call to Intento API and get json result
+            using (HttpConnector conn = new HttpConnector(Intento))
+            {
+                dynamic jsonResult = await conn.PostAsync("ai/text/translate" + suffix, json);
+                return jsonResult;
+            }
+        }
+
+        async private Task<dynamic> SyncwrapperFulfill(string suffix, dynamic json)
+        {
+            // Call to Intento API and get json result
+            using (HttpConnector conn = new HttpConnector(Intento))
+            {
+                dynamic jsonResult = await conn.PostAsync("ai/text/translate" + suffix, json, syncwrapper: true);
+                return jsonResult;
+            }
+        }
+
+        async private Task<dynamic> JustAsyncFulfill(string suffix, dynamic json)
+        {
+            json["service"]["async"] = true;
+
+            // Call to Intento API and get json result
+            using (HttpConnector conn = new HttpConnector(Intento))
+            {
+                dynamic jsonResult = await conn.PostAsync("ai/text/translate" + suffix, json);
+                return jsonResult;
+            }
         }
 
         private dynamic GetJson(object data, string name)
