@@ -503,7 +503,13 @@ namespace IntentoSDK
             return languages;
         }
 
-        async public Task<dynamic> PairsAsync(string srtName) 
+		public Task<dynamic> Pairs(string srtName)
+		{
+			Task<dynamic> taskReadResult = Task.Run<dynamic>(async () => await this.PairsAsync(srtName));
+			return taskReadResult.Result;
+		}
+
+		async public Task<dynamic> PairsAsync(string srtName) 
         {
             string url = String.Format("ai/text/translate/routing/{0}/pairs", srtName);
 
@@ -515,13 +521,28 @@ namespace IntentoSDK
             return jsonResult;
         }
 
-        public Task<dynamic> Pairs(string srtName)
-        {
-            Task<dynamic> taskReadResult = Task.Run<dynamic>(async () => await this.PairsAsync(srtName));
-            return taskReadResult.Result;
-        }
+		public IList<IList<string>> RoutingLanguagePairs(string providerId)
+		{
+			Task<IList<IList<string>>> taskReadResult = Task.Run<IList<IList<string>>>(async () => await this.RoutingLanguagePairsAsync(providerId));
+			return taskReadResult.Result;
+		}
 
-        public IList<IList<string>> ProviderLanguagePairs(string providerId)
+		async public Task<IList<IList<string>>> RoutingLanguagePairsAsync(string providerId)
+		{
+			dynamic routingInfo = await PairsAsync(providerId);
+			List<IList<string>> res = new List<IList<string>>();
+
+			dynamic pairs = routingInfo.pairs;
+			if (pairs != null)
+			{
+				foreach (dynamic pair in pairs)
+					res.Add(new List<string> { (string)pair.from, (string)pair.to });
+			}
+
+			return res;
+		}
+
+		public IList<IList<string>> ProviderLanguagePairs(string providerId)
         {
             Task<IList<IList<string>>> taskReadResult = Task.Run<IList<IList<string>>>(async () => await this.ProviderLanguagePairsAsync(providerId));
             return taskReadResult.Result;

@@ -55,5 +55,8 @@ namespace IntentoSDK
     // - additionalParams now Dictionary<string, string>
     // 1.5.1: 2020-12-23
     // - Added PairsAsync and Pairs methods: getting pairs for routing from ai/text/translate/routing/.../pairs
+    // 1.5.2: 2021-03-21
+	// - Added RoutingLanguagePairs method: getting pairs for named smart routing
+
 
 }
