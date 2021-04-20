@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Intento")]
 [assembly: AssemblyProduct("IntentoSDK")]
-[assembly: AssemblyCopyright("Copyright © Intento 2018-2020")]
+[assembly: AssemblyCopyright("Copyright © Intento 2018-2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -33,7 +33,7 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.5.2.0")]
-[assembly: AssemblyFileVersion("1.5.2.0")]
+[assembly: AssemblyVersion("1.5.3.0")]
+[assembly: AssemblyFileVersion("1.5.3.0")]
 [assembly: AssemblyInformationalVersion(GitHash.hash)]
 [assembly: AssemblyGitHash(GitHash.hash)]
