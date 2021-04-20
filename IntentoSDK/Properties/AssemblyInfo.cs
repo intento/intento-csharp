@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Intento")]
 [assembly: AssemblyProduct("IntentoSDK")]
-[assembly: AssemblyCopyright("Copyright © Intento 2018-2020")]
+[assembly: AssemblyCopyright("Copyright © Intento 2018-2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
