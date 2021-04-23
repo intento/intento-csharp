@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using IntentoSDK.API;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -20,10 +21,20 @@ namespace IntentoSDK
         }
 
         public Intento Intento
-        { get { return intento; } }
+        { 
+            get 
+            { 
+                return intento; 
+            } 
+        }
 
         public IntentoAiText Parent
-        { get { return parent; } }
+        { 
+            get 
+            { 
+                return parent; 
+            } 
+        }
 
         public dynamic Fulfill(object text, string to, string from = null, string provider = null,
             bool async = false, bool wait_async = false, string format = null, object auth = null,
@@ -45,7 +56,7 @@ namespace IntentoSDK
             string custom_model = null, string glossary = null,
             object pre_processing = null, object post_processing = null,
             bool failover = false, object failover_list = null, string routing = null, bool trace = false,
-            Dictionary<string, string> special_headers = null)
+            Dictionary<string, string> special_headers = null, Guid? clientAPIProvider = null)
         {
             dynamic preProcessingJson = GetJson(pre_processing, "pre_processing");
             dynamic postProcessingJson = GetJson(post_processing, "post_processing");
@@ -133,17 +144,9 @@ namespace IntentoSDK
 
             json.service = service;
 
-            dynamic jsonResult;
-            string url = "ai/text/translate";
-            if (trace)
-                url += "?trace=true";
-
-            // Call to Intento API and get json result
-            using (HttpConnector conn = new HttpConnector(Intento))
-            {
-                jsonResult = await conn.PostAsync(url, json);
-            }
-
+            var clientApi = APIClientFactory.Current.Get(clientAPIProvider);
+            dynamic jsonResult = await clientApi.Translate(Intento, json, trace);
+            
             if (async && wait_async)
             {   // async opertation (in terms of IntentoApi) and we need to wait result of it
                 string id = jsonResult.id;

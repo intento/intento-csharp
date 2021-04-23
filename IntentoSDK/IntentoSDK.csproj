@@ -59,6 +59,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\APIClientFactory.cs" />
+    <Compile Include="API\BaseAPIClient.cs" />
+    <Compile Include="API\LocalAPIClient.cs" />
+    <Compile Include="API\RemoteAPIClient.cs" />
     <Compile Include="GitHash.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="HttpConnector.cs" />

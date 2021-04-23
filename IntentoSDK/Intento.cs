@@ -61,6 +61,8 @@ namespace IntentoSDK
         internal int waitAsyncDelay = 0;
         internal ProxySettings proxy;
 
+        private Dictionary<string, object> extendedSettings = new Dictionary<string, object>();
+
         /// <summary>
         /// 
         /// </summary>
@@ -76,11 +78,13 @@ namespace IntentoSDK
             string path=null,
             string userAgent = null,
             Action<string, string, Exception> loggingCallback = null,
-            int waitAsyncDelay=0,ProxySettings proxySet = null)
+            int waitAsyncDelay=0,ProxySettings proxySet = null, 
+            Dictionary<string, object> extendedSettings = null)
         {
             this.apiKey = apiKey;
             this.auth = auth != null ? new Dictionary<string, object>(auth) : null;
             this.serverUrl = string.IsNullOrEmpty(path) ? "https://api.inten.to/" : path;
+            this.extendedSettings = extendedSettings;
             otherUserAgent = userAgent;
             System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             this.waitAsyncDelay = waitAsyncDelay;
@@ -101,12 +105,18 @@ namespace IntentoSDK
             string path = "https://api.inten.to/",
             string userAgent = null,
             Action<string, string, Exception> loggingCallback = null, 
-            ProxySettings proxySet = null)
+            ProxySettings proxySet = null,
+            Dictionary<string, object> extendedSettings = null)
             
         {
-            Intento intento = new Intento(intentoKey, auth:auth, path: path, userAgent: userAgent, loggingCallback: loggingCallback, proxySet: proxySet);
+            Intento intento = new Intento(intentoKey, auth:auth, path: path, userAgent: userAgent, loggingCallback: loggingCallback, proxySet: proxySet, extendedSettings: extendedSettings);
             return intento;
         }
+
+        /// <summary>
+        /// Additional settings
+        /// </summary>
+        public Dictionary<string, object> ExtendedSettings => extendedSettings;
 
         public IntentoAi Ai
         { get { return new IntentoAi(this); } }
