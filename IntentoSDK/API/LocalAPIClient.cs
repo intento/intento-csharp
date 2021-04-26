@@ -92,11 +92,7 @@ namespace IntentoSDK.API
 
         private string PrepareKey(string key)
         {
-            if (string.IsNullOrWhiteSpace(key))
-            {
-                return "";
-            }
-            return HttpUtility.HtmlDecode(key);
+            return key;
         }
 
     }
