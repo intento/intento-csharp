@@ -11,12 +11,17 @@ namespace IntentoSDK.API
     /// </summary>
     public abstract class BaseAPIClient
     {
-        protected Intento intento;
+        protected string filePath;
 
         /// <summary>
-        /// Уникальный идентификатор клиента
+        /// Uid of client
         /// </summary>
         public abstract Guid ClientUid { get; }
+
+        /// <summary>
+        /// Display name of client API provider
+        /// </summary>
+        public abstract string DisplayName { get; }
 
         /// <summary>
         /// Translate text
@@ -25,15 +30,25 @@ namespace IntentoSDK.API
         /// <param name="param"></param>
         /// <param name="trace"></param>
         /// <returns></returns>
-        public abstract Task<dynamic> Translate(Intento intento, dynamic param, bool trace = false);
+        public abstract Task<dynamic> Translate(Intento intento, object text, string to, string from = null, string provider = null,
+            bool async = false, bool wait_async = false, string format = null, object auth = null,
+            string custom_model = null, string glossary = null,
+            object pre_processing = null, object post_processing = null,
+            bool failover = false, object failover_list = null, string routing = null, bool trace = false,
+            Dictionary<string, string> special_headers = null);
 
         /// <summary>
         /// Init API Client
         /// </summary>
         /// <param name="intento"></param>
-        public virtual void Init(Intento intento)
+        public virtual bool Init(string filePath)
         {
-            this.intento = intento;
+            if (this.filePath != filePath)
+            { 
+                this.filePath = filePath;
+                return true;
+            }
+            return false;
         }
     }
 }

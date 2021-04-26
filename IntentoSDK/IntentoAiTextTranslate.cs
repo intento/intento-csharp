@@ -35,19 +35,19 @@ namespace IntentoSDK
                 return parent; 
             } 
         }
-
+      
         public dynamic Fulfill(object text, string to, string from = null, string provider = null,
             bool async = false, bool wait_async = false, string format = null, object auth = null,
             string custom_model = null, string glossary = null,
             object pre_processing = null, object post_processing = null,
             bool failover = false, object failover_list = null, string routing = null, bool trace = false,
-            Dictionary<string, string> special_headers = null)
+            Dictionary<string, string> special_headers = null, Guid? clientAPIProvider = null, string filePath = null)
         {
             Task<dynamic> taskReadResult = Task.Run<dynamic>(async () => await this.FulfillAsync(text, to, from: from, provider: provider,
                 async: async, wait_async: wait_async, format: format, auth: auth,
                 custom_model: custom_model, glossary: glossary,
                 pre_processing: pre_processing, post_processing: post_processing,
-                failover: failover, failover_list: failover_list, routing: routing, trace: trace, special_headers: special_headers));
+                failover: failover, failover_list: failover_list, routing: routing, trace: trace, special_headers: special_headers, clientAPIProvider: clientAPIProvider, filePath: filePath));
             return taskReadResult.Result;
         }
 
@@ -56,111 +56,14 @@ namespace IntentoSDK
             string custom_model = null, string glossary = null,
             object pre_processing = null, object post_processing = null,
             bool failover = false, object failover_list = null, string routing = null, bool trace = false,
-            Dictionary<string, string> special_headers = null, Guid? clientAPIProvider = null)
+            Dictionary<string, string> special_headers = null, Guid? clientAPIProvider = null, string filePath = null)
         {
-            dynamic preProcessingJson = GetJson(pre_processing, "pre_processing");
-            dynamic postProcessingJson = GetJson(post_processing, "post_processing");
-
-            dynamic json = new JObject();
-
-            // ------ context section
-            dynamic context = new JObject();
-
-            // text
-            if (text == null)
-                context.text = "";
-            else if (text is IEnumerable<string>)
-                context.text = GetJson(((IEnumerable<string>)text).Select(i => i == null ? "" : i), "text");
-            else
-                context.text = GetJson(text.ToString(), "text") ?? "";
-
-            // to
-            context.to = to;
-
-            // from
-            if (!string.IsNullOrWhiteSpace(from))
-                context.from = from;
-
-            // format
-            if (!string.IsNullOrWhiteSpace(format))
-                context.format = format;
-
-            // custom_model
-            if (!string.IsNullOrWhiteSpace(custom_model))
-                context.category = custom_model;
-
-            // glossary
-            if (!string.IsNullOrWhiteSpace(glossary))
-                context.glossary = glossary;
-
-            json.context = context;
-
-            // ----- service section
-            dynamic service = new JObject();
-
-            // provider
-            if (!string.IsNullOrWhiteSpace(provider))
-                service.provider = provider;
-
-            // async parameter
-            if (async)
-                service.async = true;
-
-            // auth parameter
-            service.auth = GetJson(auth, "auth");
-
-            // routing
-            if (!string.IsNullOrEmpty(routing))
-                service.routing = routing;
-
-            // pre-post processing paramters
-            if (preProcessingJson != null || postProcessingJson != null)
-            {
-                dynamic processing = new JObject();
-                if (preProcessingJson != null)
-                    processing.pre = preProcessingJson;
-                if (postProcessingJson != null)
-                    processing.post = postProcessingJson;
-                service.processing = processing;
-            }
-
-            // failover parameters
-            if (failover)
-            {
-                service.failover = true;
-
-                JArray failoverJson;
-                if (failover_list != null)
-                {
-                    if (failover_list is string)
-                        failoverJson = JArray.Parse((string)failover_list);
-                    else if (failover_list is JArray)
-                        failoverJson = (JArray)failover_list;
-                    else
-                        throw new IntentoInvalidParameterException("failover_list", "need to json-list-string or Newtonsoft JArray");
-                    service.failover_list = failover_list;
-                }
-            }
-
-            json.service = service;
-
+            APIClientFactory.Current.Init(filePath);
             var clientApi = APIClientFactory.Current.Get(clientAPIProvider);
-            dynamic jsonResult = await clientApi.Translate(Intento, json, trace);
+            dynamic jsonResult = await clientApi.Translate(Intento, text, to, from, provider,
+                async, wait_async, format, auth, custom_model, glossary, pre_processing, post_processing,
+                failover, failover_list, routing, trace, special_headers);            
             
-            if (async && wait_async)
-            {   // async opertation (in terms of IntentoApi) and we need to wait result of it
-                string id = jsonResult.id;
-
-                // In case of Sandbox key and some errors in parameters request to IntentoAPI may return:
-                // 1. id: async operation started
-                // 2. result of translation: Sandcox key
-                // 3. error: validation of arameters failed (like request to translate html with provider with no such capabilities)
-                if (id == null)
-                    // Not a (1) - return result immediately, nothing to wait
-                    return jsonResult;
-
-                jsonResult = await Intento.WaitAsyncJobAsync(id);
-            }
 
             return jsonResult;
         }

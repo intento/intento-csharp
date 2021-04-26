@@ -39,6 +39,14 @@ namespace IntentoSDK.API
             }
             return clients.FirstOrDefault(c => c.ClientUid == uid);
         }
+
+        public void Init(string filePath)
+        {
+            foreach (var client in clients)
+            {
+                client.Init(filePath);
+            }
+        }
        
         /// <summary>
         /// Get factory for clients API

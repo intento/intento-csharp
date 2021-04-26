@@ -60,8 +60,7 @@ namespace IntentoSDK
         internal Action<string, string, Exception> loggingCallback;
         internal int waitAsyncDelay = 0;
         internal ProxySettings proxy;
-
-        private Dictionary<string, object> extendedSettings = new Dictionary<string, object>();
+               
 
         /// <summary>
         /// 
@@ -83,8 +82,7 @@ namespace IntentoSDK
         {
             this.apiKey = apiKey;
             this.auth = auth != null ? new Dictionary<string, object>(auth) : null;
-            this.serverUrl = string.IsNullOrEmpty(path) ? "https://api.inten.to/" : path;
-            this.extendedSettings = extendedSettings;
+            this.serverUrl = string.IsNullOrEmpty(path) ? "https://api.inten.to/" : path;            
             otherUserAgent = userAgent;
             System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             this.waitAsyncDelay = waitAsyncDelay;
@@ -112,11 +110,6 @@ namespace IntentoSDK
             Intento intento = new Intento(intentoKey, auth:auth, path: path, userAgent: userAgent, loggingCallback: loggingCallback, proxySet: proxySet, extendedSettings: extendedSettings);
             return intento;
         }
-
-        /// <summary>
-        /// Additional settings
-        /// </summary>
-        public Dictionary<string, object> ExtendedSettings => extendedSettings;
 
         public IntentoAi Ai
         { get { return new IntentoAi(this); } }
