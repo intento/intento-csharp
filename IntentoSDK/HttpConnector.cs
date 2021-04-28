@@ -46,14 +46,15 @@ namespace IntentoSDK
             client.DefaultRequestHeaders.Add("User-Agent", userAgent);
         }
 
-        async public Task<dynamic> PostAsync(string path, dynamic json, Dictionary<string, string> special_headers = null, Dictionary<string, string> additionalParams = null)
+        async public Task<dynamic> PostAsync(string path, dynamic json, Dictionary<string, string> special_headers = null, 
+											Dictionary<string, string> additionalParams = null, bool useSyncwrapper = false)
         {
             try
             {
                 string jsonData = JsonConvert.SerializeObject(json);
                 using (HttpContent httpContent = new StringContent(jsonData))
                 {
-                    var url = MakeUrl(path, additionalParams);
+                    var url = MakeUrl(path, additionalParams, useSyncwrapper);
                     if (special_headers != null && special_headers.Count != 0)
                     {
                         foreach (KeyValuePair<string, string> pair in special_headers)
@@ -112,12 +113,13 @@ namespace IntentoSDK
             }
         }
 
-        private string MakeUrl(string path, Dictionary<string, string> additionalParams)
+        private string MakeUrl(string path, Dictionary<string, string> additionalParams, bool useSyncwrapper = false)
         {
-            if (additionalParams == null)
-                return intento.serverUrl + path;
+			string url = useSyncwrapper ? intento.syncwrapperUrl : intento.serverUrl;
+			if (additionalParams == null)
+                return url + path;
 
-            UriBuilder uri = new UriBuilder(intento.serverUrl + path);
+            UriBuilder uri = new UriBuilder(url + path);
             System.Collections.Specialized.NameValueCollection query = HttpUtility.ParseQueryString(uri.Query);
             foreach (KeyValuePair<string, string> pair in additionalParams)
                 query[pair.Key] = pair.Value;

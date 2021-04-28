@@ -54,8 +54,9 @@ namespace IntentoSDK
     {
         internal string apiKey;
         internal Dictionary<string, object> auth;
-        internal string serverUrl;
-        internal string otherUserAgent;
+		internal string serverUrl;
+		internal string syncwrapperUrl;
+		internal string otherUserAgent;
         internal string version;
         internal Action<string, string, Exception> loggingCallback;
         internal int waitAsyncDelay = 0;
@@ -81,7 +82,8 @@ namespace IntentoSDK
             this.apiKey = apiKey;
             this.auth = auth != null ? new Dictionary<string, object>(auth) : null;
             this.serverUrl = string.IsNullOrEmpty(path) ? "https://api.inten.to/" : path;
-            otherUserAgent = userAgent;
+			this.syncwrapperUrl = this.serverUrl.Replace("https://api", "https://syncwrapper-memoq");
+			otherUserAgent = userAgent;
             System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             this.waitAsyncDelay = waitAsyncDelay;
 
