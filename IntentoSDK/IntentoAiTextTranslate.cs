@@ -30,13 +30,14 @@ namespace IntentoSDK
             string custom_model = null, string glossary = null,
             object pre_processing = null, object post_processing = null,
             bool failover = false, object failover_list = null, string routing = null, bool trace = false,
-            Dictionary<string, string> special_headers = null)
+            Dictionary<string, string> special_headers = null, bool useSyncwrapper = false)
         {
             Task<dynamic> taskReadResult = Task.Run<dynamic>(async () => await this.FulfillAsync(text, to, from: from, provider: provider,
                 async: async, wait_async: wait_async, format: format, auth: auth,
                 custom_model: custom_model, glossary: glossary,
                 pre_processing: pre_processing, post_processing: post_processing,
-                failover: failover, failover_list: failover_list, routing: routing, trace: trace, special_headers: special_headers));
+                failover: failover, failover_list: failover_list, routing: routing, trace: trace,
+				special_headers: special_headers, useSyncwrapper: useSyncwrapper));
             return taskReadResult.Result;
         }
 
@@ -45,7 +46,7 @@ namespace IntentoSDK
             string custom_model = null, string glossary = null,
             object pre_processing = null, object post_processing = null,
             bool failover = false, object failover_list = null, string routing = null, bool trace = false,
-            Dictionary<string, string> special_headers = null)
+            Dictionary<string, string> special_headers = null, bool useSyncwrapper = false)
         {
             dynamic preProcessingJson = GetJson(pre_processing, "pre_processing");
             dynamic postProcessingJson = GetJson(post_processing, "post_processing");
@@ -55,16 +56,33 @@ namespace IntentoSDK
             // ------ context section
             dynamic context = new JObject();
 
-            // text
-            if (text == null)
-                context.text = "";
-            else if (text is IEnumerable<string>)
-                context.text = GetJson(((IEnumerable<string>)text).Select(i => i == null ? "" : i), "text");
-            else
-                context.text = GetJson(text.ToString(), "text") ?? "";
+			int textLength = 0;
+			// text
+			if (text == null)
+				context.text = "";
+			else if (text is IEnumerable<string>)
+			{
+				context.text = GetJson(((IEnumerable<string>)text).Select(i => i == null ? "" : i), "text");
+				textLength = ((IEnumerable<string>)text).Where(x => x != null).Sum(i => i.Length);
+			}
+			else
+			{
+				context.text = GetJson(text.ToString(), "text") ?? "";
+				textLength = ((string)text).Length;
+			}
 
-            // to
-            context.to = to;
+			// determination of the possibility of using the syncwrapper
+			// maximum 10k characters
+			if (useSyncwrapper)
+			{
+				if (textLength < 10000)
+					async = !useSyncwrapper;
+				else
+					useSyncwrapper = false;
+			}
+
+			// to
+			context.to = to;
 
             // from
             if (!string.IsNullOrWhiteSpace(from))
@@ -91,9 +109,9 @@ namespace IntentoSDK
             if (!string.IsNullOrWhiteSpace(provider))
                 service.provider = provider;
 
-            // async parameter
-            if (async)
-                service.async = true;
+			// async parameter
+			if (async)
+				service.async = true;
 
             // auth parameter
             service.auth = GetJson(auth, "auth");
@@ -141,7 +159,7 @@ namespace IntentoSDK
             // Call to Intento API and get json result
             using (HttpConnector conn = new HttpConnector(Intento))
             {
-                jsonResult = await conn.PostAsync(url, json);
+                jsonResult = await conn.PostAsync(url, json, useSyncwrapper: useSyncwrapper);
             }
 
             if (async && wait_async)
@@ -158,8 +176,18 @@ namespace IntentoSDK
 
                 jsonResult = await Intento.WaitAsyncJobAsync(id);
             }
+			if (useSyncwrapper)
+			{
+				JObject response = new JObject();
+				response["results"] = jsonResult.results;
+				response["meta"] = jsonResult.meta;
+				response["service"] = jsonResult.service;
+				((JObject)jsonResult)["response"] = new JArray() { response };
+				jsonResult.meta["providers"] = new JArray() { jsonResult.service.provider };
 
-            return jsonResult;
+			}
+
+			return jsonResult;
         }
 
         private dynamic GetJson(object data, string name)
