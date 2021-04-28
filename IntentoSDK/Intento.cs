@@ -82,7 +82,9 @@ namespace IntentoSDK
             this.apiKey = apiKey;
             this.auth = auth != null ? new Dictionary<string, object>(auth) : null;
             this.serverUrl = string.IsNullOrEmpty(path) ? "https://api.inten.to/" : path;
-			this.syncwrapperUrl = this.serverUrl.Replace("https://api", "https://syncwrapper-memoq");
+			// path can be https://api2.inten.to/
+			// this.syncwrapperUrl = this.serverUrl.Replace("https://api", "https://syncwrapper-memoq");
+			this.syncwrapperUrl = "https://syncwrapper-memoq.inten.to/";
 			otherUserAgent = userAgent;
             System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             this.waitAsyncDelay = waitAsyncDelay;

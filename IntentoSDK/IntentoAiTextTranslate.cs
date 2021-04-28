@@ -30,7 +30,7 @@ namespace IntentoSDK
             string custom_model = null, string glossary = null,
             object pre_processing = null, object post_processing = null,
             bool failover = false, object failover_list = null, string routing = null, bool trace = false,
-            Dictionary<string, string> special_headers = null, bool useSyncwrapper = true)
+            Dictionary<string, string> special_headers = null, bool useSyncwrapper = false)
         {
             Task<dynamic> taskReadResult = Task.Run<dynamic>(async () => await this.FulfillAsync(text, to, from: from, provider: provider,
                 async: async, wait_async: wait_async, format: format, auth: auth,
@@ -46,7 +46,7 @@ namespace IntentoSDK
             string custom_model = null, string glossary = null,
             object pre_processing = null, object post_processing = null,
             bool failover = false, object failover_list = null, string routing = null, bool trace = false,
-            Dictionary<string, string> special_headers = null, bool useSyncwrapper = true)
+            Dictionary<string, string> special_headers = null, bool useSyncwrapper = false)
         {
             dynamic preProcessingJson = GetJson(pre_processing, "pre_processing");
             dynamic postProcessingJson = GetJson(post_processing, "post_processing");
@@ -71,8 +71,18 @@ namespace IntentoSDK
 				textLength = ((string)text).Length;
 			}
 
-            // to
-            context.to = to;
+			// determination of the possibility of using the syncwrapper
+			// maximum 10k characters
+			if (useSyncwrapper)
+			{
+				if (textLength < 10000)
+					async = !useSyncwrapper;
+				else
+					useSyncwrapper = false;
+			}
+
+			// to
+			context.to = to;
 
             // from
             if (!string.IsNullOrWhiteSpace(from))
@@ -98,16 +108,6 @@ namespace IntentoSDK
             // provider
             if (!string.IsNullOrWhiteSpace(provider))
                 service.provider = provider;
-
-			// determination of the possibility of using the syncwrapper
-			// maximum 10k characters
-			if (useSyncwrapper)
-			{
-				if (textLength < 10000)
-					async = !useSyncwrapper;
-				else
-					useSyncwrapper = false;
-			}	
 
 			// async parameter
 			if (async)
