@@ -60,6 +60,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GitHash.cs" />
+    <Compile Include="Handlers\BaseSymbolHandler.cs" />
+    <Compile Include="Handlers\HtmlSymbolHandler.cs" />
+    <Compile Include="Handlers\SymbolHandlersFactory.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="HttpConnector.cs" />
     <Compile Include="IntentoAi.cs" />
@@ -67,6 +70,8 @@
     <Compile Include="IntentoAiTextTranslate.cs" />
     <Compile Include="Intento.cs" />
     <Compile Include="IntentoException.cs" />
+    <Compile Include="Handlers\ISymbolHandler.cs" />
+    <Compile Include="Handlers\XmlSymbolHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RevisionHistory.cs" />
   </ItemGroup>
