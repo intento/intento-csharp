@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31105.61
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo", "Demo\Demo.csproj", "{2A9CFF8D-AC5B-40BC-9111-04D54A47017D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intento.SDK", "Intento.SDK\Intento.SDK.csproj", "{4E19A0FB-B31C-4EB7-8749-E2A6768176AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntentoSDK", "IntentoSDK\IntentoSDK.csproj", "{14D9DA22-F8D4-4F62-975A-7BD821807528}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intento.SDK.Tests", "Intento.SDK.Tests\Intento.SDK.Tests.csproj", "{42BC6D76-8B83-4417-A2AB-877D435F1913}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,12 +13,13 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2A9CFF8D-AC5B-40BC-9111-04D54A47017D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2A9CFF8D-AC5B-40BC-9111-04D54A47017D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{14D9DA22-F8D4-4F62-975A-7BD821807528}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{14D9DA22-F8D4-4F62-975A-7BD821807528}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{14D9DA22-F8D4-4F62-975A-7BD821807528}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{14D9DA22-F8D4-4F62-975A-7BD821807528}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E19A0FB-B31C-4EB7-8749-E2A6768176AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E19A0FB-B31C-4EB7-8749-E2A6768176AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E19A0FB-B31C-4EB7-8749-E2A6768176AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E19A0FB-B31C-4EB7-8749-E2A6768176AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42BC6D76-8B83-4417-A2AB-877D435F1913}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42BC6D76-8B83-4417-A2AB-877D435F1913}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42BC6D76-8B83-4417-A2AB-877D435F1913}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
