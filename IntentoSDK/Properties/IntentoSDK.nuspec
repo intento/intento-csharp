@@ -11,5 +11,6 @@
   </metadata>
   <files>
     <file src="..\bin\IntentoSDK.dll" target="lib\net45" />
+    <file src="..\bin\IntentoSDK.pdb" target="lib\net45" />
   </files>
 </package>
