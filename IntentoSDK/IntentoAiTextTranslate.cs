@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Web;
 using Newtonsoft.Json;
@@ -27,14 +29,14 @@ namespace IntentoSDK
 
         public dynamic Fulfill(object text, string to, string from = null, string provider = null,
             bool async = false, bool wait_async = false, string format = null, object auth = null,
-            string custom_model = null, string glossary = null,
+            string custom_model = null, string glossary = null, int[] intentoGlossary = null,
             object pre_processing = null, object post_processing = null,
             bool failover = false, object failover_list = null, string routing = null, bool trace = false,
             Dictionary<string, string> special_headers = null, bool useSyncwrapper = false)
         {
             Task<dynamic> taskReadResult = Task.Run<dynamic>(async () => await this.FulfillAsync(text, to, from: from, provider: provider,
                 async: async, wait_async: wait_async, format: format, auth: auth,
-                custom_model: custom_model, glossary: glossary,
+                custom_model: custom_model, glossary: glossary, intentoGlossary: intentoGlossary,
                 pre_processing: pre_processing, post_processing: post_processing,
                 failover: failover, failover_list: failover_list, routing: routing, trace: trace,
 				special_headers: special_headers, useSyncwrapper: useSyncwrapper));
@@ -43,7 +45,7 @@ namespace IntentoSDK
 
         async public Task<dynamic> FulfillAsync(object text, string to, string from = null, string provider = null,
             bool async = false, bool wait_async = false, string format = null, object auth = null,
-            string custom_model = null, string glossary = null,
+            string custom_model = null, string glossary = null, int[] intentoGlossary = null,
             object pre_processing = null, object post_processing = null,
             bool failover = false, object failover_list = null, string routing = null, bool trace = false,
             Dictionary<string, string> special_headers = null, bool useSyncwrapper = false)
@@ -99,6 +101,13 @@ namespace IntentoSDK
             // glossary
             if (!string.IsNullOrWhiteSpace(glossary))
                 context.glossary = glossary;
+
+            // intento glossary
+            if (intentoGlossary != null && intentoGlossary.Length > 0)
+            {
+                dynamic intentoG = JArray.FromObject(intentoGlossary.Select(g => JObject.FromObject(new { id = g })));
+                context.glossary = intentoG;
+            }
 
             json.context = context;
 
@@ -401,6 +410,54 @@ namespace IntentoSDK
                 glossaries.Add(glossary);
 
             return glossaries;
+        }
+
+        public IList<dynamic> AgnosticGlossaries()
+        {
+            Task<dynamic> taskReadResult = Task.Run<dynamic>(async () =>
+                await AgnosticGlossariesAsync());
+            return taskReadResult.Result;
+        }
+
+        public async Task<IList<dynamic>> AgnosticGlossariesAsync()
+        {
+            var path = $"ai/text/glossaries/v2/typed";
+            dynamic jsonResult;
+            // Call to Intento API and get json result
+            using (HttpConnector conn = new HttpConnector(Intento))
+            {
+                jsonResult = await conn.GetAsync(path);
+            }
+            var glossaries = new List<dynamic>();
+            foreach (dynamic glossary in jsonResult.glossaries)
+            {
+                glossaries.Add(glossary);
+            }
+            return glossaries;
+        }
+
+        public IList<dynamic> AgnosticGlossariesTypes()
+        {
+            Task<dynamic> taskReadResult = Task.Run<dynamic>(async () =>
+                await AgnosticGlossariesTypesAsync());
+            return taskReadResult.Result;
+        }
+
+        public async Task<IList<dynamic>> AgnosticGlossariesTypesAsync()
+        {
+            var path = $"ai/text/glossaries/v2/cs_types";
+            dynamic jsonResult;
+            // Call to Intento API and get json result
+            using (HttpConnector conn = new HttpConnector(Intento))
+            {
+                jsonResult = await conn.GetAsync(path);
+            }
+            var types = new List<dynamic>();
+            foreach (dynamic type in jsonResult.types)
+            {
+                types.Add(type);
+            }
+            return types;
         }
 
         /// <summary>
