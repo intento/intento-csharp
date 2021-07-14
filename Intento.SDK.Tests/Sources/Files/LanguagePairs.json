@@ -1,0 +1,264 @@
+{
+  "pairs": [
+    {
+      "to": "",
+      "from": ""
+    },
+    {
+      "to": "ar",
+      "from": ""
+    },
+    {
+      "to": "cs",
+      "from": ""
+    },
+    {
+      "to": "de",
+      "from": ""
+    },
+    {
+      "to": "en",
+      "from": ""
+    },
+    {
+      "to": "es",
+      "from": ""
+    },
+    {
+      "to": "fi",
+      "from": ""
+    },
+    {
+      "to": "fr",
+      "from": ""
+    },
+    {
+      "to": "it",
+      "from": ""
+    },
+    {
+      "to": "ja",
+      "from": ""
+    },
+    {
+      "to": "ko",
+      "from": ""
+    },
+    {
+      "to": "nl",
+      "from": ""
+    },
+    {
+      "to": "pt",
+      "from": ""
+    },
+    {
+      "to": "ro",
+      "from": ""
+    },
+    {
+      "to": "ru",
+      "from": ""
+    },
+    {
+      "to": "tr",
+      "from": ""
+    },
+    {
+      "to": "zh",
+      "from": ""
+    },
+    {
+      "to": "en",
+      "from": "ar"
+    },
+    {
+      "to": "en",
+      "from": "cs"
+    },
+    {
+      "to": "en",
+      "from": "de"
+    },
+    {
+      "to": "fr",
+      "from": "de"
+    },
+    {
+      "to": "it",
+      "from": "de"
+    },
+    {
+      "to": "ja",
+      "from": "de"
+    },
+    {
+      "to": "ru",
+      "from": "de"
+    },
+    {
+      "to": "ar",
+      "from": "en"
+    },
+    {
+      "to": "cs",
+      "from": "en"
+    },
+    {
+      "to": "de",
+      "from": "en"
+    },
+    {
+      "to": "es",
+      "from": "en"
+    },
+    {
+      "to": "fi",
+      "from": "en"
+    },
+    {
+      "to": "fr",
+      "from": "en"
+    },
+    {
+      "to": "it",
+      "from": "en"
+    },
+    {
+      "to": "ja",
+      "from": "en"
+    },
+    {
+      "to": "ko",
+      "from": "en"
+    },
+    {
+      "to": "nl",
+      "from": "en"
+    },
+    {
+      "to": "pt",
+      "from": "en"
+    },
+    {
+      "to": "ro",
+      "from": "en"
+    },
+    {
+      "to": "ru",
+      "from": "en"
+    },
+    {
+      "to": "tr",
+      "from": "en"
+    },
+    {
+      "to": "zh",
+      "from": "en"
+    },
+    {
+      "to": "en",
+      "from": "es"
+    },
+    {
+      "to": "zh",
+      "from": "es"
+    },
+    {
+      "to": "en",
+      "from": "fi"
+    },
+    {
+      "to": "de",
+      "from": "fr"
+    },
+    {
+      "to": "en",
+      "from": "fr"
+    },
+    {
+      "to": "es",
+      "from": "fr"
+    },
+    {
+      "to": "ru",
+      "from": "fr"
+    },
+    {
+      "to": "de",
+      "from": "it"
+    },
+    {
+      "to": "en",
+      "from": "it"
+    },
+    {
+      "to": "pt",
+      "from": "it"
+    },
+    {
+      "to": "en",
+      "from": "ja"
+    },
+    {
+      "to": "fr",
+      "from": "ja"
+    },
+    {
+      "to": "zh",
+      "from": "ja"
+    },
+    {
+      "to": "en",
+      "from": "ko"
+    },
+    {
+      "to": "en",
+      "from": "nl"
+    },
+    {
+      "to": "en",
+      "from": "pt"
+    },
+    {
+      "to": "en",
+      "from": "ro"
+    },
+    {
+      "to": "de",
+      "from": "ru"
+    },
+    {
+      "to": "en",
+      "from": "ru"
+    },
+    {
+      "to": "es",
+      "from": "ru"
+    },
+    {
+      "to": "fr",
+      "from": "ru"
+    },
+    {
+      "to": "pt",
+      "from": "ru"
+    },
+    {
+      "to": "en",
+      "from": "tr"
+    },
+    {
+      "to": "en",
+      "from": "zh"
+    },
+    {
+      "to": "it",
+      "from": "zh"
+    },
+    {
+      "to": "ja",
+      "from": "zh"
+    }
+  ]
+}
