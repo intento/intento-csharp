@@ -54,6 +54,8 @@ namespace IntentoSDK.Translate.Options
 
         public string Glossary { get; set; }
 
+        public int[] IntentoGlossary { get; set; }
+
         public string[] PreProcessing { get; set; }
 
         public string[] PostProcessing { get; set; }

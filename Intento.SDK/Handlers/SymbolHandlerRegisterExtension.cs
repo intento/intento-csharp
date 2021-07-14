@@ -1,4 +1,5 @@
 ﻿using Intento.SDK.DI;
+using IntentoSDK.Handlers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Intento.SDK.Handlers

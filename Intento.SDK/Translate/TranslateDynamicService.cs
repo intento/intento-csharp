@@ -104,8 +104,14 @@ namespace Intento.SDK.Translate
             {
                 context.Glossary = options.Glossary;
             }
+            
+            // intento glossary
+            if (options.IntentoGlossary is {Length: > 0})
+            {
+                context.Glossaries = options.IntentoGlossary.Select(g => new GlossaryInfo { Id = g }).ToArray();
+            }
 
-            // ----- service section
+            // service section
             var service = new TranslateServiceDto();
             request.Service = service;
 
@@ -491,6 +497,49 @@ namespace Intento.SDK.Translate
             res.AddRange(pairs.Select(pair => new List<string> {pair.From, pair.To}));
 
             return res;
+        }
+        
+        /// <inheritdoc />
+        public IList<dynamic> AgnosticGlossaries()
+        {
+            Task<dynamic> taskReadResult = Task.Run<dynamic>(async () =>
+                await AgnosticGlossariesAsync());
+            return taskReadResult.Result;
+        }
+
+        /// <inheritdoc />
+        public async Task<IList<dynamic>> AgnosticGlossariesAsync()
+        {
+            var path = $"ai/text/glossaries/v2/typed";
+            // Call to Intento API and get json result
+            var jsonResult = await Client.GetAsync(path);
+            var glossaries = new List<dynamic>();
+            foreach (dynamic glossary in jsonResult.glossaries)
+            {
+                glossaries.Add(glossary);
+            }
+            return glossaries;
+        }
+
+        /// <inheritdoc />
+        public IList<dynamic> AgnosticGlossariesTypes()
+        {
+            Task<dynamic> taskReadResult = Task.Run<dynamic>(async () =>
+                await AgnosticGlossariesTypesAsync());
+            return taskReadResult.Result;
+        }
+
+        /// <inheritdoc />
+        public async Task<IList<dynamic>> AgnosticGlossariesTypesAsync()
+        {
+            var path = $"ai/text/glossaries/v2/cs_types";
+            var jsonResult = await Client.GetAsync(path);
+            var types = new List<dynamic>();
+            foreach (dynamic type in jsonResult.types)
+            {
+                types.Add(type);
+            }
+            return types;
         }
         
         private static dynamic GetJson(object data, string name)

@@ -20,7 +20,10 @@ namespace Intento.SDK.Translate.DTO
         [JsonProperty("category")]
         public string Category { get; set; }
 
-        [JsonProperty("glossary")]
+        [JsonIgnore]
         public string Glossary { get; set; }
+
+        [JsonProperty("glossary")]
+        public GlossaryInfo[] Glossaries { get; set; }
     }
 }

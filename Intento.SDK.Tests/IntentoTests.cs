@@ -1,3 +1,4 @@
+using System;
 using Intento.SDK.Settings;
 using NUnit.Framework;
 
@@ -15,7 +16,7 @@ namespace Intento.SDK.Tests
             var assemblyVersion = IntentoHelpers.GetVersion(assembly);
             var options = new Options
             {
-                ApiKey = "3nYdzoWiCRrjfmcKCPigEZB7bzXPJyDV",
+                ApiKey = Environment.GetEnvironmentVariable("IntentoAPIKey"),
                 ClientUserAgent = $"Intento.SDK.Test/{assemblyVersion}",
                 SyncwrapperUrl = "https://syncwrapper-memoq.inten.to/",
                 ServerUrl = "https://api.inten.to/"

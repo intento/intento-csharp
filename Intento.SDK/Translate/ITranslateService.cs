@@ -221,5 +221,29 @@ namespace Intento.SDK.Translate
         /// <param name="providerId">Provider identifier</param>
         /// <returns></returns>
         Task<IList<IList<string>>> ProviderLanguagePairsAsync(string providerId);
+
+        /// <summary>
+        /// List of glossaries
+        /// </summary>
+        /// <returns></returns>
+        IList<dynamic> AgnosticGlossaries();
+
+        /// <summary>
+        /// List of glossaries
+        /// </summary>
+        /// <returns></returns>
+        Task<IList<dynamic>> AgnosticGlossariesAsync();
+
+        /// <summary>
+        /// Glossaries types
+        /// </summary>
+        /// <returns></returns>
+        IList<dynamic> AgnosticGlossariesTypes();
+
+        /// <summary>
+        /// Glossaries types
+        /// </summary>
+        /// <returns></returns>
+        Task<IList<dynamic>> AgnosticGlossariesTypesAsync();
     }
 }

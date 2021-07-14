@@ -62,7 +62,7 @@ namespace IntentoSDK.Handlers
         protected override string PrepareText(string data)
         {
             data = base.PrepareText(data);
-            return string.Format("<root>{0}</root>", data);
+            return $"<root>{data}</root>";
         }
     }
 }
