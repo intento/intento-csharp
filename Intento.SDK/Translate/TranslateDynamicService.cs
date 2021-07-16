@@ -181,7 +181,11 @@ namespace Intento.SDK.Translate
                     return jsonResult;
                 }
 
-                jsonResult = await WaitAsyncJobAsync(id);
+                var wrapper = await WaitAsyncJobAsync(id);
+                if (wrapper.Done)
+                {
+                    jsonResult = wrapper.Response is {Length: > 0} ? wrapper.Response[0] : null;
+                }
             }
 
             if (!options.UseSyncwrapper)
@@ -585,23 +589,23 @@ namespace Intento.SDK.Translate
             }            
         }
 
-        private dynamic CheckAsyncJob(string asyncId)
+        private TranslateResponseWrapper CheckAsyncJob(string asyncId)
         {
             var task = Task.Run(async () => await CheckAsyncJobAsync(asyncId));
             return task.Result;
         }
 
-        private async Task<dynamic> CheckAsyncJobAsync(string asyncId)
+        private async Task<TranslateResponseWrapper> CheckAsyncJobAsync(string asyncId)
         {
             Logger.LogDebug(SdkLogEvents.INVOKE_METHOD, "CheckAsyncJobAsync: {asyncId}ms", asyncId);
             // async operations inside
-            var result = await Client.GetAsync($"operations/{asyncId}");
+            var result = await Client.GetAsync<TranslateResponseWrapper>($"operations/{asyncId}");
             return result;
         }
 
-        private dynamic WaitAsyncJob(string asyncId, int delay = 0)
+        private TranslateResponseWrapper WaitAsyncJob(string asyncId, int delay = 0)
         {
-            var taskResult = Task.Run(async () => await this.WaitAsyncJobAsync(asyncId, delay));
+            var taskResult = Task.Run(async () => await WaitAsyncJobAsync(asyncId, delay));
             return taskResult.Result;
         }
 
@@ -616,26 +620,19 @@ namespace Intento.SDK.Translate
             return delays;
         }
 
-        private async Task<dynamic> WaitAsyncJobAsync(string asyncId, int delay = 0)
+        private async Task<TranslateResponseWrapper> WaitAsyncJobAsync(string asyncId, int delay = 0)
         {
             var dt = DateTime.Now;
 
             Logger.LogDebug(SdkLogEvents.INVOKE_METHOD, $"WaitAsyncJobAsync-start: {asyncId} - {delay}ms");
-            List<int> delays;
             var n = 0;
 
-            switch (delay)
+            var delays = delay switch
             {
-                case -1:
-                    delays = new List<int> { 0 };
-                    break;
-                case 0:
-                    delays = CalcDelays(400);
-                    break;
-                default:
-                    delays = CalcDelays(delay);
-                    break;
-            }
+                -1 => new List<int> {0},
+                0 => CalcDelays(400),
+                _ => CalcDelays(delay)
+            };
 
             delay = delays[0];
             do
@@ -647,7 +644,7 @@ namespace Intento.SDK.Translate
                 var result = await CheckAsyncJobAsync(asyncId);
 
                 Logger.LogDebug(SdkLogEvents.INVOKE_METHOD, $"WaitAsyncJobAsync-loop1a: {asyncId} - {delay}ms");
-                if ((bool) result.done)
+                if (result.Done)
                 {
                     return result;
                 }
@@ -662,16 +659,21 @@ namespace Intento.SDK.Translate
             } while (DateTime.Now < dt.AddSeconds(delay));
 
             // Timeout
-            dynamic json = new JObject();
-            json.id = asyncId;
-            json.done = false;
-            json.response = null;
+            var json = new TranslateResponseWrapper
+            {
+                Id = asyncId, 
+                Done = false, 
+                Response = null
+            };
 
-            dynamic error = new JObject();
-            error.type = "Timeout";
-            error.reason = "Too long response from Intento MT plugin";
-            error.data = null;
-            json.error = error;
+            var error = new Error
+            {
+                Type = "Timeout", 
+                Reason = "Too long response from Intento MT plugin", 
+                Data = null
+            };
+            
+            json.Error = error;
 
             return json;
         }

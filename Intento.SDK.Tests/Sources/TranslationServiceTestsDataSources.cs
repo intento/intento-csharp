@@ -56,6 +56,16 @@ namespace Intento.SDK.Tests.Sources
                 Routing = "best",
                 UseSyncwrapper = true
             });
+
+            yield return new TestCaseData(new TranslateOptions
+            {
+                Text = new[] { "Yes", "No" },
+                Async = true,
+                WaitAsync = true,
+                From = "fi",
+                To = "en",
+                Routing = "best"
+            });
         }
     }
 }

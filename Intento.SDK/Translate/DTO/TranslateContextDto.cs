@@ -1,3 +1,4 @@
+using Intento.SDK.Translate.Converters;
 using Newtonsoft.Json;
 
 namespace Intento.SDK.Translate.DTO
@@ -6,6 +7,7 @@ namespace Intento.SDK.Translate.DTO
     public class TranslateContextDto
     {
         [JsonProperty("text")]
+        [JsonConverter(typeof(ArrayToSingleStringConverter))]
         public string[] Text { get; set; }
 
         [JsonProperty("to")]

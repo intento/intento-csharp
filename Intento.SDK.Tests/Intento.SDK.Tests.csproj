@@ -25,6 +25,8 @@
       <EmbeddedResource Include="Sources\Files\TranslateServiceDto.json" />
       <None Remove="Sources\Files\LanguagePairs.json" />
       <EmbeddedResource Include="Sources\Files\LanguagePairs.json" />
+      <None Remove="Sources\Files\TranslateResponseWrapper.json" />
+      <EmbeddedResource Include="Sources\Files\TranslateResponseWrapper.json" />
     </ItemGroup>
 
 </Project>

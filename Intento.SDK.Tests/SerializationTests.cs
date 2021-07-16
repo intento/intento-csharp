@@ -43,5 +43,14 @@ namespace Intento.SDK.Tests
             Assert.IsNotNull(dto);
             Assert.IsTrue(dto.Pairs.All(p => p.To != null));
         }
+
+        [Test]
+        [TestCaseSource(typeof(SerializationTestsDataSources), nameof(SerializationTestsDataSources.DeserializeTranslateResponseWrapperTestCaseData))]
+        public void DeserializeTranslateResponseWrapper(string json)
+        {
+            var dto = JsonConvert.DeserializeObject<TranslateResponseWrapper>(json);
+            Assert.IsNotNull(dto);
+            Assert.IsTrue(dto.Response.Length > 0);
+        }
     }
 }

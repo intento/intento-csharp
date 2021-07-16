@@ -49,5 +49,15 @@ namespace Intento.SDK.Tests.Sources
             yield return new TestCaseData(
                 FileUtil.ReadFileFromResources("Intento.SDK.Tests.Sources.Files.LanguagePairs.json"));
         }
+
+        /// <summary>
+        /// Get test case data for DeserializeTranslateResponseWrapper
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<TestCaseData> DeserializeTranslateResponseWrapperTestCaseData()
+        {
+            yield return new TestCaseData(
+                FileUtil.ReadFileFromResources("Intento.SDK.Tests.Sources.Files.TranslateResponseWrapper.json"));
+        }
     }
 }

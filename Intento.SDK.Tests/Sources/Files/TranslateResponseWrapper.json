@@ -1,0 +1,64 @@
+﻿{
+  "id": "c66963a0-99de-48fa-8d07-2e8ebee92611",
+  "done": true,
+  "response": [
+    {
+      "results": [
+        "Yes",
+        "Well"
+      ],
+      "meta": {
+        "detected_source_language": [
+          "fi",
+          "fi"
+        ],
+        "client_key_label": "production",
+        "routing": {
+          "id": "best"
+        }
+      },
+      "service": {
+        "provider": {
+          "id": "ai.text.translate.amazon.translate",
+          "name": "Amazon Translate",
+          "timing": {
+            "provider": 0.985427
+          },
+          "vendor": "Amazon",
+          "description": "Translate",
+          "logo": "https://inten.to/img/api/aws.png"
+        }
+      }
+    }
+  ],
+  "meta": {
+    "providers": [
+      {
+        "id": "ai.text.translate.amazon.translate",
+        "name": "Amazon Translate",
+        "timing": {
+          "provider": 0.985427
+        },
+        "vendor": "Amazon",
+        "description": "Translate",
+        "logo": "https://inten.to/img/api/aws.png"
+      }
+    ],
+    "from": "fi",
+    "to": "en",
+    "format": null,
+    "glossary": null,
+    "smart_routing": "default",
+    "category": "default",
+    "own_keys": false,
+    "size": 5,
+    "intento_user_agent": [
+      "Intento.CSharpSDK/1.6.0",
+      "Intento.SDK.Test/1.0.0"
+    ],
+    "userdata": {},
+    "user_key_label": "production",
+    "is_trace": false
+  },
+  "error": null
+}
