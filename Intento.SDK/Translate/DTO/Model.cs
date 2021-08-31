@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 namespace Intento.SDK.Translate.DTO
 {
     [JsonObject("model")]
-    public class ModelDto
+    public class Model
     {
         [JsonProperty("id")]
         public string Id { get; set; }

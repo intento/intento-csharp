@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace IntentoSDK.Handlers
+namespace Intento.SDK.Handlers
 {
     /// <summary>
     /// Base symbol handler
@@ -33,22 +30,14 @@ namespace IntentoSDK.Handlers
             data = new string(data.Where(c => (int)c != 9727).ToArray());
 
             // Replacing some HTML codes with special tags
-            foreach (KeyValuePair<string, string> pair in SpecialCodesIn)
-            {
-                data = data.Replace(pair.Key, pair.Value);
-            }            
-            return data;
+            return SpecialCodesIn.Aggregate(data, (current, pair) => current.Replace(pair.Key, pair.Value));
         }
 
         protected virtual string PrepareResult(string text)
         {
             // Return HTML codes instead of special tags
-            foreach (KeyValuePair<string, string> pair in SpecialCodesOut)
-            {
-                text = text.Replace(pair.Key, pair.Value);
-            }
-            
-            return text;
+
+            return SpecialCodesOut.Aggregate(text, (current, pair) => current.Replace(pair.Key, pair.Value));
         }
 
     }

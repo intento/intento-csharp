@@ -6,7 +6,7 @@ namespace Intento.SDK.Translate.DTO
     /// Detailed provider info
     /// </summary>
     [JsonObject("provider_detailed")]
-    public class ProviderDetailedDto: BaseProviderDto
+    public class ProviderDetailed: BaseProvider
     {
         [JsonProperty("logo")]
         public string Logo { get; set; }
@@ -18,10 +18,10 @@ namespace Intento.SDK.Translate.DTO
         public string DelegatedCredentials { get; set; }
 
         [JsonProperty("auth")]
-        public AuthDto Auth { get; set; }
+        public Auth Auth { get; set; }
 
         [JsonProperty("languages")]
-        public LanguageMapDto Languages { get; set; }
+        public LanguageMap Languages { get; set; }
 
         [JsonProperty("format")]
         public string[] Format { get; set; }

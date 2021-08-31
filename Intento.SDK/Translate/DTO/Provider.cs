@@ -7,7 +7,7 @@ namespace Intento.SDK.Translate.DTO
     /// Provider info
     /// </summary>
     [JsonObject("provider")]
-    public class ProviderDto: BaseProviderDto
+    public class Provider: BaseProvider
     {
         [JsonProperty("delegated_credentials")]
         public bool DelegatedCredentials { get; set; }
@@ -31,7 +31,7 @@ namespace Intento.SDK.Translate.DTO
         public string Type { get; set; }
 
         [JsonProperty("pairs")]
-        public PairDto[] Pairs { get; set; }
+        public LanguagePair[] Pairs { get; set; }
 
         [JsonProperty("symmetric")]
         public string[] Symmetric { get; set; }

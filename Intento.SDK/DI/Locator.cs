@@ -7,7 +7,7 @@ namespace Intento.SDK.DI
     /// </summary>
     public static class Locator
     {
-        private static ILocatorImpl locatorImpl;
+        private static ILocatorImpl _locatorImpl;
 
         /// <summary>
         /// Set implementation for locator
@@ -16,7 +16,7 @@ namespace Intento.SDK.DI
         /// <param name="options"></param>
         public static void SetImpl(ILocatorImpl impl, Options options)
         {
-            locatorImpl = impl;
+            _locatorImpl = impl;
             impl?.Init(options);
         }
 
@@ -27,7 +27,7 @@ namespace Intento.SDK.DI
         /// <returns></returns>
         public static T Resolve<T>()
         {
-            return locatorImpl.Resolve<T>();
+            return _locatorImpl.Resolve<T>();
         }
     }
 }

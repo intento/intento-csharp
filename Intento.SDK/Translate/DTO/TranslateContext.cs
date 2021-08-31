@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace Intento.SDK.Translate.DTO
 {
     [JsonObject("context")]
-    public class TranslateContextDto
+    public class TranslateContext
     {
         [JsonProperty("text")]
         [JsonConverter(typeof(ArrayToSingleStringConverter))]
@@ -16,6 +16,15 @@ namespace Intento.SDK.Translate.DTO
         [JsonProperty("from")]
         public string From { get; set; }
 
+        [JsonProperty("outputFileExtension")]
+        public string OutputFileExtension { get; set; }
+
+        [JsonProperty("size")]
+        public long Size { get; set; }
+
+        [JsonProperty("outputFormat")]
+        public string OutputFormat { get; set; }
+
         [JsonProperty("format")]
         public string Format { get; set; }
 
@@ -26,6 +35,6 @@ namespace Intento.SDK.Translate.DTO
         public string Glossary { get; set; }
 
         [JsonProperty("glossary")]
-        public GlossaryInfo[] Glossaries { get; set; }
+        public Glossary[] Glossaries { get; set; }
     }
 }

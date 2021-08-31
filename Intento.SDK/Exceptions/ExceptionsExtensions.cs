@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
 
 namespace Intento.SDK.Exceptions
@@ -18,9 +19,9 @@ namespace Intento.SDK.Exceptions
                 case HttpStatusCode.Unauthorized:
                 case HttpStatusCode.Forbidden:
                     return new IntentoInvalidApiKeyException(response, jsonResult);
+                default:
+                    throw new IntentoApiException(response, jsonResult);
             }
-
-            return new IntentoApiException(response, jsonResult);
         }
     }
 }

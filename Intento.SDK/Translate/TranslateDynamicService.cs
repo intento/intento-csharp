@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using Intento.SDK.Client;
-using Intento.SDK.Exceptions;
 using Intento.SDK.Logging;
 using Intento.SDK.Translate.DTO;
+using Intento.SDK.Translate.Options;
 using Intento.SDK.Validation;
-using IntentoSDK.Translate.Options;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -19,7 +19,7 @@ namespace Intento.SDK.Translate
     /// <summary>
     /// Intento API
     /// </summary>
-    internal sealed class TranslateDynamicService: ITranslateService
+    internal sealed class TranslateDynamicService : ITranslateService
     {
         private IntentoHttpClient Client { get; }
         private ILogger Logger { get; }
@@ -36,14 +36,20 @@ namespace Intento.SDK.Translate
         }
 
         /// <inheritdoc />
-        public async Task<TranslateResponseDto> FulfillAsync(TranslateOptions options)
+        public async Task<TranslateResponse> FulfillAsync(TranslateOptions options)
+        {
+            return await FulfillAsync(options, null);
+        }
+
+        private async Task<TranslateResponse> FulfillAsync(TranslateOptions options,
+            Action<TranslateRequest> extendRequest)
         {
             options.ValidateAndThrow();
 
-            var request = new TranslateRequestDto();
-            var context = new TranslateContextDto();
+            var request = new TranslateRequest();
+            var context = new TranslateContext();
             request.Context = context;
-            
+
             var textLength = 0;
             switch (options.Text)
             {
@@ -104,15 +110,15 @@ namespace Intento.SDK.Translate
             {
                 context.Glossary = options.Glossary;
             }
-            
+
             // intento glossary
-            if (options.IntentoGlossary is {Length: > 0})
+            if (options.IntentoGlossary is { Length: > 0 })
             {
-                context.Glossaries = options.IntentoGlossary.Select(g => new GlossaryInfo { Id = g }).ToArray();
+                context.Glossaries = options.IntentoGlossary.Select(g => new Glossary { Id = g }).ToArray();
             }
 
             // service section
-            var service = new TranslateServiceDto();
+            var service = new TranslateService();
             request.Service = service;
 
             // provider
@@ -136,18 +142,20 @@ namespace Intento.SDK.Translate
                 service.Routing = options.Routing;
             }
 
-            // pre-post processing paramters
+            // pre-post processing parameters
             if (options.PreProcessing != null || options.PostProcessing != null)
             {
-                var processing = new TranslateProcessingDto();
+                var processing = new TranslateProcessing();
                 if (options.PreProcessing != null)
                 {
                     processing.Pre = options.PreProcessing;
                 }
+
                 if (options.PostProcessing != null)
                 {
                     processing.Post = options.PostProcessing;
                 }
+
                 service.Processing = processing;
             }
 
@@ -158,6 +166,8 @@ namespace Intento.SDK.Translate
                 service.FailoverList = options.FailoverList;
             }
 
+            extendRequest?.Invoke(request);
+
             var url = "ai/text/translate";
             if (options.Trace)
             {
@@ -165,10 +175,13 @@ namespace Intento.SDK.Translate
             }
 
             // Call to Intento API and get json result
-            var jsonResult = await Client.PostAsync<TranslateRequestDto, TranslateResponseDto>(url, request, useSyncwrapper: options.UseSyncwrapper);
-            
+            var jsonResult =
+                await Client.PostAsync<TranslateRequest, TranslateResponse>(url, request,
+                    useSyncwrapper: options.UseSyncwrapper);
+
             if (options.Async && options.WaitAsync)
-            {   // async operation (in terms of IntentoApi) and we need to wait result of it
+            {
+                // async operation (in terms of IntentoApi) and we need to wait result of it
                 var id = jsonResult.Id;
 
                 // In case of Sandbox key and some errors in parameters request to IntentoAPI may return:
@@ -184,34 +197,80 @@ namespace Intento.SDK.Translate
                 var wrapper = await WaitAsyncJobAsync(id);
                 if (wrapper.Done)
                 {
-                    jsonResult = wrapper.Response is {Length: > 0} ? wrapper.Response[0] : null;
+                    jsonResult = wrapper.Response is { Length: > 0 } ? wrapper.Response[0] : null;
                 }
             }
-
-            if (!options.UseSyncwrapper)
-            {
-                return jsonResult;
-            }
-
-            /*var response = new JObject
-            {
-                ["results"] = jsonResult.results, ["meta"] = jsonResult.meta, ["service"] = jsonResult.service
-            };
-            ((JObject)jsonResult)["response"] = new JArray() { response };
-            jsonResult.meta["providers"] = new JArray() { jsonResult.service.provider };*/
 
             return jsonResult;
         }
 
         /// <inheritdoc />
-        public TranslateResponseDto Fulfill(TranslateOptions options)
+        public TranslateResponse Fulfill(TranslateOptions options)
         {
             var taskReadResult = Task.Run(async () => await FulfillAsync(options));
             return taskReadResult.Result;
         }
-        
+
         /// <inheritdoc />
-        public IList<ModelDto> Models(string provider, Dictionary<string, string> credentials, Dictionary<string, string> additionalParams = null)
+        public async Task FulfillFileAsync(TranslateOptions options, string sourcePath, string outputPath)
+        {
+            if (!File.Exists(sourcePath))
+            {
+                Logger.LogWarning($"File not found in path {sourcePath}");
+                return;
+            }
+
+            var fileInfo = new FileInfo(sourcePath);
+            using var stream = new FileStream(sourcePath, FileMode.Open, FileAccess.Read);
+            using var result = await FulfillFileAsync(options, stream, fileInfo);
+            using var writer = new FileStream(outputPath, FileMode.Create, FileAccess.Write);
+            await result.CopyToAsync(writer);
+        }
+
+        /// <inheritdoc />
+        public void FulfillFile(TranslateOptions options, string sourcePath, string outputPath)
+        {
+            var taskReadResult = Task.Run(async () => await FulfillFileAsync(options, sourcePath, outputPath));
+            taskReadResult.Start();
+            taskReadResult.Wait();
+        }
+
+        /// <inheritdoc />
+        public async Task<Stream> FulfillFileAsync(TranslateOptions options, Stream source, FileInfo fileInfo)
+        {
+            options.Text = ConvertToBase64String(source);
+            options.Async = true;
+            options.WaitAsync = true;
+            var res = await FulfillAsync(options, (request) =>
+            {
+                request.Context.Format = request.Context.OutputFileExtension =
+                    request.Context.OutputFormat = fileInfo.Extension.Replace(".", "");
+                request.Context.Size = fileInfo.Length;
+                var userData = new TranslateUserData
+                {
+                    FileName = fileInfo.Name
+                };
+                request.UserData = userData;
+            });
+            if (res.Results is not { Length: > 0 })
+            {
+                return null;
+            }
+
+            var fileContent = Convert.FromBase64String(res.Results[0]);
+            return new MemoryStream(fileContent);
+        }
+
+        /// <inheritdoc />
+        public Stream FulfillFile(TranslateOptions options, Stream source, FileInfo fileInfo)
+        {
+            var taskReadResult = Task.Run(async () => await FulfillFileAsync(options, source, fileInfo));
+            return taskReadResult.Result;
+        }
+
+        /// <inheritdoc />
+        public IList<Model> Models(string provider, Dictionary<string, string> credentials,
+            Dictionary<string, string> additionalParams = null)
         {
             var taskReadResult = Task.Run(async () =>
                 await ModelsAsync(provider, credentials, additionalParams));
@@ -219,7 +278,8 @@ namespace Intento.SDK.Translate
         }
 
         /// <inheritdoc />
-        public async Task<IList<ModelDto>> ModelsAsync(string providerId, Dictionary<string, string> credentials, Dictionary<string, string> additionalParams = null)
+        public async Task<IList<Model>> ModelsAsync(string providerId, Dictionary<string, string> credentials,
+            Dictionary<string, string> additionalParams = null)
         {
             var path = $"ai/text/translate/models?provider={providerId}";
             if (credentials != null)
@@ -234,12 +294,13 @@ namespace Intento.SDK.Translate
                         json = JsonConvert.SerializeObject(credentials, Formatting.None);
                         json = HttpUtility.UrlEncode(json);
                     }
+
                     path += $"&credential_id={json}";
                 }
             }
 
             // Call to Intento API and get json result
-            var jsonResult = await Client.GetAsync<ModelsResponseDto>(path, additionalParams);
+            var jsonResult = await Client.GetAsync<ModelsResponse>(path, additionalParams);
             return jsonResult.Models;
         }
 
@@ -252,16 +313,17 @@ namespace Intento.SDK.Translate
         }
 
         /// <inheritdoc />
-        public async Task<IList<dynamic>> AccountsAsync(string providerId = null, Dictionary<string, string> additionalParams = null)
+        public async Task<IList<dynamic>> AccountsAsync(string providerId = null,
+            Dictionary<string, string> additionalParams = null)
         {
-            var path = string.Format("accounts" + (providerId != null ? $"?provider={providerId}" : null));
+            var path = "accounts" + (providerId != null ? $"?provider={providerId}" : null);
             // Call to Intento API and get json result
             var jsonResult = await Client.GetAsync(path, additionalParams);
-            return ((JContainer) jsonResult).First.First.Cast<dynamic>().ToList();
+            return ((JContainer)jsonResult).First.First.Cast<dynamic>().ToList();
         }
-        
+
         /// <inheritdoc />
-        public IList<RoutingDto> Routing(Dictionary<string, string> additionalParams = null)
+        public IList<Routing> Routing(Dictionary<string, string> additionalParams = null)
         {
             var taskReadResult = Task.Run(async () =>
                 await RoutingAsync(additionalParams));
@@ -269,16 +331,17 @@ namespace Intento.SDK.Translate
         }
 
         /// <inheritdoc />
-        public async Task<IList<RoutingDto>> RoutingAsync(Dictionary<string, string> additionalParams = null)
+        public async Task<IList<Routing>> RoutingAsync(Dictionary<string, string> additionalParams = null)
         {
             const string path = "ai/text/translate/routing";
             // Call to Intento API and get json result
-            var jsonResult = await Client.GetAsync<RoutingResponseDto>(path, additionalParams);
+            var jsonResult = await Client.GetAsync<RoutingResponse>(path, additionalParams);
             return jsonResult.Routing;
         }
-        
+
         /// <inheritdoc />
-        public IList<dynamic> Glossaries(string providerId, Dictionary<string, string> credentials, Dictionary<string, string> additionalParams = null)
+        public IList<dynamic> Glossaries(string providerId, Dictionary<string, string> credentials,
+            Dictionary<string, string> additionalParams = null)
         {
             var taskReadResult = Task.Run<dynamic>(async () =>
                 await GlossariesAsync(providerId, credentials, additionalParams));
@@ -286,7 +349,8 @@ namespace Intento.SDK.Translate
         }
 
         /// <inheritdoc />
-        public async Task<IList<dynamic>> GlossariesAsync(string providerId, Dictionary<string, string> credentials, Dictionary<string, string> additionalParams = null)
+        public async Task<IList<dynamic>> GlossariesAsync(string providerId, Dictionary<string, string> credentials,
+            Dictionary<string, string> additionalParams = null)
         {
             var path = $"ai/text/translate/glossaries?provider={providerId}";
             if (credentials != null)
@@ -301,6 +365,7 @@ namespace Intento.SDK.Translate
                         json = JsonConvert.SerializeObject(credentials, Formatting.None);
                         json = HttpUtility.UrlEncode(json);
                     }
+
                     path += $"&credential_id={json}";
                 }
             }
@@ -308,60 +373,39 @@ namespace Intento.SDK.Translate
             // Call to Intento API and get json result
             var jsonResult = await Client.GetAsync(path, additionalParams);
 
-            return ((JContainer) jsonResult).First.First.Cast<dynamic>().ToList();
-        }
-        
-        /// <inheritdoc />
-        [Obsolete]
-        public IList<dynamic> DelegatedCredentials(Dictionary<string, string> additionalParams = null)
-        {
-            var taskReadResult = Task.Run<dynamic>(async () =>
-                await DelegatedCredentialsAsync(additionalParams));
-            return taskReadResult.Result;
+            return ((JContainer)jsonResult).First.First.Cast<dynamic>().ToList();
         }
 
         /// <inheritdoc />
-        [Obsolete]
-        public async Task<IList<dynamic>> DelegatedCredentialsAsync(Dictionary<string, string> additionalParams = null)
-        {
-            const string path = "delegated_credentials";
-            // Call to Intento API and get json result
-            var jsonResult = await Client.GetAsync(path, additionalParams);
-            var credentials = new List<dynamic>();
-            foreach (var credential in jsonResult)
-            {
-                credentials.Add(credential);
-            }
-            return credentials;
-        }
-        
-        /// <inheritdoc />
-        public ProviderDetailedDto Provider(string provider, Dictionary<string, string> additionalParams = null)
+        public ProviderDetailed Provider(string provider, Dictionary<string, string> additionalParams = null)
         {
             var taskReadResult = Task.Run(async () => await ProviderAsync(provider, additionalParams));
             return taskReadResult.Result;
         }
 
         /// <inheritdoc />
-        public async Task<ProviderDetailedDto> ProviderAsync(string providerId, Dictionary<string, string> additionalParams = null)
+        public async Task<ProviderDetailed> ProviderAsync(string providerId,
+            Dictionary<string, string> additionalParams = null)
         {
             var path = $"ai/text/translate/{providerId}";
             // Call to Intento API and get json result
-            var jsonResult = await Client.GetAsync<ProviderDetailedDto>(path, additionalParams);
+            var jsonResult = await Client.GetAsync<ProviderDetailed>(path, additionalParams);
             return jsonResult;
         }
 
         /// <inheritdoc />
-        public IList<ProviderDto> Providers(string to = null, string from = null, bool lang_detect = false, bool bulk = false,
+        public IList<Provider> Providers(string to = null, string from = null, bool langDetect = false,
+            bool bulk = false,
             Dictionary<string, string> filter = null)
         {
             var taskReadResult = Task.Run(async () =>
-                await ProvidersAsync(to, from, lang_detect, bulk, filter));
+                await ProvidersAsync(to, from, langDetect, bulk, filter));
             return taskReadResult.Result;
         }
 
         /// <inheritdoc />
-        public async Task<IList<ProviderDto>> ProvidersAsync(string to = null, string from = null, bool lang_detect = false, bool bulk = false,
+        public async Task<IList<Provider>> ProvidersAsync(string to = null, string from = null, bool langDetect = false,
+            bool bulk = false,
             Dictionary<string, string> filter = null)
         {
             var f = filter == null ? new Dictionary<string, string>() : new Dictionary<string, string>(filter);
@@ -369,64 +413,70 @@ namespace Intento.SDK.Translate
             {
                 f["to"] = to;
             }
+
             if (!string.IsNullOrEmpty(from))
             {
                 f["from"] = from;
             }
-            if (lang_detect)
+
+            if (langDetect)
             {
                 f["lang_detect"] = "true";
             }
+
             if (bulk)
             {
                 f["bulk"] = "true";
             }
+
             var p = f.Select(pair => $"{pair.Key}={HttpUtility.UrlEncode(pair.Value)}").ToList();
             var url = "ai/text/translate";
             if (p.Count != 0)
             {
                 url += "?" + string.Join("&", p);
             }
+
             // Call to Intento API and get json result
-            var jsonResult = await Client.GetAsync<List<ProviderDto>>(url);
-            var providers = new List<ProviderDto>();
+            var jsonResult = await Client.GetAsync<List<Provider>>(url);
+            var providers = new List<Provider>();
             foreach (var providerInfo in jsonResult)
             {
                 providers.Add(providerInfo);
             }
+
             return providers;
         }
-        
+
         /// <inheritdoc />
-        public IList<LanguageDto> Languages()
+        public IList<Language> Languages()
         {
             var taskReadResult = Task.Run(async () => await LanguagesAsync());
             return taskReadResult.Result;
         }
 
         /// <inheritdoc />
-        public async Task<IList<LanguageDto>> LanguagesAsync()
+        public async Task<IList<Language>> LanguagesAsync()
         {
             const string url = "ai/text/translate/languages";
-            var jsonResult = await Client.GetAsync<IList<LanguageDto>>(url);
+            var jsonResult = await Client.GetAsync<IList<Language>>(url);
             return jsonResult.ToList();
         }
 
         /// <inheritdoc />
-        public IList<LanguageDto> GetSupportedLanguages()
+        public IList<Language> GetSupportedLanguages()
         {
             var taskReadResult = Task.Run(async () => await GetSupportedLanguagesAsync());
             return taskReadResult.Result;
         }
 
         /// <inheritdoc />
-        public async Task<IList<LanguageDto>> GetSupportedLanguagesAsync()
+        public async Task<IList<Language>> GetSupportedLanguagesAsync()
         {
             const string url = "ai/text/transliterate/languages";
-            var jsonResult = await Client.GetAsync<IList<LanguageDto>>(url);
+            var jsonResult = await Client.GetAsync<IList<Language>>(url);
             return jsonResult.ToList();
         }
-        
+
         /// <inheritdoc />
         public LanguagePairs Pairs(string srtName)
         {
@@ -435,13 +485,13 @@ namespace Intento.SDK.Translate
         }
 
         /// <inheritdoc />
-        public async Task<LanguagePairs> PairsAsync(string srtName) 
+        public async Task<LanguagePairs> PairsAsync(string srtName)
         {
             var url = $"ai/text/translate/routing/{srtName}/pairs";
             var jsonResult = await Client.GetAsync<LanguagePairs>(url);
             return jsonResult;
         }
-        
+
         /// <inheritdoc />
         public IList<IList<string>> RoutingLanguagePairs(string providerId)
         {
@@ -463,13 +513,12 @@ namespace Intento.SDK.Translate
 
             foreach (var pair in pairs)
             {
-                res.Add(new List<string> {(string) pair.From, (string) pair.To});
-                
+                res.Add(new List<string> { (string)pair.From, (string)pair.To });
             }
 
             return res;
         }
-        
+
         /// <inheritdoc />
         public IList<IList<string>> ProviderLanguagePairs(string providerId)
         {
@@ -488,7 +537,7 @@ namespace Intento.SDK.Translate
             {
                 foreach (var l1 in symmetric)
                 {
-                    res.AddRange(from l2 in symmetric where l1 != l2 select new List<string> {l1, l2});
+                    res.AddRange(from l2 in symmetric where l1 != l2 select new List<string> { l1, l2 });
                 }
             }
 
@@ -498,115 +547,58 @@ namespace Intento.SDK.Translate
                 return res;
             }
 
-            res.AddRange(pairs.Select(pair => new List<string> {pair.From, pair.To}));
+            res.AddRange(pairs.Select(pair => new List<string> { pair.From, pair.To }));
 
             return res;
         }
-        
+
         /// <inheritdoc />
-        public IList<dynamic> AgnosticGlossaries()
+        public IList<GlossaryDetailed> AgnosticGlossaries()
         {
-            Task<dynamic> taskReadResult = Task.Run<dynamic>(async () =>
+            var taskReadResult = Task.Run<dynamic>(async () =>
                 await AgnosticGlossariesAsync());
             return taskReadResult.Result;
         }
 
         /// <inheritdoc />
-        public async Task<IList<dynamic>> AgnosticGlossariesAsync()
+        public async Task<IList<GlossaryDetailed>> AgnosticGlossariesAsync()
         {
             var path = $"ai/text/glossaries/v2/typed";
             // Call to Intento API and get json result
-            var jsonResult = await Client.GetAsync(path);
-            var glossaries = new List<dynamic>();
-            foreach (dynamic glossary in jsonResult.glossaries)
-            {
-                glossaries.Add(glossary);
-            }
-            return glossaries;
+            var jsonResult = await Client.GetAsync<AgnosticGlossariesResult>(path);
+            return jsonResult.Glossaries.ToList();
         }
 
         /// <inheritdoc />
-        public IList<dynamic> AgnosticGlossariesTypes()
+        public IList<AgnosticGlossaryType> AgnosticGlossariesTypes()
         {
-            Task<dynamic> taskReadResult = Task.Run<dynamic>(async () =>
+            var taskReadResult = Task.Run<dynamic>(async () =>
                 await AgnosticGlossariesTypesAsync());
             return taskReadResult.Result;
         }
 
         /// <inheritdoc />
-        public async Task<IList<dynamic>> AgnosticGlossariesTypesAsync()
+        public async Task<IList<AgnosticGlossaryType>> AgnosticGlossariesTypesAsync()
         {
             var path = $"ai/text/glossaries/v2/cs_types";
-            var jsonResult = await Client.GetAsync(path);
-            var types = new List<dynamic>();
-            foreach (dynamic type in jsonResult.types)
-            {
-                types.Add(type);
-            }
-            return types;
-        }
-        
-        private static dynamic GetJson(object data, string name)
-        {
-            // Convert data to json. 
-            // String is deserialized in case it has a for of json list or dict. 
-            // data=="" is trated as null
-
-            switch (data)
-            {
-                case null:
-                    return null;
-                case string @string:
-                    {
-                        var z = @string.Trim();
-                        if (string.IsNullOrEmpty(z))
-                            return null;
-                        try
-                        {
-                            switch (z[0])
-                            {
-                                case '[':
-                                    return JArray.Parse(z);
-                                case '{':
-                                    return JObject.Parse(z);
-                            }
-                        }
-                        catch { }
-
-                        return @string;
-                    }
-
-                case JObject @object:
-                    return @object;
-                case JArray array:
-                    return array;
-                case IDictionary<string, string> dictionary:
-                    return JObject.FromObject(dictionary);
-                case IEnumerable<string> enumerable:
-                    return JArray.FromObject(enumerable);
-                default:
-                    throw new IntentoInvalidParameterException(name, "need to be null or string or json-string or Newtonsoft JObject/JArray");
-            }            
+            var jsonResult = await Client.GetAsync<AgnosticGlossariesTypesResult>(path);
+            return jsonResult.Types.ToList();
         }
 
-        private TranslateResponseWrapper CheckAsyncJob(string asyncId)
+        /// <inheritdoc />
+        public TranslateResponseWrapper CheckAsyncJob(string asyncId)
         {
             var task = Task.Run(async () => await CheckAsyncJobAsync(asyncId));
             return task.Result;
         }
 
-        private async Task<TranslateResponseWrapper> CheckAsyncJobAsync(string asyncId)
+        /// <inheritdoc />
+        public async Task<TranslateResponseWrapper> CheckAsyncJobAsync(string asyncId)
         {
             Logger.LogDebug(SdkLogEvents.INVOKE_METHOD, "CheckAsyncJobAsync: {asyncId}ms", asyncId);
             // async operations inside
             var result = await Client.GetAsync<TranslateResponseWrapper>($"operations/{asyncId}");
             return result;
-        }
-
-        private TranslateResponseWrapper WaitAsyncJob(string asyncId, int delay = 0)
-        {
-            var taskResult = Task.Run(async () => await WaitAsyncJobAsync(asyncId, delay));
-            return taskResult.Result;
         }
 
         private List<int> CalcDelays(int delay)
@@ -617,6 +609,7 @@ namespace Intento.SDK.Translate
                 delays.Add(delay);
                 delay += 100;
             } while (delay < 3000);
+
             return delays;
         }
 
@@ -629,7 +622,7 @@ namespace Intento.SDK.Translate
 
             var delays = delay switch
             {
-                -1 => new List<int> {0},
+                -1 => new List<int> { 0 },
                 0 => CalcDelays(400),
                 _ => CalcDelays(delay)
             };
@@ -639,7 +632,8 @@ namespace Intento.SDK.Translate
             {
                 Logger.LogDebug(SdkLogEvents.INVOKE_METHOD, $"WaitAsyncJobAsync-loop: {asyncId} - {delay}ms");
                 Thread.Sleep(delay);
-                Logger.LogDebug( SdkLogEvents.INVOKE_METHOD, $"WaitAsyncJobAsync-loop after sleep: {asyncId} - {delay}ms");
+                Logger.LogDebug(SdkLogEvents.INVOKE_METHOD,
+                    $"WaitAsyncJobAsync-loop after sleep: {asyncId} - {delay}ms");
 
                 var result = await CheckAsyncJobAsync(asyncId);
 
@@ -661,21 +655,28 @@ namespace Intento.SDK.Translate
             // Timeout
             var json = new TranslateResponseWrapper
             {
-                Id = asyncId, 
-                Done = false, 
+                Id = asyncId,
+                Done = false,
                 Response = null
             };
 
             var error = new Error
             {
-                Type = "Timeout", 
-                Reason = "Too long response from Intento MT plugin", 
+                Type = "Timeout",
+                Reason = "Too long response from Intento MT plugin",
                 Data = null
             };
-            
+
             json.Error = error;
 
             return json;
+        }
+
+        private string ConvertToBase64String(Stream stream)
+        {
+            var ms = new MemoryStream();
+            stream.CopyTo(ms);
+            return Convert.ToBase64String(ms.ToArray());
         }
     }
 }

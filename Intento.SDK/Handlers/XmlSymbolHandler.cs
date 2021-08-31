@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace IntentoSDK.Handlers
+namespace Intento.SDK.Handlers
 {
     /// <summary>
     /// Xml symbols prepare
@@ -46,16 +43,16 @@ namespace IntentoSDK.Handlers
             text = base.PrepareResult(text);
 
             // Remove <? > tag
-            int n1 = text.IndexOf("<?");
-            string text2 = text;
+            var n1 = text.IndexOf("<?", StringComparison.Ordinal);
+            var text2 = text;
             if (n1 != -1)
             {
-                int n2 = text.IndexOf(">");
+                var n2 = text.IndexOf(">", StringComparison.Ordinal);
                 text2 = text.Substring(n2 + 1);
             }
 
             // Remove <root> and </root> tags
-            string text3 = text2.Replace("<root>", "").Replace("</root>", "");
+            var text3 = text2.Replace("<root>", "").Replace("</root>", "");
             return text3;
         }
 

@@ -1,25 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Intento.SDK.Handlers;
+﻿using System.Linq;
 
-namespace IntentoSDK.Handlers
+namespace Intento.SDK.Handlers
 {
     /// <summary>
     /// Factory for handlers
     /// </summary>
     internal class SymbolHandlersFactory: ISymbolHandlersFactory
     {
-        private readonly ISymbolHandler[] symbolHandlers;
+        private readonly ISymbolHandler[] _symbolHandlers;
 
         /// <summary>
         /// Ctor
         /// </summary>
         public SymbolHandlersFactory(ISymbolHandler[] symbolHandlers)
         {
-            this.symbolHandlers = symbolHandlers;
+            this._symbolHandlers = symbolHandlers;
         }
 
         /// <summary>
@@ -30,11 +25,8 @@ namespace IntentoSDK.Handlers
         /// <returns></returns>
         public string HandleSource(string text, string format)
         {
-            foreach (var handler in symbolHandlers.Where(h => h.Format == format))
-            {
-                text = handler.OnSending(text);
-            }
-            return text;
+            return _symbolHandlers.Where(h => h.Format == format)
+                .Aggregate(text, (current, handler) => handler.OnSending(current));
         }
 
         /// <summary>
@@ -45,12 +37,8 @@ namespace IntentoSDK.Handlers
         /// <returns></returns>
         public string HandleResult(string text, string format)
         {
-            foreach (var handler in symbolHandlers.Where(h => h.Format == format))
-            {
-                text = handler.OnResponsing(text);
-            }
-
-            return text;
+            return _symbolHandlers.Where(h => h.Format == format)
+                .Aggregate(text, (current, handler) => handler.OnResponsing(current));
         }
 
     }

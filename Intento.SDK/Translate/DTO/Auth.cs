@@ -3,10 +3,10 @@ using Newtonsoft.Json;
 namespace Intento.SDK.Translate.DTO
 {
     /// <summary>
-    /// AuthInfo
+    /// Auth
     /// </summary>
     [JsonObject("auth")]
-    public class AuthDto
+    public class Auth
     {
         [JsonProperty("access_token")]
         public string AccessToken { get; set; }

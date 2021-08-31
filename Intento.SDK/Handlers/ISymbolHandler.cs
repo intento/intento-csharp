@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace IntentoSDK.Handlers
+﻿namespace Intento.SDK.Handlers
 {
     /// <summary>
     /// Process text before and after sending

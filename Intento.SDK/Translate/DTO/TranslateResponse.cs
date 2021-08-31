@@ -3,16 +3,16 @@ using Newtonsoft.Json;
 namespace Intento.SDK.Translate.DTO
 {
     [JsonObject("translate_response")]
-    public class TranslateResponseDto
+    public class TranslateResponse
     {
         [JsonProperty("results")]
         public string[] Results { get; set; }
 
         [JsonProperty("meta")]
-        public TranslationMetaDto Meta { get; set; }
+        public TranslationMeta Meta { get; set; }
 
         [JsonProperty("service")]
-        public TranslateResponseServiceDto Service { get; set; }
+        public TranslateResponseService Service { get; set; }
 
         [JsonProperty("id")]
         public string Id { get; set; }

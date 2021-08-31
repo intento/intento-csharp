@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace Intento.SDK.Translate.DTO
 {
-    public class TranslateServiceDto
+    public class TranslateService
     {
         [JsonProperty("provider")]
         public string Provider { get; set; }
@@ -21,7 +21,7 @@ namespace Intento.SDK.Translate.DTO
         public string Routing { get; set; }
 
         [JsonProperty("processing")]
-        public TranslateProcessingDto Processing { get; set; }
+        public TranslateProcessing Processing { get; set; }
 
         [JsonProperty("failover")]
         public bool Failover { get; set; }

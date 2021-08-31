@@ -6,7 +6,7 @@ namespace Intento.SDK.Translate.DTO
     /// API info for languages
     /// </summary>
     [JsonObject("language")]
-    public class LanguageDto
+    public class Language
     {
         [JsonProperty("iso_name")]
         public string IsoName { get; set; }
@@ -17,7 +17,7 @@ namespace Intento.SDK.Translate.DTO
         [JsonProperty("direction")]
         public string Direction { get; set; }
         
-        public bool Equals(LanguageDto other)
+        public bool Equals(Language other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -29,7 +29,7 @@ namespace Intento.SDK.Translate.DTO
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((LanguageDto) obj);
+            return Equals((Language) obj);
         }
 
         public override int GetHashCode()
@@ -37,7 +37,7 @@ namespace Intento.SDK.Translate.DTO
             return IntentoCode != null ? IntentoCode.GetHashCode() : 0;
         }
         
-        public static LanguageDto Autodetect = new()
+        public static Language Autodetect = new()
         {
             IntentoCode = null,
             IsoName = "Autodetect"

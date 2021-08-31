@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 namespace Intento.SDK.Translate.DTO
 {
     [JsonObject("meta")]
-    public class TranslationMetaDto
+    public class TranslationMeta
     {
         [JsonProperty("detected_source_language")]
         public string[] DetectedSourceLanguage { get; set; }

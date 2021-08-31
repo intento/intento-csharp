@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
@@ -14,7 +13,7 @@ namespace Intento.SDK.DI
     /// </summary>
     internal sealed class DefaultLocatorImpl: ILocatorImpl
     {
-        private IServiceProvider serviceProvider;
+        private IServiceProvider _serviceProvider;
 
         /// <inheritdoc />
         public void Init(Options options, IServiceCollection services = null)
@@ -54,14 +53,14 @@ namespace Intento.SDK.DI
             RegisterExtensions(services);
             if (needBuild)
             {
-                serviceProvider = services.BuildServiceProvider();
+                _serviceProvider = services.BuildServiceProvider();
             }
         }
 
         /// <inheritdoc />
         public T Resolve<T>()
         {
-            return serviceProvider == null ? default : serviceProvider.GetService<T>();
+            return _serviceProvider == null ? default : _serviceProvider.GetService<T>();
         }
 
         private static void RegisterExtensions(IServiceCollection services)

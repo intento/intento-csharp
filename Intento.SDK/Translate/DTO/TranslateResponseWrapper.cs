@@ -11,10 +11,10 @@ namespace Intento.SDK.Translate.DTO
         public bool Done { get; set; }
 
         [JsonProperty("response")]
-        public TranslateResponseDto[] Response { get; set; }
+        public TranslateResponse[] Response { get; set; }
 
         [JsonProperty("meta")]
-        public TranslationMetaDto Meta { get; set; }
+        public TranslationMeta Meta { get; set; }
 
         [JsonProperty("error")]
         public Error Error { get; set; }

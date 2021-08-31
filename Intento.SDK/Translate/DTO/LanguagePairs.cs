@@ -9,6 +9,6 @@ namespace Intento.SDK.Translate.DTO
     public class LanguagePairs
     {
         [JsonProperty("pairs")]
-        public PairInfo[] Pairs { get; set; }
+        public LanguagePair[] Pairs { get; set; }
     }
 }

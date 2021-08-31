@@ -3,9 +3,9 @@ using Newtonsoft.Json;
 namespace Intento.SDK.Translate.DTO
 {
     [JsonObject("response_provider")]
-    public class TranslateResponseProviderDto: BaseProviderDto
+    public class TranslateResponseProvider: BaseProvider
     {
         [JsonProperty("timing")]
-        public TranslateResponseTimingDto Timing { get; set; }
+        public TranslateResponseTiming Timing { get; set; }
     }
 }

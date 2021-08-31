@@ -1,6 +1,5 @@
 using Intento.SDK.DI;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 
 namespace Intento.SDK.Translate
 {

@@ -5,7 +5,7 @@ namespace Intento.SDK.Translate.DTO
     /// <summary>
     /// Base provider info
     /// </summary>
-    public class BaseProviderDto
+    public class BaseProvider
     {
         [JsonProperty("id")]
         public string Id { get; set; }

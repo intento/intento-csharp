@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Intento.SDK.Translate.DTO;
-using Intento.SDK.Translate.Options;
 using Intento.SDK.Validation;
 
-namespace IntentoSDK.Translate.Options
+namespace Intento.SDK.Translate.Options
 {
     /// <summary>
     /// Options for translate
@@ -67,8 +65,6 @@ namespace IntentoSDK.Translate.Options
         public string Routing { get; set; }
 
         public bool Trace { get; set; }
-
-        public IDictionary<string, string> SpecialHeaders { get; set; }
 
         public bool UseSyncwrapper { get; set; }
     }

@@ -13,7 +13,7 @@ namespace Intento.SDK.Validation
         /// </summary>
         /// <param name="options">Options</param>
         /// <returns></returns>
-        public static ValidationResult Validate(this BaseOptions options)
+        private static ValidationResult Validate(this BaseOptions options)
         {
             var properties = options.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
             var errors = new Dictionary<string, string>();

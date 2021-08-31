@@ -3,12 +3,12 @@ using Newtonsoft.Json;
 namespace Intento.SDK.Translate.DTO
 {
     [JsonObject("language_map")]
-    public class LanguageMapDto
+    public class LanguageMap
     {
         [JsonProperty("symmetric")]
         public string[] Symmetric { get; set; }
         
         [JsonProperty("pairs")]
-        public PairDto[] Pairs { get; set; }
+        public LanguagePair[] Pairs { get; set; }
     }
 }

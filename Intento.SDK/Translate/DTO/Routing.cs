@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 namespace Intento.SDK.Translate.DTO
 {
     [JsonObject("routing")]
-    public class RoutingDto
+    public class Routing
     {
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -12,6 +12,6 @@ namespace Intento.SDK.Translate.DTO
         public string Description { get; set; }
 
         [JsonProperty("pairs")]
-        public PairDto[] Pairs { get; set; }
+        public LanguagePair[] Pairs { get; set; }
     }
 }

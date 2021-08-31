@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Intento.SDK.DI;
-using Microsoft.Extensions.Logging;
+﻿using System.Reflection;
 
 namespace Intento.SDK
 {

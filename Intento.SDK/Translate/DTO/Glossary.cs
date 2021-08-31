@@ -5,7 +5,7 @@ namespace Intento.SDK.Translate.DTO
     /// <summary>
     /// Glossary info
     /// </summary>
-    public class GlossaryInfo
+    public class Glossary
     {
         [JsonProperty("id")]
         public int Id { get; set; }
