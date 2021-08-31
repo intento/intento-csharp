@@ -83,7 +83,7 @@ namespace Intento.SDK.Translate
         Task<IList<Model>> ModelsAsync(string providerId, Dictionary<string, string> credentials,
             Dictionary<string, string> additionalParams = null);
 
-        /// <summary>
+        /*// <summary>
         /// Details of the models stored by the provider
         /// </summary>
         /// <param name="providerId">Provider id</param>
@@ -98,7 +98,7 @@ namespace Intento.SDK.Translate
         /// <param name="additionalParams">additional url params</param>
         /// <returns>dynamic (json) with requested information</returns>
         Task<IList<dynamic>> AccountsAsync(string providerId = null,
-            Dictionary<string, string> additionalParams = null);
+            Dictionary<string, string> additionalParams = null);*/
 
         /// <summary>
         /// Details of the models stored by the provider
@@ -124,7 +124,7 @@ namespace Intento.SDK.Translate
         IList<dynamic> Glossaries(string provider, Dictionary<string, string> credentials,
             Dictionary<string, string> additionalParams = null);
 
-        /// <summary>
+        /*// <summary>
         /// Details of the glossaries stored by the provider
         /// </summary>
         /// <param name="providerId">Provider id</param>
@@ -140,7 +140,7 @@ namespace Intento.SDK.Translate
         /// <param name="provider">Provider id</param>
         /// <param name="additionalParams">additional url params</param>
         /// <returns>dynamic (json) with requested information</returns>
-        ProviderDetailed Provider(string provider, Dictionary<string, string> additionalParams = null);
+        ProviderDetailed Provider(string provider, Dictionary<string, string> additionalParams = null);*/
 
         /// <summary>
         /// Detailed information on provider features

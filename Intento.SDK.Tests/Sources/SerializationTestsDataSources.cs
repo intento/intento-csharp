@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using Intento.SDK.Tests.Utils;
 using Intento.SDK.Translate.DTO;
 using Intento.SDK.Translate.Options;
@@ -18,7 +17,7 @@ namespace Intento.SDK.Tests.Sources
         /// <returns></returns>
         public static IEnumerable<TestCaseData> SerializeTranslateServiceDtoTestCaseData()
         {
-            var dto = new TranslateServiceDto
+            var dto = new TranslateService
             {
                 Provider = "Google",
                 Auth = new AuthProviderInfo[]
@@ -27,7 +26,7 @@ namespace Intento.SDK.Tests.Sources
                     new() {Key = new KeyInfo {Key = "4,5,6"}, Provider = "Yandex.v2"}
                 }
             };
-            yield return new TestCaseData(dto, FileUtil.ReadFileFromResources("Intento.SDK.Tests.Sources.Files.TranslateServiceDto.json"));
+            yield return new TestCaseData(dto, FileUtil.ReadFileFromResources("Intento.SDK.Tests.Sources.Files.TranslateService.json"));
         }
 
         /// <summary>
@@ -37,7 +36,7 @@ namespace Intento.SDK.Tests.Sources
         public static IEnumerable<TestCaseData> DeserializeTranslateServiceDtoTestCaseData()
         {
             yield return new TestCaseData(
-                FileUtil.ReadFileFromResources("Intento.SDK.Tests.Sources.Files.TranslateServiceDto.json"), 2);
+                FileUtil.ReadFileFromResources("Intento.SDK.Tests.Sources.Files.TranslateService.json"), 2);
         }
         
         /// <summary>

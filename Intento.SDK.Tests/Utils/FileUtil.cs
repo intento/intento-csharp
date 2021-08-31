@@ -16,10 +16,38 @@ namespace Intento.SDK.Tests.Utils
         /// <returns></returns>
         public static string ReadFileFromResources(string filePath)
         {
-            using var stream = typeof(FileUtil).Assembly.GetManifestResourceStream(filePath);
+            using var stream = ReadFileStreamFromResources(filePath);
             using var reader = new StreamReader(stream);
             var content = reader.ReadToEnd();
             return content;
+        }
+
+        /// <summary>
+        /// Read resource file to stream
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static Stream ReadFileStreamFromResources(string filePath)
+        {
+            return typeof(FileUtil).Assembly.GetManifestResourceStream(filePath);
+        }
+
+        /// <summary>
+        /// Read resource file to byte[]
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static byte[] ReadBytesFileFromResources(string filePath)
+        {
+            using var stream = ReadFileStreamFromResources(filePath);
+            return StreamToByteArray(stream);
+        }
+        
+        private static byte[] StreamToByteArray(Stream input)
+        {
+            var ms = new MemoryStream();
+            input.CopyTo(ms);
+            return ms.ToArray();
         }
     }
 }

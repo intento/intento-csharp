@@ -1,5 +1,8 @@
+using System;
+using System.IO;
 using System.Linq;
 using Intento.SDK.Tests.Sources;
+using Intento.SDK.Tests.Utils;
 using Intento.SDK.Translate.DTO;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -10,11 +13,11 @@ namespace Intento.SDK.Tests
     public class SerializationTests
     {
         /// <summary>
-        /// Test TranslateServiceDto serialization
+        /// Test TranslateService serialization
         /// </summary>
-        [Test(Description = "Serialize TranslateServiceDto object")]
+        [Test(Description = "Serialize TranslateService object")]
         [TestCaseSource(typeof(SerializationTestsDataSources), nameof(SerializationTestsDataSources.SerializeTranslateServiceDtoTestCaseData))]
-        public void SerializeTranslateServiceDto(TranslateServiceDto dto, string expectedResult)
+        public void SerializeTranslateServiceDto(TranslateService dto, string expectedResult)
         {
             var json = JsonConvert.SerializeObject(dto);
             Assert.IsNotEmpty(json);
@@ -22,14 +25,14 @@ namespace Intento.SDK.Tests
         }
 
         /// <summary>
-        /// Test TranslateServiceDto deserialization
+        /// Test TranslateService deserialization
         /// </summary>
         /// <param name="json"></param>
-        [Test(Description = "Deserialize TranslateServiceDto object")]
+        [Test(Description = "Deserialize TranslateService object")]
         [TestCaseSource(typeof(SerializationTestsDataSources), nameof(SerializationTestsDataSources.DeserializeTranslateServiceDtoTestCaseData))]
         public void DeserializeTranslateServiceDto(string json, int expectedLength)
         {
-            var dto = JsonConvert.DeserializeObject<TranslateServiceDto>(json);
+            var dto = JsonConvert.DeserializeObject<TranslateService>(json);
             Assert.IsNotNull(dto);
             Assert.IsNotNull(dto.Auth);
             Assert.IsTrue(dto.Auth.Length == expectedLength);

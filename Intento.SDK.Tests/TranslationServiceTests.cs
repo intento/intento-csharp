@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Intento.SDK.DI;
 using Intento.SDK.Tests.Sources;
+using Intento.SDK.Tests.Utils;
 using Intento.SDK.Translate;
-using IntentoSDK.Translate.Options;
+using Intento.SDK.Translate.Options;
 using NUnit.Framework;
 
 namespace Intento.SDK.Tests
@@ -13,7 +15,7 @@ namespace Intento.SDK.Tests
     /// Tests for TranslationService
     /// </summary>
     [TestFixture(Category = "Translate API")]
-    public class TranslationServiceTests: IntentoTests
+    public class TranslationServiceTests : IntentoTests
     {
         [Test(Description = "Get all list of languages")]
         public async Task LanguageTest()
@@ -23,7 +25,7 @@ namespace Intento.SDK.Tests
             Assert.NotNull(res);
             Assert.IsNotEmpty(res);
         }
-        
+
         [Test(Description = "Get all supported list of languages")]
         public async Task GetSupportedLanguagesTest()
         {
@@ -54,7 +56,8 @@ namespace Intento.SDK.Tests
         }
 
         [Test(Description = "Detailed provider info")]
-        [TestCaseSource(typeof(TranslationServiceTestsDataSources), nameof(TranslationServiceTestsDataSources.ProviderTestCaseData))]
+        [TestCaseSource(typeof(TranslationServiceTestsDataSources),
+            nameof(TranslationServiceTestsDataSources.ProviderTestCaseData))]
         public async Task ProviderTest(string providerId, Dictionary<string, string> additionalParams)
         {
             var service = Locator.Resolve<ITranslateService>();
@@ -74,14 +77,14 @@ namespace Intento.SDK.Tests
             Assert.IsTrue(res.Pairs.All(p => p.To != null));
         }
 
-        [Test]
+        /*[Test]
         [TestCase("ai.text.translate.microsoft.translator_text_api.3-0")]
         public async Task AccountsTest(string providerId)
         {
             var service = Locator.Resolve<ITranslateService>();
             var res = await service.AccountsAsync(providerId);
             Assert.NotNull(res);
-        }
+        }*/
 
         /*[Test]
         [TestCase("ai.text.translate.google.translate_api.v3")]
@@ -98,7 +101,10 @@ namespace Intento.SDK.Tests
         public async Task RoutingTest(bool pairs)
         {
             var service = Locator.Resolve<ITranslateService>();
-            var res = await service.RoutingAsync(new Dictionary<string, string> {{"pairs", pairs.ToString().ToLower() }});
+            var res = await service.RoutingAsync(new Dictionary<string, string>
+            {
+                { "pairs", pairs.ToString().ToLower() }
+            });
             Assert.NotNull(res);
             Assert.IsNotEmpty(res);
         }
@@ -108,13 +114,65 @@ namespace Intento.SDK.Tests
         /// </summary>
         /// <param name="options"></param>
         [Test]
-        [TestCaseSource(typeof(TranslationServiceTestsDataSources), nameof(TranslationServiceTestsDataSources.FulfillTestCaseData))]
+        [TestCaseSource(typeof(TranslationServiceTestsDataSources),
+            nameof(TranslationServiceTestsDataSources.FulfillTestCaseData))]
         public async Task FulfillTest(TranslateOptions options)
         {
             var service = Locator.Resolve<ITranslateService>();
             var res = await service.FulfillAsync(options);
             Assert.IsNotNull(res);
             Assert.IsNull(res.Error);
+        }
+
+        /// <summary>
+        /// Test for get AgnosticGlossariesTypes
+        /// </summary>
+        [Test]
+        public async Task AgnosticGlossariesTypesTest()
+        {
+            var service = Locator.Resolve<ITranslateService>();
+            var res = await service.AgnosticGlossariesTypesAsync();
+            Assert.NotNull(res);
+            Assert.NotNull(res.Count > 0);
+        }
+
+        /// <summary>
+        /// Get list of agnostic glossaries
+        /// </summary>
+        [Test]
+        public async Task AgnosticGlossariesTest()
+        {
+            var service = Locator.Resolve<ITranslateService>();
+            var res = await service.AgnosticGlossariesAsync();
+            Assert.NotNull(res);
+            Assert.NotNull(res.Count > 0);
+        }
+
+        /*[Test]
+        [TestCase("ai.text.translate.google.translate_api.v3beta1")]
+        public async Task GlossariesTest(string providerId)
+        {
+            var service = Locator.Resolve<ITranslateService>();
+            var res = await service.GlossariesAsync(providerId, new Dictionary<string, string>());
+            Assert.NotNull(res);
+        }*/
+
+        [Test]
+        [TestCase("Intento.SDK.Tests.Sources.Files.logging.docx")]
+        public async Task FulfillFileTest(string file)
+        {
+            var fileContent = FileUtil.ReadBytesFileFromResources(file);
+            var path = Path.GetTempFileName() + ".docx";
+            await File.WriteAllBytesAsync(path, fileContent);
+            var fileInfo = new FileInfo(path);
+            var service = Locator.Resolve<ITranslateService>();
+            await using var res = await service.FulfillFileAsync(
+                new TranslateOptions
+                {
+                    From = "ru", To = "en"
+                }, File.Open(path, FileMode.Open), fileInfo);
+            Assert.IsNotNull(res);
+            Assert.IsTrue(res.Length > 0);
         }
     }
 }

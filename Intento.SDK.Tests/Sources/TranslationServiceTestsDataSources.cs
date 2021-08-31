@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using IntentoSDK.Translate.Options;
+using Intento.SDK.Translate.Options;
 using NUnit.Framework;
 
 namespace Intento.SDK.Tests.Sources
