@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>intento_sn.snk</AssemblyOriginatorKeyFile>
-    <PackageVersion>1.6.0.0</PackageVersion>
+    <PackageVersion>2.0.0.0</PackageVersion>
     <Authors>Intento Inc.</Authors>
     <Description>An adapter to query Intento API. Intento provides a single API to Cognitive AI services from many vendors.</Description>
     <Copyright>Copyright © Intento 2018-2021</Copyright>
