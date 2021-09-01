@@ -7,16 +7,16 @@ To get more information, check out [the site](https://inten.to/).
 
 If you don't have a key to use Intento API, please register here [console.inten.to](https://console.inten.to)
 
-#Build
+# Build
 <code>dotnet build SDK.build.proj /p:Configuration=%Configuration% /p:DoSign=%DoSign% /p:Version=%Version% /fileLogger</code>
 
-#Sign
+# Sign
 To sign package you need to install Intento certificate with CertificateFingerprint=d79d7faf87aa9eecc1437e7da38e81f8a547dc38
 
-#Tests
+# Tests
 To run test set environment variable "IntentoAPIKey". Api key you can relieve from [console.inten.to](https://console.inten.to)
 
-#Init intento client
+# Init intento client
  ```csharp
  var options = new Options
  {
@@ -26,7 +26,7 @@ To run test set environment variable "IntentoAPIKey". Api key you can relieve fr
  IntentoClient.Init(options);
  ```
 
-#DI
+# DI
 By default, Intento SDK creates its own container for services. By the way, you can create your own container in the app and pass servicesCollection to Init function.
  ```csharp
 IntentoClient.Init(options, serviceCollection);
@@ -44,7 +44,7 @@ internal sealed class ServicesRegisterExtension: IContainerRegisterExtension
  }
  ```
 
-#Use intento API
+# Use intento API
 You can inject ITranslateService from the container (if you use your own container) or get it from Locator.
  ```csharp
 var service = Locator.Resolve<ITranslateService>();

@@ -16,7 +16,7 @@ More documentation on the API is available at:</Description>
     <PackageProjectUrl>https://inten.to/</PackageProjectUrl>
     <PackageIconUrl>https://cdn-dbgoh.nitrocdn.com/jHclttqYYBDOXvxjBDyknEiyjeLrNIpQ/assets/static/optimized/wp-content/uploads/2020/08/e719c2f434f66fd89a92730888cee8ca.logo-text-small-2.png</PackageIconUrl>
     <PackageTags>Intento</PackageTags>
-    <RepositoryUrl>https://github.com/intento/intento-csharp</RepositoryUrl>
+    <RepositoryUrl>https://github.com/intento/intento-csharp/tree/develop</RepositoryUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
