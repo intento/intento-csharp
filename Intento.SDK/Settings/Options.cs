@@ -6,8 +6,8 @@ namespace Intento.SDK.Settings
     /// <summary>
     /// Options for connections
     /// </summary>
-    public class Options: BaseOptions
-    {        
+    public class Options : BaseOptions
+    {
         /// <summary>
         /// Proxy settings
         /// </summary>
@@ -27,12 +27,11 @@ namespace Intento.SDK.Settings
         /// <summary>
         /// Url to Intento API
         /// </summary>
-        public string ServerUrl { get; set; }
+        public string ServerUrl { get; set; } = Servers.Config.ServerUrl;
 
         /// <summary>
         /// Url to syncwrapper server
         /// </summary>
-        public string SyncwrapperUrl { get; set; }
-
+        public string SyncwrapperUrl { get; set; } = Servers.Config.SyncwrapperUrl;
     }
 }

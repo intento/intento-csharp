@@ -5,11 +5,18 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>intento_sn.snk</AssemblyOriginatorKeyFile>
     <Authors>Intento Inc.</Authors>
-    <Description>An adapter to query Intento API. Intento provides a single API to Cognitive AI services from many vendors.</Description>
+    <Description>An adapter to query Intento API. Intento provides a single API to Cognitive AI services from many vendors.
+
+More documentation on the API is available at:</Description>
     <Copyright>Copyright © Intento 2018-2021</Copyright>
     <LangVersion>9</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Nullable>disable</Nullable>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://inten.to/</PackageProjectUrl>
+    <PackageIconUrl>https://cdn-dbgoh.nitrocdn.com/jHclttqYYBDOXvxjBDyknEiyjeLrNIpQ/assets/static/optimized/wp-content/uploads/2020/08/e719c2f434f66fd89a92730888cee8ca.logo-text-small-2.png</PackageIconUrl>
+    <PackageTags>Intento</PackageTags>
+    <RepositoryUrl>https://github.com/intento/intento-csharp</RepositoryUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
@@ -24,6 +31,11 @@
     <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Servers.json" />
+    <EmbeddedResource Include="Servers.json" />
   </ItemGroup>
 
 </Project>

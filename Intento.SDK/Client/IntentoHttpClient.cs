@@ -228,13 +228,12 @@ namespace Intento.SDK.Client
         private string MakeUrl(string path, Dictionary<string, string> additionalParams, bool useSyncwrapper = false)
         {
 			var url = useSyncwrapper ? Options.SyncwrapperUrl : Options.ServerUrl;
-            var fullUrl = url + path;
+            var uri = new UriBuilder(new Uri(new Uri(url), path));
+            var fullUrl =  uri.ToString();
             if (additionalParams == null)
             {
                 return fullUrl;
             }
-
-            var uri = new UriBuilder(fullUrl);
             var query = HttpUtility.ParseQueryString(uri.Query);
             foreach (var pair in additionalParams)
             {

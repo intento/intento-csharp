@@ -1,4 +1,5 @@
 ﻿using Intento.SDK.Settings;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Intento.SDK.DI
 {
@@ -14,10 +15,11 @@ namespace Intento.SDK.DI
         /// </summary>
         /// <param name="impl"></param>
         /// <param name="options"></param>
-        public static void SetImpl(ILocatorImpl impl, Options options)
+        /// <param name="services"></param>
+        public static void SetImpl(ILocatorImpl impl, Options options, IServiceCollection services = null)
         {
             _locatorImpl = impl;
-            impl?.Init(options);
+            impl?.Init(options, services);
         }
 
         /// <summary>

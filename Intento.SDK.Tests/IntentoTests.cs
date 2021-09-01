@@ -17,9 +17,7 @@ namespace Intento.SDK.Tests
             var options = new Options
             {
                 ApiKey = Environment.GetEnvironmentVariable("IntentoAPIKey"),
-                ClientUserAgent = $"Intento.SDK.Test/{assemblyVersion}",
-                SyncwrapperUrl = "https://syncwrapper-memoq.inten.to/",
-                ServerUrl = "https://api.inten.to/"
+                ClientUserAgent = $"Intento.SDK.Test/{assemblyVersion}"
             };
             IntentoClient.Init(options);
         }
