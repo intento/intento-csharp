@@ -2,6 +2,9 @@
 
 namespace Intento.SDK
 {
+    /// <summary>
+    /// Helpers for work with Intento SDK
+    /// </summary>
     public class IntentoHelpers
     {
         /// <summary>

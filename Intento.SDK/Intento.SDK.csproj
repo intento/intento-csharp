@@ -4,14 +4,17 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>intento_sn.snk</AssemblyOriginatorKeyFile>
-    <PackageVersion>2.0.0.0</PackageVersion>
     <Authors>Intento Inc.</Authors>
     <Description>An adapter to query Intento API. Intento provides a single API to Cognitive AI services from many vendors.</Description>
     <Copyright>Copyright © Intento 2018-2021</Copyright>
     <LangVersion>9</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>$(PackageVersion)</AssemblyVersion>
-    <FileVersion>$(PackageVersion)</FileVersion>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>..\build</OutputPath>
+    <DocumentationFile>..\build\Intento.SDK.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

@@ -6,6 +6,9 @@ using Intento.SDK.Exceptions;
 
 namespace Intento.SDK.Validation
 {
+    /// <summary>
+    /// Extensions for validation options
+    /// </summary>
     public static class ValidationExtensions
     {
         /// <summary>

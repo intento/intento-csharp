@@ -4,6 +4,9 @@ using System.Net.Http;
 
 namespace Intento.SDK.Exceptions
 {
+    /// <summary>
+    /// Extensions fro exceptions
+    /// </summary>
     public static class ExceptionsExtensions
     {
         /// <summary>

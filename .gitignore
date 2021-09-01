@@ -36,3 +36,4 @@ GitHash.cs
 /Intento.SDK/.DS_Store
 /.idea/.idea.IntentoSDK/.idea
 /*.DotSettings
+build

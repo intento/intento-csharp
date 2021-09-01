@@ -7,6 +7,10 @@ namespace Intento.SDK.DI
     /// </summary>
     public interface IContainerRegisterExtension
     {
+        /// <summary>
+        /// Register new instances in container
+        /// </summary>
+        /// <param name="services"></param>
         void Register(IServiceCollection services);
     }
 }
