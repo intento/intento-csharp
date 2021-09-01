@@ -5,9 +5,7 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>intento_sn.snk</AssemblyOriginatorKeyFile>
     <Authors>Intento Inc.</Authors>
-    <Description>An adapter to query Intento API. Intento provides a single API to Cognitive AI services from many vendors.
-
-More documentation on the API is available at:</Description>
+    <Description>An adapter to query Intento API. Intento provides a single API to Cognitive AI services from many vendors.</Description>
     <Copyright>Copyright © Intento 2018-2021</Copyright>
     <LangVersion>9</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
