@@ -25,6 +25,18 @@ To run test set environment variable "IntentoAPIKey". Api key you can relieve fr
  };
  IntentoClient.Init(options);
  ```
+# Init logger
+You should specify ILoggerFactory instance in container to work with SDK. If you use Intento.SDK container you should create IContainerRegisterExtension implementation.
+ ```csharp
+ [RegisterExtension]
+ internal class LoggerRegisterExtension: IContainerRegisterExtension
+ {
+      public void Register(IServiceCollection services)
+      {
+          services.AddSingleton<ILoggerFactory, NullLoggerFactory>();
+      }
+ }
+ ```
 
 # DI
 By default, Intento SDK creates its own container for services. By the way, you can create your own container in the app and pass servicesCollection to Init function.
