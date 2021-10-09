@@ -12,24 +12,23 @@ namespace Intento.SDK.Translate.Converters
     /// <summary>
     /// Converter for auth info in "service"
     /// </summary>
-    internal class AuthProviderInfoConverter: JsonConverter<AuthProviderInfo[]>
+    internal class AuthProviderInfoConverter: JsonConverter
     {
-        public override void WriteJson(JsonWriter writer, AuthProviderInfo[]? value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             if (value == null)
             {
                 return;
             }
-
-            var dict = value
+            var val = (AuthProviderInfo[])value;
+            var dict = val
                 .Where(info => info.Key != null)
                 .ToDictionary(info => info.Provider, info => new[] {info.Key});
             var t = JToken.FromObject(dict);
             t.WriteTo(writer);
         }
 
-        public override AuthProviderInfo[]? ReadJson(JsonReader reader, Type objectType, AuthProviderInfo[]? existingValue,
-            bool hasExistingValue, JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             var result = new List<AuthProviderInfo>();
             var jObject = JObject.Load(reader);
@@ -47,6 +46,11 @@ namespace Intento.SDK.Translate.Converters
                 info.Key = array[0]?.ToObject<KeyInfo>();
             }
             return result.ToArray();
+        }
+
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(AuthProviderInfo[]);
         }
     }
 }

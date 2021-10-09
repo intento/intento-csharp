@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 namespace Intento.SDK.Translate.DTO
 {
     [JsonObject("translate_request")]
-    internal class TranslateRequest
+    public class TranslateRequest
     {
         [JsonProperty("context")]
         public TranslateContext Context { get; set; }

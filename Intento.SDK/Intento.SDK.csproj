@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>intento_sn.snk</AssemblyOriginatorKeyFile>
     <Authors>Intento Inc.</Authors>
@@ -15,6 +14,7 @@
     <PackageIconUrl>https://cdn-dbgoh.nitrocdn.com/jHclttqYYBDOXvxjBDyknEiyjeLrNIpQ/assets/static/optimized/wp-content/uploads/2020/08/e719c2f434f66fd89a92730888cee8ca.logo-text-small-2.png</PackageIconUrl>
     <PackageTags>Intento</PackageTags>
     <RepositoryUrl>https://github.com/intento/intento-csharp/tree/develop</RepositoryUrl>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
@@ -27,7 +27,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.*" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>
 
