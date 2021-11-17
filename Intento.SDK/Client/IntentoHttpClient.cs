@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Intento.SDK.Exceptions;
@@ -58,7 +59,7 @@ namespace Intento.SDK.Client
             try
             {
                 string jsonData = JsonConvert.SerializeObject(json);
-                using (var httpContent = new StringContent(jsonData))
+                using (var httpContent = new StringContent(jsonData, Encoding.UTF8, "application/json"))
                 {
                     var url = MakeUrl(path, additionalParams, useSyncwrapper);
                     if (special_headers != null && special_headers.Count != 0)
@@ -114,7 +115,7 @@ namespace Intento.SDK.Client
                 {
                     NullValueHandling = NullValueHandling.Ignore
                 });
-                using (var httpContent = new StringContent(jsonData))
+                using (var httpContent = new StringContent(jsonData, Encoding.UTF8, "application/json"))
                 {
                     var url = MakeUrl(path, additionalParams, useSyncwrapper);
                     if (special_headers != null && special_headers.Count != 0)

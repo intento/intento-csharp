@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -29,7 +30,16 @@ namespace Intento.SDK.Translate.Converters
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            throw new NotImplementedException();
+            var t = JToken.Load(reader);
+            return t switch
+            {
+                null => existingValue,
+                JArray array => array.ToObject<string[]>(),
+                _ => new []
+                {
+                    t.ToObject<string>()
+                }
+            };
         }
 
         public override bool CanConvert(Type objectType)

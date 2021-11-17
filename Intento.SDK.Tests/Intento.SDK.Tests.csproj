@@ -25,11 +25,14 @@
       <None Remove="Sources\Files\LanguagePairs.json" />
       <EmbeddedResource Include="Sources\Files\LanguagePairs.json" />
       <None Remove="Sources\Files\TranslateResponseWrapper.json" />
+      <EmbeddedResource Include="Sources\Files\TranslateContext_one.json" />
       <EmbeddedResource Include="Sources\Files\TranslateResponseWrapper.json" />
       <None Remove="Sources\Files\TranslateService.json" />
       <EmbeddedResource Include="Sources\Files\TranslateService.json" />
       <None Remove="Sources\Files\logging.docx" />
       <EmbeddedResource Include="Sources\Files\logging.docx" />
+      <None Remove="Sources\Files\TranslateContext.json" />
+      <EmbeddedResource Include="Sources\Files\TranslateContext_array.json" />
     </ItemGroup>
 
 </Project>
