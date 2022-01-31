@@ -148,14 +148,17 @@ namespace Intento.SDK.Tests
             Assert.NotNull(res.Count > 0);
         }
 
-        /*[Test]
-        [TestCase("ai.text.translate.google.translate_api.v3beta1")]
+        [Test]
+        [TestCase("ai.text.translate.google.translate_api.v3")]
         public async Task GlossariesTest(string providerId)
         {
             var service = Locator.Resolve<ITranslateService>();
-            var res = await service.GlossariesAsync(providerId, new Dictionary<string, string>());
+            var res = await service.GlossariesAsync(providerId, new Dictionary<string, string>
+            {
+                { "credential_id", "Workday" }
+            });
             Assert.NotNull(res);
-        }*/
+        }
 
         [Test]
         [TestCase("Intento.SDK.Tests.Sources.Files.logging.docx")]
