@@ -77,16 +77,16 @@ namespace Intento.SDK.Tests
             Assert.IsTrue(res.Pairs.All(p => p.To != null));
         }
 
-        /*[Test]
-        [TestCase("ai.text.translate.microsoft.translator_text_api.3-0")]
+        [Test]
+        [TestCase("ai.text.translate.google.translate_api.v3")]
         public async Task AccountsTest(string providerId)
         {
             var service = Locator.Resolve<ITranslateService>();
             var res = await service.AccountsAsync(providerId);
             Assert.NotNull(res);
-        }*/
+        }
 
-        /*[Test]
+        [Test]
         [TestCase("ai.text.translate.google.translate_api.v3")]
         public async Task ModelsTest(string providerId)
         {
@@ -94,7 +94,7 @@ namespace Intento.SDK.Tests
             var res = await service.ModelsAsync(providerId, null);
             Assert.NotNull(res);
             Assert.IsNotEmpty(res);
-        }*/
+        }
 
         [Test]
         [TestCase(true)]

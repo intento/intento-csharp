@@ -305,7 +305,7 @@ namespace Intento.SDK.Translate
         }
 
         /// <inheritdoc />
-        public IList<dynamic> Accounts(string providerId = null, Dictionary<string, string> additionalParams = null)
+        public IList<Account> Accounts(string providerId = null, Dictionary<string, string> additionalParams = null)
         {
             var taskReadResult = Task.Run<dynamic>(async () =>
                 await AccountsAsync(providerId, additionalParams));
@@ -313,13 +313,13 @@ namespace Intento.SDK.Translate
         }
 
         /// <inheritdoc />
-        public async Task<IList<dynamic>> AccountsAsync(string providerId = null,
+        public async Task<IList<Account>> AccountsAsync(string providerId = null,
             Dictionary<string, string> additionalParams = null)
         {
             var path = "accounts" + (providerId != null ? $"?provider={providerId}" : null);
             // Call to Intento API and get json result
-            var jsonResult = await Client.GetAsync(path, additionalParams);
-            return ((JContainer)jsonResult).First.First.Cast<dynamic>().ToList();
+            var jsonResult = await Client.GetAsync<AccountsResult>(path, additionalParams);
+            return jsonResult.Result;
         }
 
         /// <inheritdoc />
