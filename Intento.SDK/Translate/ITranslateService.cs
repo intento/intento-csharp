@@ -140,7 +140,7 @@ namespace Intento.SDK.Translate
         /// <param name="provider">Provider id</param>
         /// <param name="additionalParams">additional url params</param>
         /// <returns>dynamic (json) with requested information</returns>
-        ProviderDetailed Provider(string provider, Dictionary<string, string> additionalParams = null);
+        Provider Provider(string provider, Dictionary<string, string> additionalParams = null);
 
         /// <summary>
         /// Detailed information on provider features
@@ -148,7 +148,7 @@ namespace Intento.SDK.Translate
         /// <param name="providerId">Provider id</param>
         /// <param name="additionalParams">Additional params</param>
         /// <returns>dynamic (json) with requested information</returns>
-        Task<ProviderDetailed> ProviderAsync(string providerId, Dictionary<string, string> additionalParams = null);
+        Task<Provider> ProviderAsync(string providerId, Dictionary<string, string> additionalParams = null);
 
         /// <summary>
         /// Get providers by options

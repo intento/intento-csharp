@@ -15,39 +15,45 @@ namespace Intento.SDK.DI
     {
         private IServiceProvider _serviceProvider;
 
-        /// <inheritdoc />
-        public void Init(Options options, IServiceCollection services = null)
+        private void AddHttpClient<T>(Options options,  IServiceCollection services) where T : class
         {
-            var needBuild = services == null;
-            services ??= new ServiceCollection();
             var client = services
-                .AddHttpClient<IntentoHttpClient>();
+                .AddHttpClient<T>();
 
             if (options.Proxy?.ProxyUri != null && options.Proxy.ProxyEnabled)
             {
                 client
                     .ConfigurePrimaryHttpMessageHandler(() =>
-                {
-                    var proxy = new WebProxy()
                     {
-                        Address = options.Proxy.ProxyUri,
-                        UseDefaultCredentials = false
-                    };
+                        var proxy = new WebProxy()
+                        {
+                            Address = options.Proxy.ProxyUri,
+                            UseDefaultCredentials = false
+                        };
 
-                    if (!string.IsNullOrWhiteSpace(options.Proxy.ProxyUserName))
-                    {
-                        proxy.Credentials = new NetworkCredential(options.Proxy.ProxyUserName,
-                            options.Proxy.ProxyPassword);
-                    }
+                        if (!string.IsNullOrWhiteSpace(options.Proxy.ProxyUserName))
+                        {
+                            proxy.Credentials = new NetworkCredential(options.Proxy.ProxyUserName,
+                                options.Proxy.ProxyPassword);
+                        }
 
-                    var httpClientHandler = new HttpClientHandler()
-                    {
-                        Proxy = proxy,
-                    };
+                        var httpClientHandler = new HttpClientHandler()
+                        {
+                            Proxy = proxy,
+                        };
 
-                    return httpClientHandler;
-                });
+                        return httpClientHandler;
+                    });
             }
+        }
+
+        /// <inheritdoc />
+        public void Init(Options options, IServiceCollection services = null)
+        {
+            var needBuild = services == null;
+            services ??= new ServiceCollection();
+            AddHttpClient<IntentoHttpClient>(options, services);
+            AddHttpClient<TelemetryHttpClient>(options, services);
 
             services.AddSingleton(options);
             RegisterExtensions(services);

@@ -377,19 +377,19 @@ namespace Intento.SDK.Translate
         }
 
         /// <inheritdoc />
-        public ProviderDetailed Provider(string provider, Dictionary<string, string> additionalParams = null)
+        public Provider Provider(string provider, Dictionary<string, string> additionalParams = null)
         {
             var taskReadResult = Task.Run(async () => await ProviderAsync(provider, additionalParams));
             return taskReadResult.Result;
         }
 
         /// <inheritdoc />
-        public async Task<ProviderDetailed> ProviderAsync(string providerId,
+        public async Task<Provider> ProviderAsync(string providerId,
             Dictionary<string, string> additionalParams = null)
         {
             var path = $"ai/text/translate/{providerId}";
             // Call to Intento API and get json result
-            var jsonResult = await Client.GetAsync<ProviderDetailed>(path, additionalParams);
+            var jsonResult = await Client.GetAsync<Provider>(path, additionalParams);
             return jsonResult;
         }
 

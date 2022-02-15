@@ -15,6 +15,7 @@ namespace Intento.SDK.Tests
     /// Tests for TranslationService
     /// </summary>
     [TestFixture(Category = "Translate API")]
+    [Parallelizable(ParallelScope.Self)]
     public class TranslationServiceTests : IntentoTests
     {
         [Test(Description = "Get all list of languages")]
