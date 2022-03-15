@@ -5,13 +5,13 @@
     <AssemblyOriginatorKeyFile>intento_sn.snk</AssemblyOriginatorKeyFile>
     <Authors>Intento Inc.</Authors>
     <Description>An adapter to query Intento API. Intento provides a single API to Cognitive AI services from many vendors.</Description>
-    <Copyright>Copyright © Intento 2018-2021</Copyright>
+    <Copyright>Copyright © Intento 2018-2022</Copyright>
     <LangVersion>9</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Nullable>disable</Nullable>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://inten.to/</PackageProjectUrl>
-    <PackageIconUrl>https://cdn-dbgoh.nitrocdn.com/jHclttqYYBDOXvxjBDyknEiyjeLrNIpQ/assets/static/optimized/wp-content/uploads/2020/08/e719c2f434f66fd89a92730888cee8ca.logo-text-small-2.png</PackageIconUrl>
+    <PackageIconUrl>https://scontent-hel3-1.xx.fbcdn.net/v/t1.6435-9/161047796_3984430584949511_5187283145707586079_n.png?_nc_cat=108&amp;ccb=1-5&amp;_nc_sid=09cbfe&amp;_nc_ohc=h9_L-27U3-QAX_fgWUx&amp;_nc_ht=scontent-hel3-1.xx&amp;oh=00_AT9yJ3dHjTRjf9PTENewVw5cuu12nqZiFBlm0dhX4P154w&amp;oe=623BFE08</PackageIconUrl>
     <PackageTags>Intento</PackageTags>
     <RepositoryUrl>https://github.com/intento/intento-csharp/tree/develop</RepositoryUrl>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -24,9 +24,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.8" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>

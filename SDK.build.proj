@@ -5,7 +5,7 @@
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>       
         <Version Condition=" '$(Version)' == '' ">2.0.0</Version>        
         <DoSign Condition="'$(DoSign)' == ''">0</DoSign>
-        <CertificateFingerprint>d79d7faf87aa9eecc1437e7da38e81f8a547dc38</CertificateFingerprint>
+        <CertificateFingerprint>ceb3832e3ea926565f7dd05c82a711307b6679ee</CertificateFingerprint>
     </PropertyGroup>
 
     <Target Name="BuildAll">
