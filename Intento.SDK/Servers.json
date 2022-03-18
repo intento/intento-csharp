@@ -1,4 +1,5 @@
 {
    "ServerUrl": "https://api.inten.to/",
+   "TmsServerUrl": "https://connectors.inten.to/tms",
    "SyncwrapperUrl": "https://syncwrapper-memoq.inten.to/"
 }

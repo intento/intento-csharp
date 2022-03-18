@@ -11,6 +11,7 @@ using Intento.SDK.Logging;
 using Intento.SDK.Settings;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using UrlCombineLib;
 
 namespace Intento.SDK.Client
 {
@@ -37,20 +38,21 @@ namespace Intento.SDK.Client
             Logger = logger;
             Options = options;
         }
-        
+
         /// <summary>
         /// Execute request to url with params (POST)
         /// </summary>
         /// <param name="path"></param>
         /// <param name="json"></param>
-        /// <param name="special_headers"></param>
+        /// <param name="specialHeaders"></param>
         /// <param name="additionalParams"></param>
         /// <param name="useSyncwrapper"></param>
+        /// <param name="isTranslateRequest"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<ResponseT> PostAsync<RequestT, ResponseT>(string path, RequestT json, Dictionary<string, string> special_headers = null,
-            Dictionary<string, string> additionalParams = null, bool useSyncwrapper = false)
-            where ResponseT : class
+        public async Task<TResponse> PostAsync<TRequest, TResponse>(string path, TRequest json, Dictionary<string, string> specialHeaders = null,
+            Dictionary<string, string> additionalParams = null, bool useSyncwrapper = false, bool isTranslateRequest = false)
+            where TResponse : class
         {
             try
             {
@@ -60,10 +62,10 @@ namespace Intento.SDK.Client
                 });
                 using (var httpContent = new StringContent(jsonData, Encoding.UTF8, "application/json"))
                 {
-                    var url = MakeUrl(path, additionalParams, useSyncwrapper);
-                    if (special_headers != null && special_headers.Count != 0)
+                    var url = MakeUrl(path, additionalParams, useSyncwrapper, isTranslateRequest);
+                    if (specialHeaders != null && specialHeaders.Count != 0)
                     {
-                        foreach (var pair in special_headers)
+                        foreach (var pair in specialHeaders)
                         {
                             httpContent.Headers.Add(pair.Key, pair.Value);
                         }
@@ -72,16 +74,13 @@ namespace Intento.SDK.Client
                     LogHttpRequest("POST", url, jsonData, Client.DefaultRequestHeaders.ToString());
                     using (var response = await Client.PostAsync(url, httpContent))
                     {
-                        LogHttpAfterSend(url);
-                        var jsonResult = await GetJson<ResponseT>(response);
-                        LogHttpResponse(jsonResult);
-
                         if (response.StatusCode == HttpStatusCode.OK)
                         {
+                            var jsonResult = await GetJson<TResponse>(response);
                             return jsonResult;
                         }
 
-                        Exception ex = response.Create(jsonResult);
+                        var ex = response.Create(response);
                         LogHttpException(ex);
                         throw ex;
                     }
@@ -104,7 +103,7 @@ namespace Intento.SDK.Client
         public async Task<T> GetAsync<T>(string path, Dictionary<string, string> additionalParams = null)
             where T:class
         {
-            var url = MakeUrl(path, additionalParams);
+            var url = MakeUrl(path, additionalParams, false, false);
             LogHttpRequest("GET", url, null, Client.DefaultRequestHeaders.ToString());
             try
             {
@@ -117,14 +116,14 @@ namespace Intento.SDK.Client
                         {
                             using (var jsonReader = new JsonTextReader(streamReader))
                             {
-                                var jsonSerializer = new JsonSerializer();
-                                var jsonResult = jsonSerializer.Deserialize<T>(jsonReader);
-                                LogHttpResponse(jsonResult);
                                 if (response.StatusCode == HttpStatusCode.OK)
                                 {
+                                    var jsonSerializer = new JsonSerializer();
+                                    var jsonResult = jsonSerializer.Deserialize<T>(jsonReader);
+                                    LogHttpResponse(jsonResult);
                                     return jsonResult;
                                 }
-                                Exception ex = response.Create(jsonResult);
+                                Exception ex = response.Create(await streamReader.ReadToEndAsync());
                                 LogHttpException(ex);
                                 throw ex;
                             }
@@ -139,14 +138,16 @@ namespace Intento.SDK.Client
             }
         }
 
-        private string MakeUrl(string path, Dictionary<string, string> additionalParams, bool useSyncwrapper = false)
+        private string MakeUrl(string path, Dictionary<string, string> additionalParams, bool useSyncwrapper, bool isTranslateRequest)
         {
-			var url = useSyncwrapper ? Options.SyncwrapperUrl : Options.ServerUrl;
-            var uri = new UriBuilder(new Uri(new Uri(url), path));
-            var fullUrl =  uri.ToString();
+            var url = isTranslateRequest && !string.IsNullOrEmpty(Options.TmsServerUrl)
+                ? Options.TmsServerUrl
+                : (useSyncwrapper ? Options.SyncwrapperUrl : Options.ServerUrl);
+            var fullUrl = url.CombineUrl(path);
+            var uri = new UriBuilder(new Uri(fullUrl, UriKind.RelativeOrAbsolute));
             if (additionalParams == null)
             {
-                return fullUrl;
+                return uri.ToString();
             }
             var query = HttpUtility.ParseQueryString(uri.Query);
             foreach (var pair in additionalParams)

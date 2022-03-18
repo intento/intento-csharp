@@ -12,7 +12,6 @@ using Intento.SDK.Translate.Options;
 using Intento.SDK.Validation;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Intento.SDK.Translate
 {
@@ -177,7 +176,7 @@ namespace Intento.SDK.Translate
             // Call to Intento API and get json result
             var jsonResult =
                 await Client.PostAsync<TranslateRequest, TranslateResponse>(url, request,
-                    useSyncwrapper: options.UseSyncwrapper);
+                    useSyncwrapper: options.UseSyncwrapper, isTranslateRequest: true);
 
             if (options.Async && options.WaitAsync)
             {

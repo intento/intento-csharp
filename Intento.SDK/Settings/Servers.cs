@@ -15,6 +15,12 @@ namespace Intento.SDK.Settings
         public string ServerUrl { get; set; }
 
         /// <summary>
+        /// Url of tms-backend
+        /// </summary>
+        [JsonProperty("TmsServerUrl")]
+        public string TmsServerUrl { get; set; }
+
+        /// <summary>
         /// Url for sync wrapper (for requests with options SyncWrapper = true)
         /// </summary>
         [JsonProperty("SyncwrapperUrl")]

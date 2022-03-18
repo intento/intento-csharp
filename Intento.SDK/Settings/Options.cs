@@ -30,6 +30,11 @@ namespace Intento.SDK.Settings
         public string ServerUrl { get; set; } = Servers.Config.ServerUrl;
 
         /// <summary>
+        /// Url of tms-backend
+        /// </summary>
+        public string TmsServerUrl { get; set; } = Servers.Config.TmsServerUrl;
+
+        /// <summary>
         /// Url to syncwrapper server
         /// </summary>
         public string SyncwrapperUrl { get; set; } = Servers.Config.SyncwrapperUrl;
