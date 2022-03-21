@@ -19,7 +19,8 @@ namespace Intento.SDK.Tests
                 ApiKey = Environment.GetEnvironmentVariable("IntentoAPIKey"),
                 ClientUserAgent = $"Intento.SDK.Test/{assemblyVersion}",
                 TmsServerUrl = "https://connectors-stage.inten.to/tms",
-                ServerUrl = "https://api2.inten.to"
+                ServerUrl = "https://api2.inten.to",
+                SyncwrapperUrl = "https://api2_syncwrapper.inten.to"
             };
             IntentoClient.Init(options);
         }

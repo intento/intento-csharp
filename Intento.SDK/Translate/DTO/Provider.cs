@@ -12,9 +12,6 @@ namespace Intento.SDK.Translate.DTO
         [JsonProperty("delegated_credentials")]
         public bool DelegatedCredentials { get; set; }
 
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
         [JsonProperty("score")]
         public int Score { get; set; }
 

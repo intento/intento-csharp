@@ -29,7 +29,7 @@ namespace Intento.SDK.Client
         /// <param name="client">HttpClient for requests</param>
         /// <param name="options">Options of connections</param>
         /// <param name="logger">Logger implementation</param>
-        public BaseHttpClient(HttpClient client, Options options, ILogger<IntentoHttpClient> logger)
+        protected BaseHttpClient(HttpClient client, Options options, ILogger<IntentoHttpClient> logger)
         {
             var version = IntentoHelpers.GetVersion();
             client.DefaultRequestHeaders.Add("apikey", options.ApiKey);
@@ -60,30 +60,28 @@ namespace Intento.SDK.Client
                 {
                     NullValueHandling = NullValueHandling.Ignore
                 });
-                using (var httpContent = new StringContent(jsonData, Encoding.UTF8, "application/json"))
+                using var httpContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
+                var url = MakeUrl(path, additionalParams, useSyncwrapper, isTranslateRequest);
+                if (specialHeaders != null && specialHeaders.Count != 0)
                 {
-                    var url = MakeUrl(path, additionalParams, useSyncwrapper, isTranslateRequest);
-                    if (specialHeaders != null && specialHeaders.Count != 0)
+                    foreach (var pair in specialHeaders)
                     {
-                        foreach (var pair in specialHeaders)
-                        {
-                            httpContent.Headers.Add(pair.Key, pair.Value);
-                        }
+                        httpContent.Headers.Add(pair.Key, pair.Value);
+                    }
+                }
+
+                LogHttpRequest("POST", url, jsonData, Client.DefaultRequestHeaders.ToString());
+                using (var response = await Client.PostAsync(url, httpContent))
+                {
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        var jsonResult = await GetJson<TResponse>(response);
+                        return jsonResult;
                     }
 
-                    LogHttpRequest("POST", url, jsonData, Client.DefaultRequestHeaders.ToString());
-                    using (var response = await Client.PostAsync(url, httpContent))
-                    {
-                        if (response.StatusCode == HttpStatusCode.OK)
-                        {
-                            var jsonResult = await GetJson<TResponse>(response);
-                            return jsonResult;
-                        }
-
-                        var ex = response.Create(response);
-                        LogHttpException(ex);
-                        throw ex;
-                    }
+                    var ex = response.Create(response);
+                    LogHttpException(ex);
+                    throw ex;
                 }
             }
             catch (Exception ex)
@@ -107,29 +105,21 @@ namespace Intento.SDK.Client
             LogHttpRequest("GET", url, null, Client.DefaultRequestHeaders.ToString());
             try
             {
-                using (var response = await Client.GetAsync(url))
+                using var response = await Client.GetAsync(url);
+                LogHttpAfterSend(url);
+                using var contentStream = await response.Content.ReadAsStreamAsync();
+                using var streamReader = new StreamReader(contentStream);
+                using var jsonReader = new JsonTextReader(streamReader);
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    LogHttpAfterSend(url);
-                    using (var contentStream = await response.Content.ReadAsStreamAsync())
-                    {
-                        using (var streamReader = new StreamReader(contentStream))
-                        {
-                            using (var jsonReader = new JsonTextReader(streamReader))
-                            {
-                                if (response.StatusCode == HttpStatusCode.OK)
-                                {
-                                    var jsonSerializer = new JsonSerializer();
-                                    var jsonResult = jsonSerializer.Deserialize<T>(jsonReader);
-                                    LogHttpResponse(jsonResult);
-                                    return jsonResult;
-                                }
-                                Exception ex = response.Create(await streamReader.ReadToEndAsync());
-                                LogHttpException(ex);
-                                throw ex;
-                            }
-                        }
-                    }
+                    var jsonSerializer = new JsonSerializer();
+                    var jsonResult = jsonSerializer.Deserialize<T>(jsonReader);
+                    LogHttpResponse(jsonResult);
+                    return jsonResult;
                 }
+                Exception ex = response.Create(await streamReader.ReadToEndAsync());
+                LogHttpException(ex);
+                throw ex;
             }
             catch (Exception ex)
             {

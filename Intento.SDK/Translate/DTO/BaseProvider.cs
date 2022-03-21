@@ -10,6 +10,9 @@ namespace Intento.SDK.Translate.DTO
         [JsonProperty("id")]
         public string Id { get; set; }
         
+        [JsonProperty("name")]
+        public string Name { get; set; }
+        
         [JsonProperty("vendor")]
         public string Vendor { get; set; }
         

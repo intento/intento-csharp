@@ -192,8 +192,14 @@ namespace Intento.SDK.Translate
                     // Not a (1) - return result immediately, nothing to wait
                     return jsonResult;
                 }
+                
+                var taskCompletion = new TaskCompletionSource<bool>();
+                var wrapperTask = await Task.WhenAny(
+                    WaitAsync(taskCompletion, id, 1000),
+                    TimeoutError());
+                var wrapper = await wrapperTask;
+                taskCompletion.SetResult(true);
 
-                var wrapper = await WaitAsyncJobAsync(id);
                 if (wrapper.Done)
                 {
                     jsonResult = wrapper.Response is { Length: > 0 } ? wrapper.Response[0] : null;
@@ -599,76 +605,31 @@ namespace Intento.SDK.Translate
             var result = await Client.GetAsync<TranslateResponseWrapper>($"operations/{asyncId}");
             return result;
         }
-
-        private List<int> CalcDelays(int delay)
+        
+        private async Task<TranslateResponseWrapper> WaitAsync(TaskCompletionSource<bool> taskCompletion,
+            string asyncId, int delay = 1000)
         {
-            var delays = new List<int>();
-            do
+            await Task.WhenAny(taskCompletion.Task, Task.Delay(delay));
+            var response = await CheckAsyncJobAsync(asyncId);
+            if (response.Done)
             {
-                delays.Add(delay);
-                delay += 100;
-            } while (delay < 3000);
+                return response;
+            }
 
-            return delays;
+            return await WaitAsync(taskCompletion, asyncId, delay);
         }
-
-        private async Task<TranslateResponseWrapper> WaitAsyncJobAsync(string asyncId, int delay = 0)
+        
+        private async Task<TranslateResponseWrapper> TimeoutError()
         {
-            var dt = DateTime.Now;
-
-            Logger.LogDebug(SdkLogEvents.INVOKE_METHOD, $"WaitAsyncJobAsync-start: {asyncId} - {delay}ms");
-            var n = 0;
-
-            var delays = delay switch
+            await Task.Delay(20000);
+            return new TranslateResponseWrapper
             {
-                -1 => new List<int> { 0 },
-                0 => CalcDelays(400),
-                _ => CalcDelays(delay)
-            };
-
-            delay = delays[0];
-            do
-            {
-                Logger.LogDebug(SdkLogEvents.INVOKE_METHOD, $"WaitAsyncJobAsync-loop: {asyncId} - {delay}ms");
-                Thread.Sleep(delay);
-                Logger.LogDebug(SdkLogEvents.INVOKE_METHOD,
-                    $"WaitAsyncJobAsync-loop after sleep: {asyncId} - {delay}ms");
-
-                var result = await CheckAsyncJobAsync(asyncId);
-
-                Logger.LogDebug(SdkLogEvents.INVOKE_METHOD, $"WaitAsyncJobAsync-loop1a: {asyncId} - {delay}ms");
-                if (result.Done)
-                {
-                    return result;
-                }
-
-                n++;
-                if (n < delays.Count)
-                {
-                    delay = delays[n];
-                }
-
-                Logger.LogDebug(SdkLogEvents.INVOKE_METHOD, $"WaitAsyncJobAsync-loop2: {asyncId} - {delay}ms");
-            } while (DateTime.Now < dt.AddSeconds(delay));
-
-            // Timeout
-            var json = new TranslateResponseWrapper
-            {
-                Id = asyncId,
                 Done = false,
-                Response = null
+                Error = new Error
+                {
+                    Reason = "Timeout of async operation"
+                }
             };
-
-            var error = new Error
-            {
-                Type = "Timeout",
-                Reason = "Too long response from Intento MT plugin",
-                Data = null
-            };
-
-            json.Error = error;
-
-            return json;
         }
 
         private string ConvertToBase64String(Stream stream)
