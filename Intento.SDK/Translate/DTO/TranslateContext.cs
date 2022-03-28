@@ -1,3 +1,4 @@
+using System;
 using Intento.SDK.Translate.Converters;
 using Newtonsoft.Json;
 
@@ -32,9 +33,53 @@ namespace Intento.SDK.Translate.DTO
         public string Category { get; set; }
 
         [JsonIgnore]
-        public string Glossary { get; set; }
+        public string Glossary
+        {
+            get
+            {
+                return JsonGlossary switch
+                {
+                    null => null,
+                    string glossary => glossary,
+                    _ => null
+                };
+            }
+            set => JsonGlossary = value;
+        }
 
+        [JsonIgnore]
+        public Glossary[] Glossaries
+        {
+            get
+            {
+                return JsonGlossary switch
+                {
+                    null => null,
+                    Glossary[] glossaries => glossaries,
+                    _ => null
+                };
+            }
+            set => JsonGlossary = value;
+        }
+
+        /// <summary>
+        /// Typeof property should be string or Glossary[]
+        /// </summary>
         [JsonProperty("glossary")]
-        public Glossary[] Glossaries { get; set; }
+        [JsonConverter(typeof(GlossaryConverter))]
+        public object JsonGlossary
+        {
+            get => _jsonGlossary;
+            set
+            {
+                if (value is not string && value is not Glossary[])
+                {
+                    throw new Exception("Typeof property should be string or Glossary[]");
+                }
+                _jsonGlossary = value;
+            }
+        }
+        
+        private object _jsonGlossary;
     }
 }

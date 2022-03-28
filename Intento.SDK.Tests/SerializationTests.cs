@@ -63,6 +63,16 @@ namespace Intento.SDK.Tests
             var dto = JsonConvert.DeserializeObject<TranslateContext>(json);
             Assert.IsNotNull(dto);
             Assert.IsTrue(dto.Text.Length > 0);
+            switch (dto.JsonGlossary)
+            {
+                case string:
+                    Assert.IsNotNull(dto.Glossary);
+                    break;
+                case Glossary[]:
+                    Assert.IsNotNull(dto.Glossaries);
+                    Assert.IsTrue(dto.Glossaries.Length > 0);
+                    break;
+            }
         }
     }
 }
