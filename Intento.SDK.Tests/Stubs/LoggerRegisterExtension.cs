@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Intento.SDK.DI;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -8,9 +9,10 @@ namespace Intento.SDK.Tests.Stubs
     [RegisterExtension]
     internal class LoggerRegisterExtension: IContainerRegisterExtension
     {
-        public void Register(IServiceCollection services)
+        public IEnumerable<ServiceDescriptor> GetServices()
         {
-            services.AddSingleton<ILoggerFactory, NullLoggerFactory>();
+            yield return new ServiceDescriptor(typeof(ILoggerFactory), typeof(NullLoggerFactory),
+                ServiceLifetime.Singleton);
         }
     }
 }

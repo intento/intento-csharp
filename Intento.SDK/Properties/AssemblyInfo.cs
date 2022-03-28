@@ -16,7 +16,3 @@ using Intento.SDK;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("e0a71be8-3841-4677-a1a7-523660c69e05")]
-
-
-
-

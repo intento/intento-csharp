@@ -1,4 +1,5 @@
 using System;
+using Intento.SDK.DependencyInjection;
 using Intento.SDK.Settings;
 using NUnit.Framework;
 
@@ -12,7 +13,7 @@ namespace Intento.SDK.Tests
         [OneTimeSetUp]
         public virtual void Setup()
         {
-            var assembly = typeof(TranslationServiceTests).Assembly;
+            var assembly = typeof(IntentoTests).Assembly;
             var assemblyVersion = IntentoHelpers.GetVersion(assembly);
             var options = new Options
             {

@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+        <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
+        <LangVersion>latest</LangVersion>
+        <AssemblyOriginatorKeyFile>intento_sn.snk</AssemblyOriginatorKeyFile>
+        <PublicSign>false</PublicSign>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Authors>Intento Inc.</Authors>
+        <Description>Implementation of DI for Intento.SDK with Microsoft.DependencyInjection</Description>
+        <Copyright>Copyright © Intento 2018-2022</Copyright>
+        <PackageProjectUrl>https://inten.to/</PackageProjectUrl>
+        <PackageIconUrl>https://scontent-hel3-1.xx.fbcdn.net/v/t1.6435-9/161047796_3984430584949511_5187283145707586079_n.png?_nc_cat=108&amp;ccb=1-5&amp;_nc_sid=09cbfe&amp;_nc_ohc=h9_L-27U3-QAX_fgWUx&amp;_nc_ht=scontent-hel3-1.xx&amp;oh=00_AT9yJ3dHjTRjf9PTENewVw5cuu12nqZiFBlm0dhX4P154w&amp;oe=623BFE08</PackageIconUrl>
+        <RepositoryUrl>https://github.com/intento/intento-csharp/tree/develop</RepositoryUrl>
+        <PackageTags>Intento</PackageTags>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <OutputPath>..\build\</OutputPath>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <OutputPath>..\build\</OutputPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Intento.SDK\Intento.SDK.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.0" />
+    </ItemGroup>
+
+</Project>

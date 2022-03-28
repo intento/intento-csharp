@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Intento.SDK.DI;
 using Intento.SDK.Logging;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,10 +9,12 @@ namespace Intento.SDK.Translate
     internal sealed class ServicesRegisterExtension: IContainerRegisterExtension
     {
         /// <inheritdoc />
-        public void Register(IServiceCollection services)
+        public IEnumerable<ServiceDescriptor> GetServices()
         {
-            services.AddSingleton<ITranslateService, TranslateDynamicService>();
-            services.AddSingleton<ITelemetryService, TelemetryService>();
+            yield return new ServiceDescriptor(typeof(ITranslateService), typeof(TranslateDynamicService),
+                ServiceLifetime.Singleton);
+            yield return new ServiceDescriptor(typeof(ITelemetryService), typeof(TelemetryService),
+                ServiceLifetime.Singleton);
         }
     }
 }

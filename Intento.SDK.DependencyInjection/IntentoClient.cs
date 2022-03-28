@@ -2,7 +2,7 @@ using Intento.SDK.DI;
 using Intento.SDK.Settings;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Intento.SDK
+namespace Intento.SDK.DependencyInjection
 {
     /// <summary>
     /// Initializer for Intento.SDK

@@ -7,7 +7,7 @@ namespace Intento.SDK.Client
     /// <summary>
     /// Connection client to API
     /// </summary>
-    internal class IntentoHttpClient: BaseHttpClient
+    public class IntentoHttpClient: BaseHttpClient
     {
         /// <summary>
         /// Ctor

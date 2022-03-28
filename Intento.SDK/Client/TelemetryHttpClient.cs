@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Intento.SDK.Client
 {
-    internal class TelemetryHttpClient: BaseHttpClient
+    public class TelemetryHttpClient: BaseHttpClient
     {
         /// <summary>
         /// Ctor
@@ -13,7 +13,7 @@ namespace Intento.SDK.Client
         /// <param name="client"></param>
         /// <param name="options"></param>
         /// <param name="logger"></param>
-        public TelemetryHttpClient(HttpClient client, Options options, ILogger<IntentoHttpClient> logger) : base(client, options, logger)
+        public TelemetryHttpClient(HttpClient client, Options options, ILogger<TelemetryHttpClient> logger) : base(client, options, logger)
         {
             client.DefaultRequestHeaders.Add("x-consumer-id", DateTime.UtcNow.ToString("yyyy-MM-dd_HH"));
         }

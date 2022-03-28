@@ -7,6 +7,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intento.SDK", "Intento.SDK\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intento.SDK.Tests", "Intento.SDK.Tests\Intento.SDK.Tests.csproj", "{42BC6D76-8B83-4417-A2AB-877D435F1913}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intento.SDK.DependencyInjection", "Intento.SDK.DependencyInjection\Intento.SDK.DependencyInjection.csproj", "{1F200DE3-95B3-46C1-B82C-30B42ECC5851}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intento.SDK.Autofac", "Intento.SDK.Autofac\Intento.SDK.Autofac.csproj", "{9DD5A074-9F3D-48B2-A34C-AD17359ECB1D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intento.SDK.Tests.DependencyInjection", "Intento.SDK.Tests.DependencyInjection\Intento.SDK.Tests.DependencyInjection.csproj", "{EDE86695-A139-40A3-8797-2E1488228569}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intento.SDK.Tests.Autofac", "Intento.SDK.Tests.Autofac\Intento.SDK.Tests.Autofac.csproj", "{5F65017E-68B6-4D5C-91E1-34F2740D13CA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +28,20 @@ Global
 		{42BC6D76-8B83-4417-A2AB-877D435F1913}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{42BC6D76-8B83-4417-A2AB-877D435F1913}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42BC6D76-8B83-4417-A2AB-877D435F1913}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F200DE3-95B3-46C1-B82C-30B42ECC5851}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F200DE3-95B3-46C1-B82C-30B42ECC5851}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F200DE3-95B3-46C1-B82C-30B42ECC5851}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F200DE3-95B3-46C1-B82C-30B42ECC5851}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DD5A074-9F3D-48B2-A34C-AD17359ECB1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DD5A074-9F3D-48B2-A34C-AD17359ECB1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DD5A074-9F3D-48B2-A34C-AD17359ECB1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DD5A074-9F3D-48B2-A34C-AD17359ECB1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDE86695-A139-40A3-8797-2E1488228569}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDE86695-A139-40A3-8797-2E1488228569}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDE86695-A139-40A3-8797-2E1488228569}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F65017E-68B6-4D5C-91E1-34F2740D13CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F65017E-68B6-4D5C-91E1-34F2740D13CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F65017E-68B6-4D5C-91E1-34F2740D13CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

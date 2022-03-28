@@ -1,4 +1,5 @@
-﻿using Intento.SDK.DI;
+﻿using System.Collections.Generic;
+using Intento.SDK.DI;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Intento.SDK.Handlers
@@ -7,12 +8,14 @@ namespace Intento.SDK.Handlers
     internal sealed class SymbolHandlerRegisterExtension : IContainerRegisterExtension
     {
         /// <inheritdoc />
-        public void Register(IServiceCollection services)
+        public IEnumerable<ServiceDescriptor> GetServices()
         {
-            services
-                .AddSingleton<ISymbolHandler, XmlSymbolHandler>()
-                .AddSingleton<ISymbolHandler, HtmlSymbolHandler>()
-                .AddSingleton<ISymbolHandlersFactory, SymbolHandlersFactory>();
+            yield return new ServiceDescriptor(typeof(ISymbolHandler), typeof(XmlSymbolHandler),
+                ServiceLifetime.Singleton);
+            yield return new ServiceDescriptor(typeof(ISymbolHandler), typeof(HtmlSymbolHandler),
+                ServiceLifetime.Singleton);
+            yield return new ServiceDescriptor(typeof(ISymbolHandlersFactory), typeof(SymbolHandlersFactory),
+                ServiceLifetime.Singleton);
         }
     }
 }

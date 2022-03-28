@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Intento.SDK.DI
 {
@@ -10,7 +11,6 @@ namespace Intento.SDK.DI
         /// <summary>
         /// Register new instances in container
         /// </summary>
-        /// <param name="services"></param>
-        void Register(IServiceCollection services);
+        IEnumerable<ServiceDescriptor> GetServices();
     }
 }

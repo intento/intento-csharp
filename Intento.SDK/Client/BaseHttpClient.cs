@@ -15,7 +15,7 @@ using UrlCombineLib;
 
 namespace Intento.SDK.Client
 {
-    internal class BaseHttpClient
+    public class BaseHttpClient
     {
         private HttpClient Client { get; }
 
@@ -29,7 +29,7 @@ namespace Intento.SDK.Client
         /// <param name="client">HttpClient for requests</param>
         /// <param name="options">Options of connections</param>
         /// <param name="logger">Logger implementation</param>
-        protected BaseHttpClient(HttpClient client, Options options, ILogger<IntentoHttpClient> logger)
+        protected BaseHttpClient(HttpClient client, Options options, ILogger logger)
         {
             var version = IntentoHelpers.GetVersion();
             client.DefaultRequestHeaders.Add("apikey", options.ApiKey);
