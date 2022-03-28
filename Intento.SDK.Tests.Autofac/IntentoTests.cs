@@ -1,5 +1,5 @@
 using System;
-using Intento.SDK.DependencyInjection;
+using Intento.SDK.Autofac;
 using Intento.SDK.Settings;
 using NUnit.Framework;
 

@@ -1,9 +1,8 @@
-using Intento.SDK.Autofac;
 using Intento.SDK.DI;
 using Intento.SDK.Settings;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Intento.SDK.DependencyInjection
+namespace Intento.SDK.Autofac
 {
     /// <summary>
     /// Initializer for Intento.SDK
