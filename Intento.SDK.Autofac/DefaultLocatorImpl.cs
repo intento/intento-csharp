@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Reflection;
 using Autofac;
-using Autofac.Extensions.DependencyInjection;
+using Autofac.Builder;
 using Intento.SDK.Client;
 using Intento.SDK.DI;
 using Intento.SDK.Settings;
@@ -60,7 +60,7 @@ namespace Intento.SDK.Autofac
             builder.Register(c => options).SingleInstance();
             if (services != null)
             {
-                builder.Populate(services);
+                Register(builder, services, null);
             }
             container = builder.Build();
         }
@@ -87,8 +87,56 @@ namespace Intento.SDK.Autofac
                     if (Activator.CreateInstance(type) is IContainerRegisterExtension extension)
                     {
                         var services = extension.GetServices();
-                        builder.Populate(services);
+                        Register(builder, services, null);
                     }
+                }
+            }
+        }
+        
+        private static void Register(
+            ContainerBuilder builder,
+            IEnumerable<ServiceDescriptor> descriptors,
+            object lifetimeScopeTagForSingletons)
+        {
+            foreach (var descriptor in descriptors)
+            {
+                if (descriptor.ImplementationType != null)
+                {
+                    // Test if the an open generic type is being registered
+                    var serviceTypeInfo = descriptor.ServiceType.GetTypeInfo();
+                    if (serviceTypeInfo.IsGenericTypeDefinition)
+                    {
+                        builder
+                            .RegisterGeneric(descriptor.ImplementationType)
+                            .As(descriptor.ServiceType)
+                            .ConfigureLifecycle(descriptor.Lifetime, lifetimeScopeTagForSingletons);
+                    }
+                    else
+                    {
+                        builder
+                            .RegisterType(descriptor.ImplementationType)
+                            .As(descriptor.ServiceType)
+                            .ConfigureLifecycle(descriptor.Lifetime, lifetimeScopeTagForSingletons);
+                    }
+                }
+                else if (descriptor.ImplementationFactory != null)
+                {
+                    var registration = RegistrationBuilder.ForDelegate(descriptor.ServiceType, (context, parameters) =>
+                        {
+                            var serviceProvider = context.Resolve<IServiceProvider>();
+                            return descriptor.ImplementationFactory(serviceProvider);
+                        })
+                        .ConfigureLifecycle(descriptor.Lifetime, lifetimeScopeTagForSingletons)
+                        .CreateRegistration();
+
+                    builder.RegisterComponent(registration);
+                }
+                else
+                {
+                    builder
+                        .RegisterInstance(descriptor.ImplementationInstance)
+                        .As(descriptor.ServiceType)
+                        .ConfigureLifecycle(descriptor.Lifetime, null);
                 }
             }
         }
