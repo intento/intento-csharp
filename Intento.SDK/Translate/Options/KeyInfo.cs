@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+
 namespace Intento.SDK.Translate.Options
 {
     /// <summary>
@@ -8,6 +10,7 @@ namespace Intento.SDK.Translate.Options
         /// <summary>
         /// Key of provider
         /// </summary>
+        [JsonProperty("credential_id")]
         public string Key { get; set; }
     }
 }

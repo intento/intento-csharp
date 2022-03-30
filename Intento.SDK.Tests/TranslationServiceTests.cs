@@ -178,5 +178,35 @@ namespace Intento.SDK.Tests
             Assert.IsNotNull(res);
             Assert.IsTrue(res.Length > 0);
         }
+
+        [Test]
+        [TestCase("ai.text.translate.google.translate_api.v3","projects/894683665182/locations/us-central1/glossaries/compiled_de_en_2022_02_17T11_56_35")]
+        public async Task FulfillWithGlossary(string providerId, string glossary)
+        {
+            var service = Locator.Resolve<ITranslateService>();
+            var options = new TranslateOptions
+            {
+                From = "de",
+                To = "en",
+                Async = true,
+                WaitAsync = true,
+                Glossary = glossary,
+                Provider = providerId,
+                Text = "14",
+                Auth = new[]
+                {
+                    new AuthProviderInfo
+                    {
+                        Key = new KeyInfo
+                        {
+                            Key = "test1"
+                        },
+                        Provider = providerId
+                    }
+                }
+            };
+            var result = await service.FulfillAsync(options);
+            Assert.IsTrue(result.Error != null);
+        }
     }
 }
