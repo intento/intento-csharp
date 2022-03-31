@@ -23,7 +23,7 @@ namespace Intento.SDK.Translate.Converters
             var val = (AuthProviderInfo[])value;
             var dict = val
                 .Where(info => info.Key != null)
-                .ToDictionary(info => info.Provider, info => new[] {info.Key});
+                .ToDictionary(info => info.Provider, info => info.Key);
             var t = JToken.FromObject(dict);
             t.WriteTo(writer);
         }
@@ -43,7 +43,7 @@ namespace Intento.SDK.Translate.Converters
                     continue;
                 }
                 result.Add(info);
-                info.Key = array[0]?.ToObject<KeyInfo>();
+                info.Key = array.Select(a => a.ToObject<KeyInfo>()).ToArray();
             }
             return result.ToArray();
         }

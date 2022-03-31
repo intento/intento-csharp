@@ -7,6 +7,6 @@ namespace Intento.SDK.Translate.Options
     {
         public string Provider { get; set; }
         
-        public KeyInfo Key { get; set; }
+        public KeyInfo[] Key { get; set; }
     }
 }

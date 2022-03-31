@@ -22,8 +22,18 @@ namespace Intento.SDK.Tests.Sources
                 Provider = "Google",
                 Auth = new AuthProviderInfo[]
                 {
-                    new() {Key = new KeyInfo {Key = "123"}, Provider = "Google.v1"},
-                    new() {Key = new KeyInfo {Key = "4,5,6"}, Provider = "Yandex.v2"}
+                    new()
+                    {
+                        Key = new[]
+                        {
+                            new KeyInfo { CredentialId = "123" }
+                        }, 
+                        Provider = "Google.v1"
+                    },
+                    new() { Key = new[]
+                    {
+                        new KeyInfo { CredentialId = "4,5,6" }
+                    }, Provider = "Yandex.v2" }
                 }
             };
             yield return new TestCaseData(dto, FileUtil.ReadFileFromResources("Intento.SDK.Tests.Sources.Files.TranslateService.json"));

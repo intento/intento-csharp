@@ -28,6 +28,7 @@ namespace Intento.SDK.Tests
         /// Test TranslateService deserialization
         /// </summary>
         /// <param name="json"></param>
+        /// <param name="expectedLength"></param>
         [Test(Description = "Deserialize TranslateService object")]
         [TestCaseSource(typeof(SerializationTestsDataSources), nameof(SerializationTestsDataSources.DeserializeTranslateServiceDtoTestCaseData))]
         public void DeserializeTranslateServiceDto(string json, int expectedLength)

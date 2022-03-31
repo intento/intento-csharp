@@ -150,13 +150,13 @@ namespace Intento.SDK.Tests
         }
 
         [Test]
-        [TestCase("ai.text.translate.google.translate_api.v3")]
-        public async Task GlossariesTest(string providerId)
+        [TestCase("ai.text.translate.google.translate_api.v3", "Workday")]
+        public async Task GlossariesTest(string providerId, string credentialId)
         {
             var service = Locator.Resolve<ITranslateService>();
             var res = await service.GlossariesAsync(providerId, new Dictionary<string, string>
             {
-                { "credential_id", "Workday" }
+                { "credential_id", credentialId }
             });
             Assert.NotNull(res);
         }
@@ -197,16 +197,17 @@ namespace Intento.SDK.Tests
                 {
                     new AuthProviderInfo
                     {
-                        Key = new KeyInfo
+                        Key = new [] { new KeyInfo
                         {
-                            Key = "test1"
-                        },
+                            CredentialId = "test1"
+                        }},
                         Provider = providerId
                     }
                 }
             };
             var result = await service.FulfillAsync(options);
-            Assert.IsTrue(result.Error != null);
+            Assert.IsTrue(result.Error == null);
+            Assert.IsTrue(result.Results.Length == 1);
         }
     }
 }

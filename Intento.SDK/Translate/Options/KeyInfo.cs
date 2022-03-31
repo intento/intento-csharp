@@ -11,6 +11,6 @@ namespace Intento.SDK.Translate.Options
         /// Key of provider
         /// </summary>
         [JsonProperty("credential_id")]
-        public string Key { get; set; }
+        public string CredentialId { get; set; }
     }
 }
