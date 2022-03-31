@@ -154,9 +154,9 @@ namespace Intento.SDK.Tests
         public async Task GlossariesTest(string providerId, string credentialId)
         {
             var service = Locator.Resolve<ITranslateService>();
-            var res = await service.GlossariesAsync(providerId, new Dictionary<string, string>
+            var res = await service.GlossariesAsync(providerId, new[]
             {
-                { "credential_id", credentialId }
+                new KeyInfo { CredentialId = credentialId }
             });
             Assert.NotNull(res);
         }
