@@ -27,7 +27,7 @@ namespace Intento.SDK.Translate.DTO
         public string Name { get; set; }
 
         [JsonProperty("created_at")]
-        public DateTime Created { get; set; }
+        public DateTime? Created { get; set; }
 
         [JsonProperty("created_at_epoch_secs")]
         public double CreatedAtEpochSecs { get; set; }

@@ -80,6 +80,7 @@ namespace Intento.SDK.Tests
 
         [Test]
         [TestCase("ai.text.translate.google.translate_api.v3")]
+        [TestCase("ai.text.translate.baidu.translate_api")]
         public async Task AccountsTest(string providerId)
         {
             var service = Locator.Resolve<ITranslateService>();
@@ -150,14 +151,11 @@ namespace Intento.SDK.Tests
         }
 
         [Test]
-        [TestCase("ai.text.translate.google.translate_api.v3", "Workday")]
+        [TestCase("ai.text.translate.google.translate_api.v3", "test1")]
         public async Task GlossariesTest(string providerId, string credentialId)
         {
             var service = Locator.Resolve<ITranslateService>();
-            var res = await service.GlossariesAsync(providerId, new[]
-            {
-                new KeyInfo { CredentialId = credentialId }
-            });
+            var res = await service.GlossariesAsync(providerId, credentialId);
             Assert.NotNull(res);
         }
 

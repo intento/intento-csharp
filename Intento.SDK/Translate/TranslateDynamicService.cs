@@ -345,7 +345,7 @@ namespace Intento.SDK.Translate
         }
 
         /// <inheritdoc />
-        public IList<NativeGlossary> Glossaries(string providerId, KeyInfo[] credentials,
+        public IList<NativeGlossary> Glossaries(string providerId, string credentials,
             Dictionary<string, string> additionalParams = null)
         {
             var taskReadResult = Task.Run<dynamic>(async () =>
@@ -354,27 +354,13 @@ namespace Intento.SDK.Translate
         }
 
         /// <inheritdoc />
-        public async Task<IList<NativeGlossary>> GlossariesAsync(string providerId, KeyInfo[] credentials,
+        public async Task<IList<NativeGlossary>> GlossariesAsync(string providerId, string credentials,
             Dictionary<string, string> additionalParams = null)
         {
             var path = $"ai/text/translate/glossaries?provider={providerId}";
-            if (credentials is { Length: > 0 })
+            if (!string.IsNullOrEmpty(credentials))
             {
-                string credentialJson;
-                if (credentials.Length == 1)
-                {
-                    credentialJson = credentials[0].CredentialId;
-                }
-                else
-                {
-                    credentialJson = HttpUtility.UrlEncode(JsonConvert.SerializeObject(credentials,
-                        Formatting.None, new JsonSerializerSettings
-                        {
-                            NullValueHandling = NullValueHandling.Ignore
-                        } ));
-                }
-
-                path += $"&credential_id={credentialJson}";
+                path += $"&credential_id={credentials}";
             }
 
             // Call to Intento API and get json result

@@ -121,7 +121,7 @@ namespace Intento.SDK.Translate
         /// <param name="credentials">Credential id</param>
         /// <param name="additionalParams">additional url params</param>
         /// <returns>dynamic (json) with requested information</returns>
-        IList<NativeGlossary> Glossaries(string provider, KeyInfo[] credentials,
+        IList<NativeGlossary> Glossaries(string provider, string credentials,
             Dictionary<string, string> additionalParams = null);
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace Intento.SDK.Translate
         /// <param name="credentials">Credential id</param>
         /// <param name="additionalParams">additional url params</param>
         /// <returns>dynamic (json) with requested information</returns>
-        Task<IList<NativeGlossary>> GlossariesAsync(string providerId, KeyInfo[] credentials,
+        Task<IList<NativeGlossary>> GlossariesAsync(string providerId, string credentials,
             Dictionary<string, string> additionalParams = null);
 
         /// <summary>

@@ -11,7 +11,7 @@ namespace Intento.SDK.Translate.DTO
         public string CredentialId { get; set; }
 
         [JsonProperty("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public DateTime? CreatedAt { get; set; }
 
         [JsonProperty("provider_id")]
         public string ProviderId { get; set; }
@@ -20,7 +20,7 @@ namespace Intento.SDK.Translate.DTO
         public AccountCredentials Credentials { get; set; }
 
         [JsonProperty("expiry_at")]
-        public DateTime ExpiryAt { get; set; }
+        public DateTime? ExpiryAt { get; set; }
 
         [JsonProperty("default")]
         public bool Default { get; set; }
