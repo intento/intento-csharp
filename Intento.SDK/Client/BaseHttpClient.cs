@@ -50,8 +50,8 @@ namespace Intento.SDK.Client
         /// <param name="isTranslateRequest"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<TResponse> PostAsync<TRequest, TResponse>(string path, TRequest json, Dictionary<string, string> specialHeaders = null,
-            Dictionary<string, string> additionalParams = null, bool useSyncwrapper = false, bool isTranslateRequest = false)
+        public async Task<TResponse> PostAsync<TRequest, TResponse>(string path, TRequest json, IDictionary<string, string> specialHeaders = null,
+            IDictionary<string, string> additionalParams = null, bool useSyncwrapper = false, bool isTranslateRequest = false)
             where TResponse : class
         {
             try
@@ -95,13 +95,14 @@ namespace Intento.SDK.Client
         /// Execute request to url (GET)
         /// </summary>
         /// <param name="path"></param>
+        /// <param name="isTranslateRequest"></param>
         /// <param name="additionalParams"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<T> GetAsync<T>(string path, Dictionary<string, string> additionalParams = null)
+        public async Task<T> GetAsync<T>(string path, bool isTranslateRequest = false, IDictionary<string, string> additionalParams = null)
             where T:class
         {
-            var url = MakeUrl(path, additionalParams, false, false);
+            var url = MakeUrl(path, additionalParams, false, isTranslateRequest);
             LogHttpRequest("GET", url, null, Client.DefaultRequestHeaders.ToString());
             try
             {
@@ -128,7 +129,7 @@ namespace Intento.SDK.Client
             }
         }
 
-        private string MakeUrl(string path, Dictionary<string, string> additionalParams, bool useSyncwrapper, bool isTranslateRequest)
+        private string MakeUrl(string path, IDictionary<string, string> additionalParams, bool useSyncwrapper, bool isTranslateRequest)
         {
             var url = isTranslateRequest && !string.IsNullOrEmpty(Options.TmsServerUrl)
                 ? Options.TmsServerUrl

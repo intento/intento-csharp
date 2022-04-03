@@ -70,8 +70,8 @@ namespace Intento.SDK.Translate
         /// <param name="credentials">Credential id</param>
         /// <param name="additionalParams">additional url params</param>
         /// <returns>dynamic (json) with requested information</returns>
-        IList<Model> Models(string provider, Dictionary<string, string> credentials,
-            Dictionary<string, string> additionalParams = null);
+        IList<Model> Models(string provider, IDictionary<string, string> credentials,
+            IDictionary<string, string> additionalParams = null);
 
         /// <summary>
         /// Details of the models stored by the provider
@@ -80,8 +80,8 @@ namespace Intento.SDK.Translate
         /// <param name="credentials">Credential id</param>
         /// <param name="additionalParams">additional url params</param>
         /// <returns>dynamic (json) with requested information</returns>
-        Task<IList<Model>> ModelsAsync(string providerId, Dictionary<string, string> credentials,
-            Dictionary<string, string> additionalParams = null);
+        Task<IList<Model>> ModelsAsync(string providerId, IDictionary<string, string> credentials,
+            IDictionary<string, string> additionalParams = null);
 
         /// <summary>
         /// Details of the models stored by the provider
@@ -89,7 +89,7 @@ namespace Intento.SDK.Translate
         /// <param name="providerId">Provider id</param>
         /// <param name="additionalParams">additional url params</param>
         /// <returns>dynamic (json) with requested information</returns>
-        IList<Account> Accounts(string providerId = null, Dictionary<string, string> additionalParams = null);
+        IList<Account> Accounts(string providerId = null, IDictionary<string, string> additionalParams = null);
 
         /// <summary>
         /// Details of the models stored by the provider
@@ -98,21 +98,21 @@ namespace Intento.SDK.Translate
         /// <param name="additionalParams">additional url params</param>
         /// <returns>dynamic (json) with requested information</returns>
         Task<IList<Account>> AccountsAsync(string providerId = null,
-            Dictionary<string, string> additionalParams = null);
+            IDictionary<string, string> additionalParams = null);
 
         /// <summary>
         /// Details of the models stored by the provider
         /// </summary>
         /// <param name="additionalParams">additional url params</param>
         /// <returns>dynamic (json) with requested information</returns>
-        IList<Routing> Routing(Dictionary<string, string> additionalParams = null);
+        IList<Routing> Routing(IDictionary<string, string> additionalParams = null);
 
         /// <summary>
         /// Details of the models stored by the provider
         /// </summary>
         /// <param name="additionalParams">additional url params</param>
         /// <returns>dynamic (json) with requested information</returns>
-        Task<IList<Routing>> RoutingAsync(Dictionary<string, string> additionalParams = null);
+        Task<IList<Routing>> RoutingAsync(IDictionary<string, string> additionalParams = null);
 
         /// <summary>
         /// Details of the glossaries stored by the provider
@@ -122,7 +122,7 @@ namespace Intento.SDK.Translate
         /// <param name="additionalParams">additional url params</param>
         /// <returns>dynamic (json) with requested information</returns>
         IList<NativeGlossary> Glossaries(string provider, string credentials,
-            Dictionary<string, string> additionalParams = null);
+            IDictionary<string, string> additionalParams = null);
 
         /// <summary>
         /// Details of the glossaries stored by the provider
@@ -132,7 +132,7 @@ namespace Intento.SDK.Translate
         /// <param name="additionalParams">additional url params</param>
         /// <returns>dynamic (json) with requested information</returns>
         Task<IList<NativeGlossary>> GlossariesAsync(string providerId, string credentials,
-            Dictionary<string, string> additionalParams = null);
+            IDictionary<string, string> additionalParams = null);
 
         /// <summary>
         /// Detailed information on provider features
@@ -140,7 +140,7 @@ namespace Intento.SDK.Translate
         /// <param name="provider">Provider id</param>
         /// <param name="additionalParams">additional url params</param>
         /// <returns>dynamic (json) with requested information</returns>
-        Provider Provider(string provider, Dictionary<string, string> additionalParams = null);
+        Provider Provider(string provider, IDictionary<string, string> additionalParams = null);
 
         /// <summary>
         /// Detailed information on provider features
@@ -148,7 +148,7 @@ namespace Intento.SDK.Translate
         /// <param name="providerId">Provider id</param>
         /// <param name="additionalParams">Additional params</param>
         /// <returns>dynamic (json) with requested information</returns>
-        Task<Provider> ProviderAsync(string providerId, Dictionary<string, string> additionalParams = null);
+        Task<Provider> ProviderAsync(string providerId, IDictionary<string, string> additionalParams = null);
 
         /// <summary>
         /// Get providers by options
@@ -160,7 +160,7 @@ namespace Intento.SDK.Translate
         /// <param name="filter">Filter option</param>
         /// <returns></returns>
         IList<Provider> Providers(string to = null, string from = null, bool langDetect = false, bool bulk = false,
-            Dictionary<string, string> filter = null);
+            IDictionary<string, string> filter = null);
 
         /// <summary>
         /// Get providers by options
@@ -173,7 +173,7 @@ namespace Intento.SDK.Translate
         /// <returns></returns>
         Task<IList<Provider>> ProvidersAsync(string to = null, string from = null, bool langDetect = false,
             bool bulk = false,
-            Dictionary<string, string> filter = null);
+            IDictionary<string, string> filter = null);
 
         /// <summary>
         /// Get languages list
@@ -200,18 +200,20 @@ namespace Intento.SDK.Translate
         Task<IList<Language>> GetSupportedLanguagesAsync();
 
         /// <summary>
-        /// Get language pairs
+        /// Get routes language pairs
         /// </summary>
         /// <param name="srtName">Source name</param>
+        /// <param name="additionalParams"></param>
         /// <returns></returns>
-        LanguagePairs Pairs(string srtName);
+        LanguagePairs RoutingPairs(string srtName, IDictionary<string, string> additionalParams = null);
 
         /// <summary>
-        /// Get language pairs
+        /// Get routes language pairs
         /// </summary>
         /// <param name="srtName">Source name</param>
+        /// <param name="additionalParams"></param>
         /// <returns></returns>
-        Task<LanguagePairs> PairsAsync(string srtName);
+        Task<LanguagePairs> RoutingPairsAsync(string srtName, IDictionary<string, string> additionalParams = null);
 
         /// <summary>
         /// Get routing language pairs

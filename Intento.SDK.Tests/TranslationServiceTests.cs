@@ -72,7 +72,7 @@ namespace Intento.SDK.Tests
         public async Task PairsTest(string srtName)
         {
             var service = Locator.Resolve<ITranslateService>();
-            var res = await service.PairsAsync(srtName);
+            var res = await service.RoutingPairsAsync(srtName);
             Assert.IsNotNull(res);
             Assert.IsTrue(res.Pairs.Length > 0);
             Assert.IsTrue(res.Pairs.All(p => p.To != null));

@@ -274,8 +274,8 @@ namespace Intento.SDK.Translate
         }
 
         /// <inheritdoc />
-        public IList<Model> Models(string provider, Dictionary<string, string> credentials,
-            Dictionary<string, string> additionalParams = null)
+        public IList<Model> Models(string provider, IDictionary<string, string> credentials,
+            IDictionary<string, string> additionalParams = null)
         {
             var taskReadResult = Task.Run(async () =>
                 await ModelsAsync(provider, credentials, additionalParams));
@@ -283,8 +283,8 @@ namespace Intento.SDK.Translate
         }
 
         /// <inheritdoc />
-        public async Task<IList<Model>> ModelsAsync(string providerId, Dictionary<string, string> credentials,
-            Dictionary<string, string> additionalParams = null)
+        public async Task<IList<Model>> ModelsAsync(string providerId, IDictionary<string, string> credentials,
+            IDictionary<string, string> additionalParams = null)
         {
             var path = $"ai/text/translate/models?provider={providerId}";
             if (credentials != null)
@@ -305,12 +305,12 @@ namespace Intento.SDK.Translate
             }
 
             // Call to Intento API and get json result
-            var jsonResult = await Client.GetAsync<ModelsResponse>(path, additionalParams);
+            var jsonResult = await Client.GetAsync<ModelsResponse>(path, false, additionalParams);
             return jsonResult.Models;
         }
 
         /// <inheritdoc />
-        public IList<Account> Accounts(string providerId = null, Dictionary<string, string> additionalParams = null)
+        public IList<Account> Accounts(string providerId = null, IDictionary<string, string> additionalParams = null)
         {
             var taskReadResult = Task.Run<dynamic>(async () =>
                 await AccountsAsync(providerId, additionalParams));
@@ -319,16 +319,16 @@ namespace Intento.SDK.Translate
 
         /// <inheritdoc />
         public async Task<IList<Account>> AccountsAsync(string providerId = null,
-            Dictionary<string, string> additionalParams = null)
+            IDictionary<string, string> additionalParams = null)
         {
             var path = "accounts" + (providerId != null ? $"?provider={providerId}" : null);
             // Call to Intento API and get json result
-            var jsonResult = await Client.GetAsync<AccountsResult>(path, additionalParams);
+            var jsonResult = await Client.GetAsync<AccountsResult>(path, false, additionalParams);
             return jsonResult.Result;
         }
 
         /// <inheritdoc />
-        public IList<Routing> Routing(Dictionary<string, string> additionalParams = null)
+        public IList<Routing> Routing(IDictionary<string, string> additionalParams = null)
         {
             var taskReadResult = Task.Run(async () =>
                 await RoutingAsync(additionalParams));
@@ -336,17 +336,17 @@ namespace Intento.SDK.Translate
         }
 
         /// <inheritdoc />
-        public async Task<IList<Routing>> RoutingAsync(Dictionary<string, string> additionalParams = null)
+        public async Task<IList<Routing>> RoutingAsync(IDictionary<string, string> additionalParams = null)
         {
             const string path = "ai/text/translate/routing";
             // Call to Intento API and get json result
-            var jsonResult = await Client.GetAsync<RoutingResponse>(path, additionalParams);
+            var jsonResult = await Client.GetAsync<RoutingResponse>(path, true, additionalParams);
             return jsonResult.Routing;
         }
 
         /// <inheritdoc />
         public IList<NativeGlossary> Glossaries(string providerId, string credentials,
-            Dictionary<string, string> additionalParams = null)
+            IDictionary<string, string> additionalParams = null)
         {
             var taskReadResult = Task.Run<dynamic>(async () =>
                 await GlossariesAsync(providerId, credentials, additionalParams));
@@ -355,7 +355,7 @@ namespace Intento.SDK.Translate
 
         /// <inheritdoc />
         public async Task<IList<NativeGlossary>> GlossariesAsync(string providerId, string credentials,
-            Dictionary<string, string> additionalParams = null)
+            IDictionary<string, string> additionalParams = null)
         {
             var path = $"ai/text/translate/glossaries?provider={providerId}";
             if (!string.IsNullOrEmpty(credentials))
@@ -364,12 +364,12 @@ namespace Intento.SDK.Translate
             }
 
             // Call to Intento API and get json result
-            var jsonResult = await Client.GetAsync<NativeGlossaryResult>(path, additionalParams);
+            var jsonResult = await Client.GetAsync<NativeGlossaryResult>(path, false, additionalParams);
             return jsonResult.Response;
         }
 
         /// <inheritdoc />
-        public Provider Provider(string provider, Dictionary<string, string> additionalParams = null)
+        public Provider Provider(string provider, IDictionary<string, string> additionalParams = null)
         {
             var taskReadResult = Task.Run(async () => await ProviderAsync(provider, additionalParams));
             return taskReadResult.Result;
@@ -377,28 +377,29 @@ namespace Intento.SDK.Translate
 
         /// <inheritdoc />
         public async Task<Provider> ProviderAsync(string providerId,
-            Dictionary<string, string> additionalParams = null)
+            IDictionary<string, string> additionalParams = null)
         {
             var path = $"ai/text/translate/{providerId}";
             // Call to Intento API and get json result
-            var jsonResult = await Client.GetAsync<Provider>(path, additionalParams);
+            var jsonResult = await Client.GetAsync<Provider>(path, true, additionalParams);
             return jsonResult;
         }
 
         /// <inheritdoc />
-        public IList<Provider> Providers(string to = null, string from = null, bool langDetect = false,
+        public IList<Provider> Providers(string to = null, string @from = null, bool langDetect = false,
             bool bulk = false,
-            Dictionary<string, string> filter = null)
+            IDictionary<string, string> filter = null)
         {
             var taskReadResult = Task.Run(async () =>
-                await ProvidersAsync(to, from, langDetect, bulk, filter));
+                await ProvidersAsync(to, @from, langDetect, bulk, filter));
             return taskReadResult.Result;
         }
 
         /// <inheritdoc />
-        public async Task<IList<Provider>> ProvidersAsync(string to = null, string from = null, bool langDetect = false,
+        public async Task<IList<Provider>> ProvidersAsync(string to = null, string @from = null,
+            bool langDetect = false,
             bool bulk = false,
-            Dictionary<string, string> filter = null)
+            IDictionary<string, string> filter = null)
         {
             var f = filter == null ? new Dictionary<string, string>() : new Dictionary<string, string>(filter);
             if (!string.IsNullOrEmpty(to))
@@ -429,7 +430,7 @@ namespace Intento.SDK.Translate
             }
 
             // Call to Intento API and get json result
-            var jsonResult = await Client.GetAsync<List<Provider>>(url);
+            var jsonResult = await Client.GetAsync<List<Provider>>(url, true);
             var providers = new List<Provider>();
             foreach (var providerInfo in jsonResult)
             {
@@ -470,17 +471,17 @@ namespace Intento.SDK.Translate
         }
 
         /// <inheritdoc />
-        public LanguagePairs Pairs(string srtName)
+        public LanguagePairs RoutingPairs(string srtName, IDictionary<string, string> additionalParams = null)
         {
-            var taskReadResult = Task.Run(async () => await PairsAsync(srtName));
+            var taskReadResult = Task.Run(async () => await RoutingPairsAsync(srtName, additionalParams));
             return taskReadResult.Result;
         }
 
         /// <inheritdoc />
-        public async Task<LanguagePairs> PairsAsync(string srtName)
+        public async Task<LanguagePairs> RoutingPairsAsync(string srtName, IDictionary<string, string> additionalParams = null)
         {
             var url = $"ai/text/translate/routing/{srtName}/pairs";
-            var jsonResult = await Client.GetAsync<LanguagePairs>(url);
+            var jsonResult = await Client.GetAsync<LanguagePairs>(url, additionalParams: additionalParams);
             return jsonResult;
         }
 
@@ -494,7 +495,7 @@ namespace Intento.SDK.Translate
         /// <inheritdoc />
         public async Task<IList<IList<string>>> RoutingLanguagePairsAsync(string providerId)
         {
-            var routingInfo = await PairsAsync(providerId);
+            var routingInfo = await RoutingPairsAsync(providerId);
             var res = new List<IList<string>>();
 
             var pairs = routingInfo.Pairs;
@@ -503,10 +504,7 @@ namespace Intento.SDK.Translate
                 return res;
             }
 
-            foreach (var pair in pairs)
-            {
-                res.Add(new List<string> { (string)pair.From, (string)pair.To });
-            }
+            res.AddRange(pairs.Select(pair => new List<string> { pair.From, pair.To }));
 
             return res;
         }
