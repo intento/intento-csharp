@@ -486,16 +486,17 @@ namespace Intento.SDK.Translate
         }
 
         /// <inheritdoc />
-        public IList<IList<string>> RoutingLanguagePairs(string providerId)
+        public IList<IList<string>> RoutingLanguagePairs(string providerId,
+            IDictionary<string, string> additionalParams = null)
         {
-            var taskReadResult = Task.Run(async () => await RoutingLanguagePairsAsync(providerId));
+            var taskReadResult = Task.Run(async () => await RoutingLanguagePairsAsync(providerId, additionalParams));
             return taskReadResult.Result;
         }
 
         /// <inheritdoc />
-        public async Task<IList<IList<string>>> RoutingLanguagePairsAsync(string providerId)
+        public async Task<IList<IList<string>>> RoutingLanguagePairsAsync(string providerId, IDictionary<string, string> additionalParams = null)
         {
-            var routingInfo = await RoutingPairsAsync(providerId);
+            var routingInfo = await RoutingPairsAsync(providerId, additionalParams);
             var res = new List<IList<string>>();
 
             var pairs = routingInfo.Pairs;
@@ -510,16 +511,17 @@ namespace Intento.SDK.Translate
         }
 
         /// <inheritdoc />
-        public IList<IList<string>> ProviderLanguagePairs(string providerId)
+        public IList<IList<string>> ProviderLanguagePairs(string providerId,
+            IDictionary<string, string> additionalParams = null)
         {
-            var taskReadResult = Task.Run(async () => await ProviderLanguagePairsAsync(providerId));
+            var taskReadResult = Task.Run(async () => await ProviderLanguagePairsAsync(providerId, additionalParams));
             return taskReadResult.Result;
         }
 
         /// <inheritdoc />
-        public async Task<IList<IList<string>>> ProviderLanguagePairsAsync(string providerId)
+        public async Task<IList<IList<string>>> ProviderLanguagePairsAsync(string providerId, IDictionary<string, string> additionalParams = null)
         {
-            var providerInfo = await ProviderAsync(providerId);
+            var providerInfo = await ProviderAsync(providerId, additionalParams);
             var res = new List<IList<string>>();
             var languages = providerInfo.Languages;
             var symmetric = languages.Symmetric;

@@ -219,29 +219,33 @@ namespace Intento.SDK.Translate
         /// Get routing language pairs
         /// </summary>
         /// <param name="providerId">Provider identifier</param>
+        /// <param name="additionalParams"></param>
         /// <returns></returns>
-        IList<IList<string>> RoutingLanguagePairs(string providerId);
+        IList<IList<string>> RoutingLanguagePairs(string providerId, IDictionary<string, string> additionalParams = null);
 
         /// <summary>
         /// Get routing language pairs
         /// </summary>
         /// <param name="providerId">Provider identifier</param>
+        /// <param name="additionalParams"></param>
         /// <returns></returns>        
-        Task<IList<IList<string>>> RoutingLanguagePairsAsync(string providerId);
+        Task<IList<IList<string>>> RoutingLanguagePairsAsync(string providerId, IDictionary<string, string> additionalParams = null);
 
         /// <summary>
         /// Get providers language pairs
         /// </summary>
         /// <param name="providerId">Provider identifier</param>
+        /// <param name="additionalParams"></param>
         /// <returns></returns>
-        IList<IList<string>> ProviderLanguagePairs(string providerId);
+        IList<IList<string>> ProviderLanguagePairs(string providerId, IDictionary<string, string> additionalParams = null);
 
         /// <summary>
         /// Get providers language pairs
         /// </summary>
         /// <param name="providerId">Provider identifier</param>
+        /// <param name="additionalParams"></param>
         /// <returns></returns>
-        Task<IList<IList<string>>> ProviderLanguagePairsAsync(string providerId);
+        Task<IList<IList<string>>> ProviderLanguagePairsAsync(string providerId, IDictionary<string, string> additionalParams = null);
 
         /// <summary>
         /// List of glossaries
