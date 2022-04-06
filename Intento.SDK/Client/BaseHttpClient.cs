@@ -107,7 +107,6 @@ namespace Intento.SDK.Client
             try
             {
                 using var response = await Client.GetAsync(url);
-                LogHttpAfterSend(url);
                 using var contentStream = await response.Content.ReadAsStreamAsync();
                 using var streamReader = new StreamReader(contentStream);
                 using var jsonReader = new JsonTextReader(streamReader);
@@ -157,22 +156,18 @@ namespace Intento.SDK.Client
 
         private void LogHttpRequest(string method, string url, string body, string headers)
         {
-            Logger.LogDebug(SdkLogEvents.START_HTTP_REQUEST, "method: {method}\r\nurl: {url}\r\nbody: {body}\r\nheaders: {headers}\r\n", method, url, body, headers);
+            Logger.LogDebug(SdkLogEvents.START_HTTP_REQUEST, "method: {Method}\r\nurl: {Url}\r\nbody: {Body}\r\nheaders: {Headers}\r\n", method, url, body, headers);
         }
 
-        private void LogHttpAfterSend(string url)
+        private void LogHttpResponse(object jsonResult)
         {
-            Logger.LogDebug(SdkLogEvents.AFTER_SEND_HTTP_REQUEST, "url: {url}", url);
-        }
-
-        private void LogHttpResponse(dynamic jsonResult)
-        {
-            Logger.LogDebug(SdkLogEvents.HTTP_RESPONSE, "body: {jsonResult}", jsonResult != null ? (string)jsonResult.ToString() : "empty");
+            var result = jsonResult != null ? JsonConvert.SerializeObject(jsonResult) : null;
+            Logger.LogDebug(SdkLogEvents.HTTP_RESPONSE, "body: {Result}", result ?? "empty");
         }
 
         private void LogHttpException(Exception ex)
         {
-            Logger.LogError(SdkLogEvents.HTTP_ERROR, ex, ex.Message);
+            Logger.LogError(SdkLogEvents.HTTP_ERROR, ex, "HTTP request return error");
         }
     }
 }
