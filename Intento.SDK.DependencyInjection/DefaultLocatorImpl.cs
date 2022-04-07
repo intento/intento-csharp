@@ -73,6 +73,11 @@ namespace Intento.SDK.DependencyInjection
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
             foreach (var assembly in assemblies)
             {
+                if (assembly.GetCustomAttribute<IntentoComponentsAttribute>() == null)
+                {
+                    continue;
+                }   
+                
                 var types = assembly.GetTypes();
                 foreach (var type in types)
                 {

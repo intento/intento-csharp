@@ -4,6 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
+[assembly: IntentoComponents]
+
 namespace Intento.SDK.Tests.Stubs
 {
     [RegisterExtension]

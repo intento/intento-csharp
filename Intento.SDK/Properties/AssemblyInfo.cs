@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using Intento.SDK;
+using Intento.SDK.DI;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
@@ -16,3 +15,4 @@ using Intento.SDK;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("e0a71be8-3841-4677-a1a7-523660c69e05")]
+[assembly: IntentoComponents]
