@@ -13,7 +13,7 @@ namespace Intento.SDK.Autofac
     /// <summary>
     /// Locator implementation for default
     /// </summary>
-    internal sealed class DefaultLocatorImpl: ILocatorImpl
+    public sealed class DefaultLocatorImpl: ILocatorImpl
     {
         private IContainer container;
 

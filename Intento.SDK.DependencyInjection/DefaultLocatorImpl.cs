@@ -10,7 +10,7 @@ namespace Intento.SDK.DependencyInjection
     /// <summary>
     /// Locator implementation for default
     /// </summary>
-    internal sealed class DefaultLocatorImpl: ILocatorImpl
+    public sealed class DefaultLocatorImpl: ILocatorImpl
     {
         private IServiceProvider _serviceProvider;
 
