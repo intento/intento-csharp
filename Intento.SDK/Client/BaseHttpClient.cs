@@ -132,7 +132,7 @@ namespace Intento.SDK.Client
         {
             var url = isTranslateRequest && !string.IsNullOrEmpty(Options.TmsServerUrl)
                 ? Options.TmsServerUrl
-                : (useSyncwrapper ? Options.SyncwrapperUrl : Options.ServerUrl);
+                : (useSyncwrapper && !string.IsNullOrEmpty(Options.SyncwrapperUrl) ? Options.SyncwrapperUrl : Options.ServerUrl);
             var fullUrl = url.CombineUrl(path);
             var uri = new UriBuilder(new Uri(fullUrl, UriKind.RelativeOrAbsolute));
             if (additionalParams == null)
