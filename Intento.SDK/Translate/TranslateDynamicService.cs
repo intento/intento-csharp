@@ -202,7 +202,14 @@ namespace Intento.SDK.Translate
 
                 if (wrapper.Done)
                 {
-                    jsonResult = wrapper.Response is { Length: > 0 } ? wrapper.Response[0] : null;
+                    jsonResult = wrapper.Response is { Length: > 0 } ? wrapper.Response[0] : new TranslateResponse
+                    {
+                        Error = new TranslationRequestError
+                        {
+                            Message = wrapper.Error?.Reason,
+                            Data = wrapper.Error != null ? JsonConvert.SerializeObject(wrapper.Error) : null
+                        }
+                    };
                 }
             }
 
