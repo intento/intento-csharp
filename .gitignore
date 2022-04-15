@@ -33,3 +33,7 @@ _ReSharper*/
 
 #Ignore file with github hash
 GitHash.cs
+/Intento.SDK/.DS_Store
+/.idea/.idea.IntentoSDK/.idea
+/*.DotSettings
+build

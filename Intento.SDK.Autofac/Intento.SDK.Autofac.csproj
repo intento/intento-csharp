@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+        <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
+        <LangVersion>default</LangVersion>
+        <Authors>Intento Inc.</Authors>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Description>Implementation of DI for Intento.SDK with Autofac</Description>
+        <Copyright>Copyright © Intento 2018-2022</Copyright>
+        <PackageProjectUrl>https://inten.to/</PackageProjectUrl>
+        <PackageIcon>intento.png</PackageIcon>
+        <PackageTags>Intento</PackageTags>
+        <RepositoryUrl>https://github.com/intento/intento-csharp/tree/develop</RepositoryUrl>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <OutputPath>..\build\</OutputPath>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <OutputPath>..\build\</OutputPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Autofac" Version="4.9.4" />
+      <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Intento.SDK\Intento.SDK.csproj" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <None Include="intento.png" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
+</Project>

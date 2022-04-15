@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+        <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
+        <LangVersion>latest</LangVersion>
+        <AssemblyOriginatorKeyFile>intento_sn.snk</AssemblyOriginatorKeyFile>
+        <PublicSign>false</PublicSign>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Authors>Intento Inc.</Authors>
+        <Description>Implementation of DI for Intento.SDK with Microsoft.DependencyInjection</Description>
+        <Copyright>Copyright © Intento 2018-2022</Copyright>
+        <PackageProjectUrl>https://inten.to/</PackageProjectUrl>
+        <PackageIcon>intento.png</PackageIcon>
+        <RepositoryUrl>https://github.com/intento/intento-csharp/tree/develop</RepositoryUrl>
+        <PackageTags>Intento</PackageTags>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <OutputPath>..\build\</OutputPath>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <OutputPath>..\build\</OutputPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Intento.SDK\Intento.SDK.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.0" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <None Include="intento.png" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
+</Project>

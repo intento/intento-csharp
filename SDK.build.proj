@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="BuildAll" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>       
+        <Version Condition=" '$(Version)' == '' ">2.0.0</Version>        
+        <DoSign Condition="'$(DoSign)' == ''">0</DoSign>
+        <CertificateFingerprint>ceb3832e3ea926565f7dd05c82a711307b6679ee</CertificateFingerprint>
+    </PropertyGroup>
+
+    <Target Name="BuildAll">
+        <CallTarget Targets="Clean"/>
+        <CallTarget Targets="BuildSolution"/>
+        <CallTarget Condition="'$(DoSign)' == '1'" Targets="SignNuget"/>
+    </Target>
+
+    <Target Name="Clean">
+        <RemoveDir Directories="$(ProjectDir)build"/>
+        <MSBuild
+                Projects="$(ProjectDir)IntentoSDK.sln"
+                Targets="Clean"
+                Properties="Configuration=$(Configuration);"/>
+    </Target>
+
+    <Target Name="BuildSolution">
+        <MakeDir Directories="$(ProjectDir)build"/>
+        <MSBuild
+                Projects="$(ProjectDir)IntentoSDK.sln"
+                Targets="Build"
+                Properties="Configuration=$(Configuration);Version=$(Version);VersionSuffix=$(VersionSuffix)"/>
+    </Target>
+    
+    <Target Name="SignNuget">
+        <Exec Command="dotnet nuget sign $(ProjectDir)build/Intento.SDK.$(Version).nupkg --certificate-fingerprint $(CertificateFingerprint) --timestamper http://ts.ssl.com" />
+	    <Exec Command="dotnet nuget sign $(ProjectDir)build/Intento.SDK.Autofac.$(Version).nupkg --certificate-fingerprint $(CertificateFingerprint) --timestamper http://ts.ssl.com" />
+	    <Exec Command="dotnet nuget sign $(ProjectDir)build/Intento.SDK.DependencyInjection.$(Version).nupkg --certificate-fingerprint $(CertificateFingerprint) --timestamper http://ts.ssl.com" />
+    </Target>
+
+</Project>

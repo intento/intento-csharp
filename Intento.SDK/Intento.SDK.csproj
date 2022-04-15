@@ -1,0 +1,48 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>intento_sn.snk</AssemblyOriginatorKeyFile>
+    <Authors>Intento Inc.</Authors>
+    <Description>An adapter to query Intento API. Intento provides a single API to Cognitive AI services from many vendors.</Description>
+    <Copyright>Copyright © Intento 2018-2022</Copyright>
+    <LangVersion>9</LangVersion>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Nullable>disable</Nullable>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://inten.to/</PackageProjectUrl>
+    <PackageIcon>intento.png</PackageIcon>
+    <PackageTags>Intento</PackageTags>
+    <RepositoryUrl>https://github.com/intento/intento-csharp/tree/develop</RepositoryUrl>
+    <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>..\build</OutputPath>
+    <DocumentationFile>..\build\Intento.SDK.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>..\build\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+    <PackageReference Include="UrlCombine" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Servers.json" />
+    <EmbeddedResource Include="Servers.json" />
+    <None Include="intento.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Web" Condition="'$(TargetFramework)' == 'net461'" />
+  </ItemGroup>
+
+</Project>
