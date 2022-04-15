@@ -10,9 +10,10 @@
         <Description>Implementation of DI for Intento.SDK with Autofac</Description>
         <Copyright>Copyright © Intento 2018-2022</Copyright>
         <PackageProjectUrl>https://inten.to/</PackageProjectUrl>
-        <PackageIconUrl>https://scontent-hel3-1.xx.fbcdn.net/v/t1.6435-9/161047796_3984430584949511_5187283145707586079_n.png?_nc_cat=108&amp;ccb=1-5&amp;_nc_sid=09cbfe&amp;_nc_ohc=h9_L-27U3-QAX_fgWUx&amp;_nc_ht=scontent-hel3-1.xx&amp;oh=00_AT9yJ3dHjTRjf9PTENewVw5cuu12nqZiFBlm0dhX4P154w&amp;oe=623BFE08</PackageIconUrl>
+        <PackageIcon>intento.png</PackageIcon>
         <PackageTags>Intento</PackageTags>
         <RepositoryUrl>https://github.com/intento/intento-csharp/tree/develop</RepositoryUrl>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -30,6 +31,10 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Intento.SDK\Intento.SDK.csproj" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <None Include="intento.png" Pack="true" PackagePath="\" />
     </ItemGroup>
 
 </Project>
