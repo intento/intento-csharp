@@ -7,11 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Intento.SDK.Exceptions;
+using Intento.SDK.Extensions;
 using Intento.SDK.Logging;
 using Intento.SDK.Settings;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using UrlCombineLib;
 
 namespace Intento.SDK.Client
 {
