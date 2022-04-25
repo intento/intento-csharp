@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>intento_sn.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>intento.snk</AssemblyOriginatorKeyFile>
     <Authors>Intento Inc.</Authors>
     <Description>An adapter to query Intento API. Intento provides a single API to Cognitive AI services from many vendors.</Description>
     <Copyright>Copyright © Intento 2018-2022</Copyright>
@@ -14,6 +14,7 @@
     <PackageTags>Intento</PackageTags>
     <RepositoryUrl>https://github.com/intento/intento-csharp/tree/develop</RepositoryUrl>
     <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
+    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">

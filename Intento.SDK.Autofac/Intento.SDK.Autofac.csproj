@@ -14,6 +14,8 @@
         <PackageTags>Intento</PackageTags>
         <RepositoryUrl>https://github.com/intento/intento-csharp/tree/develop</RepositoryUrl>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<SignAssembly>true</SignAssembly>
+	<AssemblyOriginatorKeyFile>intento.snk</AssemblyOriginatorKeyFile>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
