@@ -3,7 +3,7 @@
     <PropertyGroup>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
-        <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
+        <TargetFrameworks>net461;net47;netstandard2.0</TargetFrameworks>
         <LangVersion>default</LangVersion>
         <Authors>Intento Inc.</Authors>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -14,6 +14,8 @@
         <PackageTags>Intento</PackageTags>
         <RepositoryUrl>https://github.com/intento/intento-csharp/tree/develop</RepositoryUrl>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<SignAssembly>true</SignAssembly>
+	<AssemblyOriginatorKeyFile>intento.snk</AssemblyOriginatorKeyFile>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -24,9 +26,19 @@
       <OutputPath>..\build\</OutputPath>
     </PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Include="Autofac" Version="4.9.4" />
+    <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
+      <PackageReference Include="Autofac" Version="3.5.2" />
       <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    </ItemGroup>
+
+    <ItemGroup Condition=" '$(TargetFramework)' == 'net47' ">
+        <PackageReference Include="Autofac" Version="4.8.1" />
+        <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    </ItemGroup>
+
+    <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+        <PackageReference Include="Autofac" Version="4.8.1" />
+        <PackageReference Include="System.Net.Http" Version="4.3.4" />
     </ItemGroup>
 
     <ItemGroup>
