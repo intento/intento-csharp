@@ -32,8 +32,9 @@
     
     <Target Name="SignNuget">
         <Exec Command="dotnet nuget sign $(ProjectDir)build/Intento.SDK.$(Version).nupkg --certificate-fingerprint $(CertificateFingerprint) --timestamper http://ts.ssl.com" />
-	    <Exec Command="dotnet nuget sign $(ProjectDir)build/Intento.SDK.Autofac.$(Version).nupkg --certificate-fingerprint $(CertificateFingerprint) --timestamper http://ts.ssl.com" />
-	    <Exec Command="dotnet nuget sign $(ProjectDir)build/Intento.SDK.DependencyInjection.$(Version).nupkg --certificate-fingerprint $(CertificateFingerprint) --timestamper http://ts.ssl.com" />
+	<Exec Command="dotnet nuget sign $(ProjectDir)build/Intento.SDK.Autofac.$(Version).nupkg --certificate-fingerprint $(CertificateFingerprint) --timestamper http://ts.ssl.com" />
+	<Exec Command="dotnet nuget sign $(ProjectDir)build/Intento.SDK.DependencyInjection.$(Version).nupkg --certificate-fingerprint $(CertificateFingerprint) --timestamper http://ts.ssl.com" />
+        <Exec Command="dotnet nuget sign $(ProjectDir)build/Intento.SDK.Ninject.$(Version).nupkg --certificate-fingerprint $(CertificateFingerprint) --timestamper http://ts.ssl.com" />
     </Target>
 
 </Project>
