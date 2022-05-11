@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intento.SDK.Tests.Dependenc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intento.SDK.Tests.Autofac", "Intento.SDK.Tests.Autofac\Intento.SDK.Tests.Autofac.csproj", "{5F65017E-68B6-4D5C-91E1-34F2740D13CA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intento.SDK.Ninject", "Intento.SDK.Ninject\Intento.SDK.Ninject.csproj", "{CF7EB14B-3E46-40C7-9566-FCEEC75D2991}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intento.SDK.Tests.Ninject", "Intento.SDK.Tests.Ninject\Intento.SDK.Tests.Ninject.csproj", "{C516BAF6-06B9-4C08-92AE-0FFB7208395A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +46,13 @@ Global
 		{5F65017E-68B6-4D5C-91E1-34F2740D13CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5F65017E-68B6-4D5C-91E1-34F2740D13CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F65017E-68B6-4D5C-91E1-34F2740D13CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF7EB14B-3E46-40C7-9566-FCEEC75D2991}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF7EB14B-3E46-40C7-9566-FCEEC75D2991}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF7EB14B-3E46-40C7-9566-FCEEC75D2991}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF7EB14B-3E46-40C7-9566-FCEEC75D2991}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C516BAF6-06B9-4C08-92AE-0FFB7208395A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C516BAF6-06B9-4C08-92AE-0FFB7208395A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C516BAF6-06B9-4C08-92AE-0FFB7208395A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
