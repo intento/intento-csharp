@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+        <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
+        <LangVersion>default</LangVersion>
+        <Authors>Intento Inc.</Authors>
+        <Description>Implementation of DI for Intento.SDK with Ninject</Description>
+        <Copyright>Copyright © Intento 2018-2022</Copyright>
+        <PackageProjectUrl>https://inten.to/</PackageProjectUrl>
+        <SignAssembly>true</SignAssembly>
+        <AssemblyOriginatorKeyFile>intento.snk</AssemblyOriginatorKeyFile>
+        <PackageIcon>intento.png</PackageIcon>
+        <RepositoryUrl>https://github.com/intento/intento-csharp/tree/develop</RepositoryUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageTags>Intento</PackageTags>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <OutputPath>..\build\</OutputPath>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <OutputPath>..\build\</OutputPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Ninject" Version="3.3.5" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Intento.SDK\Intento.SDK.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="intento.png" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
+</Project>
