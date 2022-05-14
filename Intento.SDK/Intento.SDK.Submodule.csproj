@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{B183FC58-2924-4D11-A6A9-34D52034184D}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>Intento.SDK</RootNamespace>
+        <AssemblyName>Intento.SDK</AssemblyName>
+        <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <LangVersion>default</LangVersion>
+        <SignAssembly>true</SignAssembly>
+        <AssemblyOriginatorKeyFile>intento.snk</AssemblyOriginatorKeyFile>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
+          <HintPath>..\..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.3.1.8\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+        </Reference>
+        <Reference Include="Microsoft.Extensions.Logging.Abstractions">
+          <HintPath>..\..\..\..\Users\oerodger\.nuget\packages\microsoft.extensions.logging.abstractions\3.1.0\lib\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+        </Reference>
+        <Reference Include="Newtonsoft.Json">
+          <HintPath>..\..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+        </Reference>
+        <Reference Include="System" />
+        <Reference Include="System.ComponentModel.DataAnnotations" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Xml" />
+		<Reference Include="System.Web" />
+		<Reference Include="System.Net.Http" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Client\BaseHttpClient.cs" />
+        <Compile Include="Client\IntentoHttpClient.cs" />
+        <Compile Include="Client\TelemetryHttpClient.cs" />
+        <Compile Include="DI\IContainerRegisterExtension.cs" />
+        <Compile Include="DI\ILocatorImpl.cs" />
+        <Compile Include="DI\IntentoComponentsAttribute.cs" />
+        <Compile Include="DI\Locator.cs" />
+        <Compile Include="DI\RegisterExtensionAttribute.cs" />
+        <Compile Include="Exceptions\ExceptionsExtensions.cs" />
+        <Compile Include="Exceptions\IntentoApiException.cs" />
+        <Compile Include="Exceptions\IntentoException.cs" />
+        <Compile Include="Exceptions\IntentoInvalidApiKeyException.cs" />
+        <Compile Include="Exceptions\IntentoInvalidParameterException.cs" />
+        <Compile Include="Exceptions\IntentoSdkException.cs" />
+        <Compile Include="Exceptions\IntentoValidationException.cs" />
+        <Compile Include="Extensions\StringExtensions.cs" />
+        <Compile Include="Handlers\BaseSymbolHandler.cs" />
+        <Compile Include="Handlers\HtmlSymbolHandler.cs" />
+        <Compile Include="Handlers\ISymbolHandler.cs" />
+        <Compile Include="Handlers\ISymbolHandlersFactory.cs" />
+        <Compile Include="Handlers\SymbolHandlerRegisterExtension.cs" />
+        <Compile Include="Handlers\SymbolHandlersFactory.cs" />
+        <Compile Include="Handlers\XmlSymbolHandler.cs" />
+        <Compile Include="IntentoHelpers.cs" />
+        <Compile Include="Logging\DTO\TelemetryLogItem.cs" />
+        <Compile Include="Logging\DTO\TelemetryLogResult.cs" />
+        <Compile Include="Logging\ITelemetryService.cs" />
+        <Compile Include="Logging\SdkLogEvents.cs" />
+        <Compile Include="Logging\TelemetryService.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="Settings\Options.cs" />
+        <Compile Include="Settings\ProxySettings.cs" />
+        <Compile Include="Settings\Servers.cs" />
+        <Compile Include="Translate\Converters\ArrayToSingleStringConverter.cs" />
+        <Compile Include="Translate\Converters\AuthProviderInfoConverter.cs" />
+        <Compile Include="Translate\Converters\GlossaryConverter.cs" />
+        <Compile Include="Translate\DTO\Account.cs" />
+        <Compile Include="Translate\DTO\AccountCredentials.cs" />
+        <Compile Include="Translate\DTO\AccountsResult.cs" />
+        <Compile Include="Translate\DTO\AgnosticGlossariesResult.cs" />
+        <Compile Include="Translate\DTO\AgnosticGlossariesTypesResult.cs" />
+        <Compile Include="Translate\DTO\AgnosticGlossaryType.cs" />
+        <Compile Include="Translate\DTO\Auth.cs" />
+        <Compile Include="Translate\DTO\BaseProvider.cs" />
+        <Compile Include="Translate\DTO\BaseResponseResult.cs" />
+        <Compile Include="Translate\DTO\Error.cs" />
+        <Compile Include="Translate\DTO\Glossary.cs" />
+        <Compile Include="Translate\DTO\GlossaryDetailed.cs" />
+        <Compile Include="Translate\DTO\Language.cs" />
+        <Compile Include="Translate\DTO\LanguageMap.cs" />
+        <Compile Include="Translate\DTO\LanguagePair.cs" />
+        <Compile Include="Translate\DTO\LanguagePairGlossary.cs" />
+        <Compile Include="Translate\DTO\LanguagePairs.cs" />
+        <Compile Include="Translate\DTO\Model.cs" />
+        <Compile Include="Translate\DTO\ModelsResponse.cs" />
+        <Compile Include="Translate\DTO\NativeGlossary.cs" />
+        <Compile Include="Translate\DTO\NativeGlossaryResult.cs" />
+        <Compile Include="Translate\DTO\Provider.cs" />
+        <Compile Include="Translate\DTO\Routing.cs" />
+        <Compile Include="Translate\DTO\RoutingResponse.cs" />
+        <Compile Include="Translate\DTO\TranslateContext.cs" />
+        <Compile Include="Translate\DTO\TranslateProcessing.cs" />
+        <Compile Include="Translate\DTO\TranslateRequest.cs" />
+        <Compile Include="Translate\DTO\TranslateResponse.cs" />
+        <Compile Include="Translate\DTO\TranslateResponseProvider.cs" />
+        <Compile Include="Translate\DTO\TranslateResponseService.cs" />
+        <Compile Include="Translate\DTO\TranslateResponseTiming.cs" />
+        <Compile Include="Translate\DTO\TranslateResponseWrapper.cs" />
+        <Compile Include="Translate\DTO\TranslateService.cs" />
+        <Compile Include="Translate\DTO\TranslateUserData.cs" />
+        <Compile Include="Translate\DTO\TranslationMeta.cs" />
+        <Compile Include="Translate\DTO\TranslationRequestError.cs" />
+        <Compile Include="Translate\ITranslateService.cs" />
+        <Compile Include="Translate\Options\AuthProviderInfo.cs" />
+        <Compile Include="Translate\Options\KeyInfo.cs" />
+        <Compile Include="Translate\Options\TranslateOptions.cs" />
+        <Compile Include="Translate\ServicesRegisterExtension.cs" />
+        <Compile Include="Translate\TranslateDynamicService.cs" />
+        <Compile Include="Validation\BaseOptions.cs" />
+        <Compile Include="Validation\ValidationExtensions.cs" />
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
+	
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>..\build</OutputPath>
+    <DocumentationFile>..\build\Intento.SDK.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>..\build\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.8" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.8" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Servers.json" />
+    <EmbeddedResource Include="Servers.json" />  
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="intento.snk" />
+  </ItemGroup>
+
+  
+</Project>

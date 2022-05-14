@@ -17,7 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Intento.SDK.Tests.Ninject\Intento.SDK.Tests.Ninject.csproj" />
+      <ProjectReference Include="..\Intento.SDK.Tests.DependencyInjection.Lite\Intento.SDK.Tests.DependencyInjection.Lite.csproj" />
       <ProjectReference Include="..\Intento.SDK\Intento.SDK.csproj" />
     </ItemGroup>
 
