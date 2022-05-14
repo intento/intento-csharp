@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
+using System.Net.Http;
 using System.Reflection;
 using Intento.SDK.Client;
 using Intento.SDK.DI;
