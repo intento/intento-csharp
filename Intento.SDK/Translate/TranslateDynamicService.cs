@@ -168,9 +168,20 @@ namespace Intento.SDK.Translate
             extendRequest?.Invoke(request);
 
             var url = "ai/text/translate";
+            var modifiers = new List<string>();
             if (options.Trace)
             {
-                url += "?trace=true";
+                modifiers.Add("trace=true");
+            }
+
+            if (options.PlainText)
+            {
+                modifiers.Add("plainText=true");
+            }
+
+            if (modifiers.Count > 0)
+            {
+                url += $"?{string.Join("&", modifiers)}";
             }
 
             // Call to Intento API and get json result
