@@ -66,6 +66,8 @@ namespace Intento.SDK.Translate.Options
 
         public bool Trace { get; set; }
 
+        public bool PlainText { get; set; }
+
         public bool UseSyncwrapper { get; set; }
     }
 
