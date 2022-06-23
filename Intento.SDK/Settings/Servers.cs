@@ -28,12 +28,19 @@ namespace Intento.SDK.Settings
 
         private static Servers LoadServers()
         {
-            using var stream = typeof(Servers).Assembly.GetManifestResourceStream("Intento.SDK.Servers.json");
-            if (stream != null)
+            try
             {
-                using var reader = new StreamReader(stream);
-                var content = reader.ReadToEnd();
-                return JsonConvert.DeserializeObject<Servers>(content);
+                using var stream = typeof(Servers).Assembly.GetManifestResourceStream("Intento.SDK.Servers.json");
+                if (stream != null)
+                {
+                    using var reader = new StreamReader(stream);
+                    var content = reader.ReadToEnd();
+                    return JsonConvert.DeserializeObject<Servers>(content);
+                }
+            }
+            catch
+            {
+                //no_error
             }
 
             return null;
