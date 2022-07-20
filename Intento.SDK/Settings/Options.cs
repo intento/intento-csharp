@@ -27,16 +27,16 @@ namespace Intento.SDK.Settings
         /// <summary>
         /// Url to Intento API
         /// </summary>
-        public string ServerUrl { get; set; } = Servers.Config.ServerUrl;
+        public string ServerUrl { get; set; } = Servers.Config?.ServerUrl;
 
         /// <summary>
         /// Url of tms-backend
         /// </summary>
-        public string TmsServerUrl { get; set; } = Servers.Config.TmsServerUrl;
+        public string TmsServerUrl { get; set; } = Servers.Config?.TmsServerUrl;
 
         /// <summary>
         /// Url to syncwrapper server
         /// </summary>
-        public string SyncwrapperUrl { get; set; } = Servers.Config.SyncwrapperUrl;
+        public string SyncwrapperUrl { get; set; } = Servers.Config?.SyncwrapperUrl;
     }
 }
