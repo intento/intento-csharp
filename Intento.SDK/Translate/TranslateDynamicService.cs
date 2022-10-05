@@ -499,7 +499,7 @@ namespace Intento.SDK.Translate
         public async Task<LanguagePairs> RoutingPairsAsync(string srtName, IDictionary<string, string> additionalParams = null)
         {
             var url = $"ai/text/translate/routing/{srtName}/pairs";
-            var jsonResult = await Client.GetAsync<LanguagePairs>(url, additionalParams: additionalParams);
+            var jsonResult = await Client.GetAsync<LanguagePairs>(url, true, additionalParams: additionalParams);
             return jsonResult;
         }
 
