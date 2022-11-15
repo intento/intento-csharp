@@ -35,9 +35,9 @@ namespace Intento.SDK.Translate
         }
 
         /// <inheritdoc />
-        public async Task<TranslateResponse> FulfillAsync(TranslateOptions options)
+        public Task<TranslateResponse> FulfillAsync(TranslateOptions options)
         {
-            return await FulfillAsync(options, null);
+            return FulfillAsync(options, null);
         }
 
         private async Task<TranslateResponse> FulfillAsync(TranslateOptions options,
@@ -629,7 +629,7 @@ namespace Intento.SDK.Translate
             await Task.Delay(20000);
             return new TranslateResponseWrapper
             {
-                Done = false,
+                Done = true,
                 Error = new Error
                 {
                     Reason = "Timeout of async operation"

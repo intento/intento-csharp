@@ -57,6 +57,7 @@ namespace Intento.SDK.Autofac
                 .SingleInstance();
             builder.Register(c => CreateClient<IntentoHttpClient>(options, c)).SingleInstance().AsSelf();
             builder.Register(c => CreateClient<TelemetryHttpClient>(options, c)).SingleInstance().AsSelf();
+            builder.Register(c => CreateClient<TmsBackendClient>(options, c)).SingleInstance().AsSelf();
             builder.Register(c => options).SingleInstance();
             if (services != null)
             {

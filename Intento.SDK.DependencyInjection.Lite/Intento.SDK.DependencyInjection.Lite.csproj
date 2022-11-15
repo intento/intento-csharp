@@ -10,7 +10,7 @@
         <Description>Implementation of DI for Intento.SDK with Microsoft.DependencyInjection. Without Http library.</Description>
         <Copyright>Copyright © Intento 2018-2022</Copyright>
         <PackageProjectUrl>https://inten.to/</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/intento/intento-csharp/tree/develop</RepositoryUrl>
+        <RepositoryUrl>https://github.com/intento/intento-csharp</RepositoryUrl>
         <PackageTags>Intento</PackageTags>
         <SignAssembly>true</SignAssembly>
         <AssemblyOriginatorKeyFile>intento.snk</AssemblyOriginatorKeyFile>

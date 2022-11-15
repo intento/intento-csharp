@@ -53,6 +53,7 @@ namespace Intento.SDK.DependencyInjection
             services ??= new ServiceCollection();
             AddHttpClient<IntentoHttpClient>(options, services);
             AddHttpClient<TelemetryHttpClient>(options, services);
+            AddHttpClient<TmsBackendClient>(options, services);
 
             services.AddSingleton(options);
             RegisterExtensions(services);

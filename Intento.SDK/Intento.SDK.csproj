@@ -12,7 +12,7 @@
     <PackageProjectUrl>https://inten.to/</PackageProjectUrl>
     <PackageIcon>intento.png</PackageIcon>
     <PackageTags>Intento</PackageTags>
-    <RepositoryUrl>https://github.com/intento/intento-csharp/tree/develop</RepositoryUrl>
+    <RepositoryUrl>https://github.com/intento/intento-csharp</RepositoryUrl>
     <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
