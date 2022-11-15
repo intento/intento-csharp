@@ -60,6 +60,8 @@ namespace Intento.SDK.Ninject
                 .InSingletonScope();
             _kernel.Bind<TelemetryHttpClient>().ToMethod(c => CreateClient<TelemetryHttpClient>(options, c))
                 .InSingletonScope();
+            _kernel.Bind<TmsBackendClient>().ToMethod(c => CreateClient<TmsBackendClient>(options, c))
+                .InSingletonScope();
             _kernel.Bind<Options>().ToMethod(c => options).InSingletonScope();
             if (services != null)
             {

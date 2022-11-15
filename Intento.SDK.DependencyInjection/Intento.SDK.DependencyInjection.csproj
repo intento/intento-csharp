@@ -13,7 +13,7 @@
         <Copyright>Copyright © Intento 2018-2022</Copyright>
         <PackageProjectUrl>https://inten.to/</PackageProjectUrl>
         <PackageIcon>intento.png</PackageIcon>
-        <RepositoryUrl>https://github.com/intento/intento-csharp/tree/develop</RepositoryUrl>
+        <RepositoryUrl>https://github.com/intento/intento-csharp</RepositoryUrl>
         <PackageTags>Intento</PackageTags>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<SignAssembly>true</SignAssembly>

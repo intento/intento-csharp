@@ -12,7 +12,7 @@
         <PackageProjectUrl>https://inten.to/</PackageProjectUrl>
         <PackageIcon>intento.png</PackageIcon>
         <PackageTags>Intento</PackageTags>
-        <RepositoryUrl>https://github.com/intento/intento-csharp/tree/develop</RepositoryUrl>
+        <RepositoryUrl>https://github.com/intento/intento-csharp</RepositoryUrl>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<SignAssembly>true</SignAssembly>
 	<AssemblyOriginatorKeyFile>intento.snk</AssemblyOriginatorKeyFile>

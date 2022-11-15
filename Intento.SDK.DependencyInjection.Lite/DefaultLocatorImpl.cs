@@ -57,6 +57,7 @@ namespace Intento.SDK.DependencyInjection.Lite
             services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
             services.AddSingleton(c => CreateClient<IntentoHttpClient>(options, c));
             services.AddSingleton(c => CreateClient<TelemetryHttpClient>(options, c));
+            services.AddSingleton(c => CreateClient<TmsBackendClient>(options, c));
             services.AddSingleton(options);
             RegisterExtensions(services);
             if (needBuild)
