@@ -631,32 +631,6 @@ namespace Intento.SDK.Translate
             var result = await Client.GetAsync<TranslateResponseWrapper>($"operations/{asyncId}");
             return result;
         }
-        
-        private async Task<TranslateResponseWrapper> WaitAsync(TaskCompletionSource<bool> taskCompletion,
-            string asyncId, int delay = 1000)
-        {
-            await Task.WhenAny(taskCompletion.Task, Task.Delay(delay));
-            var response = await CheckAsyncJobAsync(asyncId);
-            if (response.Done)
-            {
-                return response;
-            }
-
-            return await WaitAsync(taskCompletion, asyncId, delay);
-        }
-        
-        private async Task<TranslateResponseWrapper> TimeoutError()
-        {
-            await Task.Delay(20000);
-            return new TranslateResponseWrapper
-            {
-                Done = false,
-                Error = new Error
-                {
-                    Reason = "Timeout of async operation"
-                }
-            };
-        }
 
         private string ConvertToBase64String(Stream stream)
         {
