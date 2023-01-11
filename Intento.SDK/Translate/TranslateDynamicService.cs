@@ -221,7 +221,7 @@ namespace Intento.SDK.Translate
                     });
                 if (wrapperResult.FinalException != null)
                 {
-                    jsonResult = new TranslateResponse
+                    return new TranslateResponse
                     {
                         Error = new TranslationRequestError
                         {
