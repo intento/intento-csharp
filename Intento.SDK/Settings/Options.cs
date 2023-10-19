@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Intento.SDK.Validation;
 
 namespace Intento.SDK.Settings
@@ -38,5 +39,10 @@ namespace Intento.SDK.Settings
         /// Url to syncwrapper server
         /// </summary>
         public string SyncwrapperUrl { get; set; } = Servers.Config?.SyncwrapperUrl;
+        
+        /// <summary>
+        /// Timeout for https requests (default 10 mins)
+        /// </summary>
+        public TimeSpan HttpTimeout { get; set; } = TimeSpan.FromMinutes(10);
     }
 }

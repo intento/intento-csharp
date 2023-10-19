@@ -44,6 +44,7 @@ namespace Intento.SDK.Ninject
             else
                 client = new HttpClient();
 
+            client.Timeout = options.HttpTimeout;
             var logger = c.Kernel.Get<ILogger<T>>();
             return (T)Activator.CreateInstance(typeof(T), client, options, logger);
         }

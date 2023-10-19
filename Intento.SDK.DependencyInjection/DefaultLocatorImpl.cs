@@ -18,7 +18,12 @@ namespace Intento.SDK.DependencyInjection
         {
             var client = services
                 .AddHttpClient<T>();
-
+            
+            client.ConfigureHttpClient(client =>
+            {
+                client.Timeout = options.HttpTimeout;
+            });
+            
             if (options.Proxy?.ProxyUri != null && options.Proxy.ProxyEnabled)
             {
                 client
