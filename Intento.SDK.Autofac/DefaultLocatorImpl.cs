@@ -43,6 +43,7 @@ namespace Intento.SDK.Autofac
             else
                 client = new HttpClient();
 
+            client.Timeout = options.HttpTimeout;
             var logger = c.Resolve<ILogger<T>>();
             return (T)Activator.CreateInstance(typeof(T), client, options, logger);
         }

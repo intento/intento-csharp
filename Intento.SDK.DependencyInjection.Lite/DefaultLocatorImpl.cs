@@ -43,6 +43,7 @@ namespace Intento.SDK.DependencyInjection.Lite
             else
                 client = new HttpClient();
 
+            client.Timeout = options.HttpTimeout;
             var logger = c.GetService<ILogger<T>>();
             return (T)Activator.CreateInstance(typeof(T), client, options, logger);
         }
