@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using Intento.SDK.Client;
+using Intento.SDK.Exceptions;
 using Intento.SDK.Logging;
 using Intento.SDK.Translate.Converters;
 using Intento.SDK.Translate.DTO;
@@ -12,6 +13,7 @@ using Intento.SDK.Translate.Options;
 using Intento.SDK.Validation;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Polly;
 
 namespace Intento.SDK.Translate
 {
@@ -203,14 +205,33 @@ namespace Intento.SDK.Translate
                     // Not a (1) - return result immediately, nothing to wait
                     return jsonResult;
                 }
-                
-                var taskCompletion = new TaskCompletionSource<bool>();
-                var wrapperTask = await Task.WhenAny(
-                    WaitAsync(taskCompletion, id, 1000),
-                    TimeoutError());
-                var wrapper = await wrapperTask;
-                taskCompletion.SetResult(true);
 
+                var wrapperResult = await Policy
+                    .Handle<Exception>().Or<IntentoApiException>()
+                    .WaitAndRetryAsync(20, _ => TimeSpan.FromSeconds(1))
+                    .ExecuteAndCaptureAsync(async () =>
+                    {
+                        var response = await CheckAsyncJobAsync(id);
+                        if (response.Done)
+                        {
+                            return response;
+                        }
+
+                        throw new IntentoException("Job is active");
+                    });
+                if (wrapperResult.FinalException != null)
+                {
+                    return new TranslateResponse
+                    {
+                        Error = new TranslationRequestError
+                        {
+                            Message = "Async operation haven't finished yet",
+                            Data = wrapperResult.FinalException.Message
+                        }
+                    };
+                }
+
+                var wrapper = wrapperResult.Result;
                 if (wrapper.Done)
                 {
                     jsonResult = wrapper.Response is { Length: > 0 } ? wrapper.Response[0] : new TranslateResponse
@@ -609,32 +630,6 @@ namespace Intento.SDK.Translate
             // async operations inside
             var result = await Client.GetAsync<TranslateResponseWrapper>($"operations/{asyncId}");
             return result;
-        }
-        
-        private async Task<TranslateResponseWrapper> WaitAsync(TaskCompletionSource<bool> taskCompletion,
-            string asyncId, int delay = 1000)
-        {
-            await Task.WhenAny(taskCompletion.Task, Task.Delay(delay));
-            var response = await CheckAsyncJobAsync(asyncId);
-            if (response.Done)
-            {
-                return response;
-            }
-
-            return await WaitAsync(taskCompletion, asyncId, delay);
-        }
-        
-        private async Task<TranslateResponseWrapper> TimeoutError()
-        {
-            await Task.Delay(20000);
-            return new TranslateResponseWrapper
-            {
-                Done = true,
-                Error = new Error
-                {
-                    Reason = "Timeout of async operation"
-                }
-            };
         }
 
         private string ConvertToBase64String(Stream stream)
