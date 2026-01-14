@@ -4,10 +4,10 @@ namespace Intento.SDK.Translate.DTO
 {
     public class StorageSettings
     {
-        [JsonProperty( "path" )]
+        [JsonProperty("path")]
         public string Path { get; set; }
 
-        [JsonProperty( "searchkeys" )]
+        [JsonProperty("searchkeys")]
         public string[] SearchKeys { get; set; }
     }
 }
