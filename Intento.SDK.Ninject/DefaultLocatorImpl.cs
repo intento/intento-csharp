@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Net.Http;
 using System.Reflection;
 using Intento.SDK.Client;
 using Intento.SDK.DI;
@@ -111,7 +112,7 @@ namespace Intento.SDK.Ninject
             {
                 if (descriptor.ImplementationType != null)
                 {
-                    // Test if the an open generic type is being registered
+                    // Test if an open generic type is being registered
                     kernel.Bind(descriptor.ServiceType)
                         .To(descriptor.ImplementationType)
                         .ConfigureLifecycle(descriptor.Lifetime);
