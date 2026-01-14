@@ -28,5 +28,11 @@ namespace Intento.SDK.Translate.DTO
 
         [JsonProperty("failover_list")]
         public string[] FailoverList { get; set; }
+        
+        [JsonProperty("cache")]
+        public CacheSettings Cache { get; set; }
+        
+        [JsonProperty("storage")]
+        public StorageSettings Storage { get; set; }
     }
 }
