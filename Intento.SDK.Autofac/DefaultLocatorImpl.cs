@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Net.Http;
 using System.Reflection;
 using Autofac;
 using Autofac.Builder;
