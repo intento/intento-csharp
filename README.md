@@ -11,7 +11,23 @@ If you don't have a key to use Intento API, please register here [console.inten.
 <code>dotnet build SDK.build.proj /p:Configuration=%Configuration% /p:DoSign=%DoSign% /p:Version=%Version% /fileLogger</code>
 
 # Sign
-To sign package you need to install Intento certificate with CertificateFingerprint=d79d7faf87aa9eecc1437e7da38e81f8a547dc38
+Packages are signed with the Intento, Inc. code signing certificate stored in DigiCert KeyLocker
+(SHA-256 fingerprint `cfe2b6c33f7e79805a3e611c4aab1a67a13c6ce8f068b711a7b49bac69086481`, timestamp server `http://timestamp.digicert.com`).
+
+To sign locally you need the DigiCert ONE Signing Manager tools (`smctl`) installed and configured:
+
+1. `smctl healthcheck` must report `Status: Connected` with a valid client certificate.
+2. Register the KSP once (admin shell): `smctl windows ksp register`.
+3. Sync the certificate into the user store: `smctl windows certsync`.
+4. Build with signing: `dotnet build SDK.build.proj /p:Configuration=Release /p:DoSign=1 /p:Version=<version>`.
+
+Fingerprint and timestamp server can be overridden with `/p:CertificateFingerprint=...` and `/p:Timestamper=...`.
+
+Notes:
+
+- NuGet 6.12+ (.NET SDK 9 and newer) accepts only SHA-256/384/512 fingerprints and rejects SHA-1 with NU3043. NuGet 6.11 and older (.NET SDK 8 and older) only match SHA-1 thumbprints and fail with NU3001 when given a SHA-256 fingerprint. `SDK.build.proj` picks the right one automatically based on the MSBuild version; the SHA-1 thumbprint of the same certificate is `0d1f66efbfc3f97c281800cbc3a91ab883fb1663`.
+- `NU3001: No certificates were found` also happens when the certificate has not been synced into `CurrentUser\My` yet; run `smctl windows certsync` and check with `Get-ChildItem Cert:\CurrentUser\My`.
+- The DigiCert KSP (`smksp.dll`) is x64-only, so signing must run in an x64 process. On Windows on ARM the default `dotnet` is native ARM64 and fails with `Provider DLL failed to initialize correctly`; sign on an x64 machine (or CI) instead.
 
 # Tests
 To run test set environment variable "IntentoAPIKey". Api key you can relieve from [console.inten.to](https://console.inten.to)
