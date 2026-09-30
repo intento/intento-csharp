@@ -25,7 +25,8 @@ Fingerprint and timestamp server can be overridden with `/p:CertificateFingerpri
 
 Notes:
 
-- Recent NuGet versions accept only SHA-256/384/512 fingerprints; the SHA-1 thumbprint of the same certificate is `0d1f66efbfc3f97c281800cbc3a91ab883fb1663` (only needed for old SDKs such as .NET 6.0.100).
+- NuGet 6.12+ (.NET SDK 9 and newer) accepts only SHA-256/384/512 fingerprints and rejects SHA-1 with NU3043. NuGet 6.11 and older (.NET SDK 8 and older) only match SHA-1 thumbprints and fail with NU3001 when given a SHA-256 fingerprint. `SDK.build.proj` picks the right one automatically based on the MSBuild version; the SHA-1 thumbprint of the same certificate is `0d1f66efbfc3f97c281800cbc3a91ab883fb1663`.
+- `NU3001: No certificates were found` also happens when the certificate has not been synced into `CurrentUser\My` yet; run `smctl windows certsync` and check with `Get-ChildItem Cert:\CurrentUser\My`.
 - The DigiCert KSP (`smksp.dll`) is x64-only, so signing must run in an x64 process. On Windows on ARM the default `dotnet` is native ARM64 and fails with `Provider DLL failed to initialize correctly`; sign on an x64 machine (or CI) instead.
 
 # Tests
